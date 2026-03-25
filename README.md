@@ -39,14 +39,15 @@ It is designed to be shared within a research group: everyone runs their own loc
 ### Requirements
 
 - **Python 3** (any version ≥ 3.6) — pre-installed on macOS and most Linux systems
-- **Google Chrome** (recommended) or any modern browser
+- **Google Chrome**, doesn't work on Safari and Firefox due to a local file write permission issue.
 - No other packages or installations needed
 
 ### Running the notebook
 
 ```bash
-# 1. Clone or download this repository
-git clone https://github.com/YOUR-ORG/eukosmos.git
+# 1. Clone or download this repository, and make sure it has read/write access (chmod -R 777 eukosmos). You can place the directory in [Dropbox](https://www.dropbox.com/referrals/AAAZAqQ3u_3TrKQd4h7IGmkW1P-o6tEifJs?src=global9) for data backup and use this notebook over multiple machines.
+
+git clone https://github.com/rmajidul/eukosmos.git
 cd eukosmos
 
 # 2. Start the local server
@@ -82,8 +83,7 @@ eukosmos/
 └── lib/            ← Offline KaTeX assets (downloaded on first run)
 ```
 
-> `data_*.json` files and the `pdf/` folder are personal — do not commit them to a shared repository unless you intend to share your data.
-
+> `data_*.json` files and the `pdf/` folder are personal and created when you use the notebook.
 ---
 
 ## Key features
@@ -138,19 +138,22 @@ Eukosmos has no database or sync server. The recommended workflow:
 
 For read-only shared reference data (e.g. a group link list), pre-populate `data.js` and commit it to the repository. Everyone who clones and opens the notebook for the first time will have those entries seeded automatically.
 
+<!--
 ---
 
-## GitHub Pages deployment (optional)
+ ## GitHub Pages deployment (optional)
 
 For a read-only, shareable version hosted online:
 
 1. Enable GitHub Pages on the repository (Settings → Pages → `main` branch, root folder)
 2. Edit `data.js` to include the entries you want pre-populated
-3. Push to `main` — the notebook will be available at `https://YOUR-ORG.github.io/eukosmos/`
+3. Push to `main` — the notebook will be available at `https://YOUR-ORG.github.io/eukosmos/` 
 
-Note: GitHub Pages does not support local file saving or the ADS proxy. It is useful for sharing a static, pre-populated reference notebook.
+Note: GitHub Pages does not support local file saving or the ADS proxy. It is useful for sharing a static, pre-populated reference notebook. 
 
 ---
+
+-->
 
 ## Customisation
 
@@ -158,7 +161,7 @@ All colours, fonts, and panel widths are CSS variables in the `:root { }` block 
 
 ```css
 :root {
-  --fs-body: 15px;      /* main text size */
+  --fs-body: 32px;      /* main text size */
   --sidebar: 220px;     /* sidebar width */
   --glow: #33d9ff;      /* primary accent colour (cyan) */
   --bg: #050a12;        /* page background */
@@ -173,8 +176,8 @@ After editing, hard-refresh Chrome: `Cmd+Shift+R` (Mac) or `Ctrl+Shift+R` (Windo
 
 | Problem | Fix |
 |---------|-----|
-| Page looks wrong / old version | Hard-refresh: `Cmd+Shift+R` / `Ctrl+Shift+R` |
-| Port 8080 already in use | `python3 serve.py 9090`, then open `localhost:9090` |
+| Page looks wrong / old version | Hard-refresh: `Cmd+Shift+R` / `Ctrl+Shift+R` | delete browsing history and cache for last 24 hrs or 7 days
+| Port 8080 already in use, `lsof -ti tcp:8080 | xargs kill` or | `python3 serve.py 9090`, then open `http://localhost:9090` |
 | ADS auto-fill not working | Check your token is entered in the Lit. Papers form |
 | Equations not rendering | Needs internet on first run to download KaTeX; offline after that |
 | Data not saving | Open via `http://localhost:8080`, not `file://` |
