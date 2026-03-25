@@ -54,7 +54,7 @@ cd eukosmos
 python3 serve.py
 
 # 3. Open Chrome and go to:
-#    http://localhost:8080
+ http://localhost:8080
 ```
 
 Your data is saved automatically as `data_*.json` files in the same folder.
@@ -66,7 +66,8 @@ Your data is saved automatically as `data_*.json` files in the same folder.
 
 ```bash
 python3 serve.py 9090
-# Then open: http://localhost:9090
+# Then open:
+http://localhost:9090
 ```
 
 ---
