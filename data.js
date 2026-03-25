@@ -1,7 +1,7 @@
 // ══════════════════════════════════════════════════════════════
 //  data.js  —  Optional static seed file for Eukosmos
 //
-//  For LOCAL use: you do NOT need this file.
+//  For LOCAL use: you do NOT need this file. This file is randomly generated for the preview purpose. You can delete it.
 //  Your data is saved as data_<section>.json in your folder.
 //
 //  Useful for GitHub Pages deployment or pre-populating on first run.
