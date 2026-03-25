@@ -1,4 +1,5 @@
 data_*.json
+data.js
 pdf/
 lib/
 __pycache__/
