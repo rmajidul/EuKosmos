@@ -221,8 +221,8 @@ After editing, hard-refresh Chrome: `Cmd+Shift+R` (Mac) or `Ctrl+Shift+R` (Windo
 
 | Problem | Fix |
 |---------|-----|
-| Page looks wrong / old version | Hard-refresh: `Cmd+Shift+R` / `Ctrl+Shift+R` | delete browsing history and cache for last 24 hrs or 7 days
-| Port 8080 already in use | "`lsof -ti tcp:8080 | xargs kill`" or  `python3 serve.py 9090`, then open `http://localhost:9090` |
+| Page looks wrong / old version | Hard-refresh: `Cmd+Shift+R` / `Ctrl+Shift+R` / delete browsing history and cache for last 24 hrs or 7 days|
+| Port 8080 already in use | `lsof -ti tcp:8080 \| xargs kill` or  `python3 serve.py 9090`, then open `http://localhost:9090` |
 | ADS auto-fill not working | Check your token is entered in the Lit. Papers form |
 | Equations not rendering | Needs internet on first run to download KaTeX; offline after that |
 | Data not saving | Open via `http://localhost:8080`, not `file://` |
