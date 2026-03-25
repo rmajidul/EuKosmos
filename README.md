@@ -1,7 +1,12 @@
 # 🔭 Eukosmos — A Researcher's Notebook
 
-> A self-contained, browser-based research notebook for astronomers.  
-> Everything runs locally on your machine — no cloud, no account, no installation beyond Python 3.
+# Motivation
+Research workflows are fragmented. Literature lives in Zotero, notes scatter across Google Docs, ideas disappear into paper notebooks, proposals have their own folders, and job applications their own spreadsheets — none of which talk to each other.
+
+Eukosmos was built to fix this. One portable folder, one file, everything in one place — literature, notes, ideas, proposals, job tracking, code, contacts, and photos — all searchable, all yours, entirely offline.
+
+> A self-contained, browser-based research notebook for researchers.  
+> Everything runs locally on your machine — no cloud, no account, no subscriptions, no installation beyond Python 3.
 
 ---
 
