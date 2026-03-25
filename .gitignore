@@ -1,0 +1,8 @@
+data_*.json
+pdf/
+lib/
+__pycache__/
+*.pyc
+.DS_Store
+_test.tmp
+Thumbs.db
