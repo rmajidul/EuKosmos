@@ -12,7 +12,7 @@ Eukosmos was built to fix this. One portable folder, one file, everything in one
 
 ## What is this?
 
-Eukosmos (click [here](https://rmajidul.github.io/eukosmos/) for preview) is a single-page web application (`index.html`) that acts as a personal research hub. It keeps your literature notes, ideas, proposals, job applications, code, conference notes, tasks, and more — all in one place, searchable, tagged, and stored as plain JSON files on your own computer.
+Eukosmos (click [here](https://rmajidul.github.io/EuKosmos/) for preview) is a single-page web application (`index.html`) that acts as a personal research hub. It keeps your literature notes, ideas, proposals, job applications, code, conference notes, tasks, and more — all in one place, searchable, tagged, and stored as plain JSON files on your own computer.
 
 It is designed to be shared within a research group: everyone runs their own local copy, and data can be exported/imported between members as JSON files.
 
