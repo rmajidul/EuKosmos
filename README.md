@@ -48,9 +48,10 @@ It is designed to be shared within a research group: everyone runs their own loc
 - No other packages or installations needed
 
 ### Running the notebook
+*You can place the directory in [Dropbox](https://www.dropbox.com/referrals/AAAZAqQ3u_3TrKQd4h7IGmkW1P-o6tEifJs?src=global9) for data backup and use this notebook over multiple machines.*
 
 ```bash
-# 1. Clone or download this repository, and make sure it has read/write access (chmod -R 777 eukosmos). You can place the directory in [Dropbox](https://www.dropbox.com/referrals/AAAZAqQ3u_3TrKQd4h7IGmkW1P-o6tEifJs?src=global9) for data backup and use this notebook over multiple machines.
+# 1. Clone or download this repository, and make sure it has read/write access (chmod -R 777 eukosmos). 
 
 git clone https://github.com/rmajidul/eukosmos.git
 cd eukosmos
