@@ -12,7 +12,7 @@ Eukosmos was built to fix this. One portable folder, one file, everything in one
 
 ## What is this?
 
-Eukosmos is a single-page web application (`index.html`) that acts as a personal research hub. It keeps your literature notes, ideas, proposals, job applications, code, conference notes, tasks, and more — all in one place, searchable, tagged, and stored as plain JSON files on your own computer.
+Eukosmos (click [here](https://rmajidul.github.io/eukosmos/) for preview) is a single-page web application (`index.html`) that acts as a personal research hub. It keeps your literature notes, ideas, proposals, job applications, code, conference notes, tasks, and more — all in one place, searchable, tagged, and stored as plain JSON files on your own computer.
 
 It is designed to be shared within a research group: everyone runs their own local copy, and data can be exported/imported between members as JSON files.
 
@@ -222,7 +222,7 @@ After editing, hard-refresh Chrome: `Cmd+Shift+R` (Mac) or `Ctrl+Shift+R` (Windo
 | Problem | Fix |
 |---------|-----|
 | Page looks wrong / old version | Hard-refresh: `Cmd+Shift+R` / `Ctrl+Shift+R` | delete browsing history and cache for last 24 hrs or 7 days
-| Port 8080 already in use, `lsof -ti tcp:8080 | xargs kill` or | `python3 serve.py 9090`, then open `http://localhost:9090` |
+| Port 8080 already in use | "`lsof -ti tcp:8080 | xargs kill`" or  `python3 serve.py 9090`, then open `http://localhost:9090` |
 | ADS auto-fill not working | Check your token is entered in the Lit. Papers form |
 | Equations not rendering | Needs internet on first run to download KaTeX; offline after that |
 | Data not saving | Open via `http://localhost:8080`, not `file://` |
