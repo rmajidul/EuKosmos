@@ -48,7 +48,9 @@ It is designed to be shared within a research group: everyone runs their own loc
 - No other packages or installations needed
 
 ### Running the notebook
-*You can place the directory in [Dropbox](https://www.dropbox.com/referrals/AAAZAqQ3u_3TrKQd4h7IGmkW1P-o6tEifJs?src=global9) for data backup and use this notebook over multiple machines.*
+*You can place the directory in [Dropbox](https://www.dropbox.com/referrals/AAAZAqQ3u_3TrKQd4h7IGmkW1P-o6tEifJs?src=global9) for data backup and use this notebook over multiple machines.
+
+*
 
 ```bash
 # 1. Clone or download this repository, and make sure it has read/write access (chmod -R 777 eukosmos). 
@@ -64,6 +66,42 @@ python3 serve.py
 ```
 
 Your data is saved automatically as `data_*.json` files in the same folder.
+
+
+## ☁️ Multi-Device Sync (Dropbox Setup)
+
+Eukosmos is designed to be "location agnostic." By placing your workspace in a synced folder, your research follows you from the office to your home laptop without manual exports.
+
+### 1. Initial Setup
+1. **Prepare Dropbox:** Download and install [Dropbox](https://www.dropbox.com/) if you haven’t already. 
+   *(Tip: Using a referral link can grant you extra free storage space!)*
+2. **Move Workspace:** Place your entire `Eukosmos` folder (containing `index.html`, `serve.py`, etc.) inside your Dropbox directory (e.g., `~/Dropbox/Eukosmos`).
+3. **Connect:** Run `python3 serve.py`, open the browser, and use the **📂 Connect Folder** button to select this Dropbox location.
+
+### 2. Accessing from a Second Computer
+1. **Sync:** Ensure Dropbox is installed and has finished syncing the folder to the new machine.
+2. **Launch:** Navigate to the folder in your terminal and run:
+   ```bash
+   python3 serve.py
+Open http://localhost:8080 in your browser.
+
+Click the 📂 Connect Folder button in the sidebar and select the same folder (the one inside Dropbox).
+
+All your data (notes, papers, photos, etc.) will load immediately from the synced JSON files.
+
+### How it works
+Every time you add or edit an entry, the app updates the corresponding data_*.json file on disk (if you’ve connected a folder).
+
+Dropbox detects these changes and syncs them to all your devices.
+
+When you open the notebook on another machine, the files are already up‑to‑date – no manual export/import needed.
+
+# Notes
+You must run serve.py from the same folder on each computer – the script serves the files from its current directory.
+
+The folder does not need to be in Dropbox; any sync service (iCloud Drive, Google Drive, OneDrive, Syncthing, or even Git) will work just as well.
+
+All data remains on your local drives; Dropbox only stores an encrypted copy in the cloud – your data never leaves your control.
 
 > **Why not just open index.html directly?**  
 > Chrome blocks folder read/write access for `file://` pages. The server also proxies NASA ADS API calls, which browsers block due to CORS restrictions.
