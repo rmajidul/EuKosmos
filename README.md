@@ -73,7 +73,7 @@ Your data is saved automatically as `data_*.json` files in the same folder.
 Eukosmos is designed to be "location agnostic." By placing your workspace in a synced folder, your research follows you from the office to your home laptop without manual exports.
 
 ### 1. Initial Setup
-1. **Prepare Dropbox:** Download and install [Dropbox](https://www.dropbox.com/) if you haven’t already. 
+1. **Prepare Dropbox:** Download and install [Dropbox](https://www.dropbox.com/referrals/AAAZAqQ3u_3TrKQd4h7IGmkW1P-o6tEifJs?src=global9) if you haven’t already. 
    *(Tip: Using a referral link can grant you extra free storage space!)*
 2. **Move Workspace:** Place your entire `Eukosmos` folder (containing `index.html`, `serve.py`, etc.) inside your Dropbox directory (e.g., `~/Dropbox/Eukosmos`).
 3. **Connect:** Run `python3 serve.py`, open the browser, and use the **📂 Connect Folder** button to select this Dropbox location.
