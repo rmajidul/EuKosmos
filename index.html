@@ -146,7 +146,7 @@
 
   /* Width of the left sidebar in pixels.
      Increase if nav item labels get cut off (e.g. --sidebar:260px) */
-  --sidebar:220px;
+  --sidebar:260px;
 
   /* ════════════════════════════════════════════════════════
      WINDOW / PANEL SIZE CONTROLS  ←  edit these to taste
@@ -513,7 +513,6 @@ body.light nav a { color: var(--text2); }
 body.light nav a:hover { background:rgba(21,88,192,.08); color:var(--glow); }
 body.light nav a.active { background:rgba(21,88,192,.12); color:var(--glow); border-left-color:var(--glow); }
 body.light .nav-group-label { color: var(--text3); }
-body.light .nav-drag-handle { color: var(--text3); }
 body.light .status-dot { background: var(--green); }
 body.light #btn-theme { color: var(--amber) !important; }
 
@@ -670,17 +669,6 @@ body.light .read-badge.read-unread { color:var(--text3); border-color:var(--bord
 }
 /* ── Draggable nav ─────────────────────────────────── */
 #nav-sortable{display:flex;flex-direction:column}
-.nav-item-wrap{display:flex;align-items:center;position:relative;user-select:none}
-.nav-item-wrap a{flex:1}
-.nav-drag-handle{
-  display:flex;align-items:center;justify-content:center;
-  width:18px;min-width:18px;cursor:grab;opacity:0;
-  color:var(--text3);font-size:.7rem;transition:opacity .15s;
-  padding:0 2px 0 5px;
-}
-.nav-item-wrap:hover .nav-drag-handle{opacity:.7}
-.nav-item-wrap.dragging{opacity:.35;pointer-events:none}
-.nav-item-wrap.drag-over > a{background:var(--glow-dim);border-left:2px solid var(--glow)}
 /* ── Compact view — all values driven by :root variables ── */
 body.compact .card{padding:var(--compact-card-pad)}
 body.compact .card-body{font-size:calc(var(--fs-card)*var(--compact-text-scale));-webkit-line-clamp:var(--compact-clamp)}
@@ -693,17 +681,17 @@ body.compact .h-rule{margin:.5rem 0}
 body.compact .tags{margin-top:.2rem}
 body.compact .abstract-block,body.compact .bibtex-block{margin-top:.3rem}
 /* ── Ticker ── */
-.ticker-wrap{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:4px;overflow:hidden;margin-bottom:1.25rem;height:36px;display:flex;align-items:center;position:relative}
-.ticker-label{flex-shrink:0;font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;color:var(--bg);background:var(--amber);padding:0 .75rem;height:100%;display:flex;align-items:center;z-index:2;white-space:nowrap}
+.ticker-wrap{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:4px;overflow:hidden;margin-bottom:1.25rem;height:56px;display:flex;align-items:center;position:relative}
+.ticker-label{flex-shrink:0;font-family:var(--mono);font-size:1.0rem;letter-spacing:.14em;color:var(--bg);background:var(--amber);padding:0 1.0rem;height:100%;display:flex;align-items:center;z-index:2;white-space:nowrap}
 .ticker-track{flex:1;overflow:hidden;height:100%;position:relative}
 .ticker-inner{display:flex;align-items:center;gap:2.5rem;white-space:nowrap;will-change:transform}
 @keyframes ticker-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.ticker-item{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.65rem;cursor:pointer;padding:.2rem .5rem;border-radius:2px;transition:background .15s;flex-shrink:0}
+.ticker-item{display:inline-flex;align-items:center;gap:.8rem;font-family:var(--mono);font-size:1.0rem;cursor:pointer;padding:.3rem .8rem;border-radius:2px;transition:background .15s;flex-shrink:0}
 .ticker-item:hover{background:var(--panel2)}
 .ticker-item.overdue{color:var(--red)}
 .ticker-item.due-soon{color:var(--amber)}
 .ticker-item.due-later{color:var(--green)}
-.ticker-item .ticker-icon{font-size:.7rem;opacity:.8}
+.ticker-item .ticker-icon{font-size:.9rem;opacity:.8}
 .ticker-empty{font-family:var(--mono);font-size:.62rem;color:var(--text3);padding:0 1rem}
 
 /* ── Pinboard ── */
@@ -875,6 +863,15 @@ body.compact .abstract-block,body.compact .bibtex-block{margin-top:.3rem}
 /* Make textareas inside edit modal taller for comfortable writing */
 #edit-box textarea{min-height:140px !important; font-size:var(--fs-input) !important; line-height:1.8 !important;}
 #edit-box input{font-size:var(--fs-input) !important;}
+/* Title textarea in Add Paper form — looks like input but grows to fit long titles */
+textarea#p-title, textarea#mp-title,
+#edit-box textarea[id$="-title"] {
+  min-height:2.8rem !important;
+  line-height:1.5 !important;
+  resize:none !important;
+  overflow:hidden;
+  field-sizing:content; /* modern browsers auto-grow */
+}
 .modal-import-ta{width:100%;background:var(--surface);border:1px solid var(--border2);color:var(--text);font-family:var(--mono);font-size:.73rem;padding:.72rem;min-height:170px;border-radius:2px;outline:none;resize:vertical;margin-bottom:.72rem}
 .modal-import-ta:focus{border-color:var(--amber)}
 .import-hint{font-family:var(--mono);font-size:.6rem;color:var(--text3);margin-bottom:.9rem;line-height:1.6}
@@ -1099,8 +1096,8 @@ body.compact .abstract-block,body.compact .bibtex-block{margin-top:.3rem}
   <div class="form-panel" id="form-papers">
     <h3>// New Paper Summary</h3>
     <div class="ads-fetch-row">
-      <input id="p-ads-quick" placeholder="Paste ADS, SciX, or arXiv URL / bibcode → auto-fill">
-      <button class="btn-fetch" id="p-fetch-btn" onclick="fetchADS()">⚡ Auto-fill from ADS</button>
+      <input id="p-ads-quick" placeholder="Paste ADS, SciX, arXiv or InspireHEP URL / bibcode → auto-fill">
+      <button class="btn-fetch" id="p-fetch-btn" onclick="fetchADS()">⚡ Auto-fill</button>
     </div>
     <div class="ads-hint" style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
       <span>// ADS API token required —</span>
@@ -1111,7 +1108,7 @@ body.compact .abstract-block,body.compact .bibtex-block{margin-top:.3rem}
         value="YOUR_ADS_API_TOKEN_HERE">
     </div>
     <div class="form-grid">
-      <div class="f-row full"><label>Title</label><div class="ac-wrap"><input id="p-title" placeholder="Full paper title" autocomplete="off" oninput="acInput(this,'p-title-ac',acPool('papers','title'))"><div class="ac-list" id="p-title-ac"></div></div></div>
+      <div class="f-row full"><label>Title</label><textarea id="p-title" placeholder="Full paper title" autocomplete="off" rows="2" style="min-height:2.8rem;resize:none;overflow:hidden;line-height:1.5" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea></div>
       <div class="f-row"><label>Authors</label><div class="ac-wrap"><input id="p-authors" placeholder="Smith et al. (2024)" autocomplete="off" oninput="acInput(this,'p-authors-ac',acPool('papers','authors'))"><div class="ac-list" id="p-authors-ac"></div></div></div>
       <div class="f-row"><label>Journal / Year</label><input id="p-journal" placeholder="ApJ 2024"></div>
       <div class="f-row"><label>ADS URL</label><input id="p-ads" placeholder="https://ui.adsabs.harvard.edu/abs/..."></div>
@@ -1161,14 +1158,14 @@ body.compact .abstract-block,body.compact .bibtex-block{margin-top:.3rem}
   <div class="form-panel" id="form-mypapers">
     <h3>// Add My Paper</h3>
     <div class="ads-fetch-row">
-      <input id="mp-ads-quick" placeholder="Paste ADS, SciX, or arXiv URL / bibcode → auto-fill">
-      <button class="btn-fetch" id="mp-fetch-btn" onclick="fetchADSMyPaper()">⚡ Auto-fill from ADS</button>
+      <input id="mp-ads-quick" placeholder="Paste ADS, SciX, arXiv or InspireHEP URL / bibcode → auto-fill">
+      <button class="btn-fetch" id="mp-fetch-btn" onclick="fetchADSMyPaper()">⚡ Auto-fill</button>
     </div>
     <div class="ads-hint" style="font-family:var(--mono);font-size:.62rem;color:var(--text3)">
       // Uses same ADS API token as Lit. Papers — enter it there once and it applies here too
     </div>
     <div class="form-grid">
-      <div class="f-row full"><label>Title</label><input id="mp-title" placeholder="Full paper title"></div>
+      <div class="f-row full"><label>Title</label><textarea id="mp-title" placeholder="Full paper title" rows="2" style="min-height:2.8rem;resize:none;overflow:hidden;line-height:1.5" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea></div>
       <div class="f-row"><label>Authors (full list)</label><input id="mp-authors" placeholder="Your Name, Co-author, ..."></div>
       <div class="f-row"><label>Journal / Year</label><input id="mp-journal" placeholder="ApJ 2024 / MNRAS in press"></div>
       <div class="f-row"><label>Status</label>
@@ -1766,8 +1763,8 @@ body.compact .abstract-block,body.compact .bibtex-block{margin-top:.3rem}
     <div style="margin-bottom:2rem">
       <div style="font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--glow);opacity:.8;margin-bottom:.7rem">// What's inside</div>
       <div style="display:flex;flex-direction:column;gap:.38rem">
-        <div style="display:flex;gap:.75rem;align-items:baseline"><span style="color:var(--glow);font-size:.7rem;min-width:1.1rem">◈</span><span style="font-family:var(--mono);font-size:.72rem;color:var(--text2)"><strong style="color:var(--text)">Literature Papers</strong> — ADS/SciX auto-fill, BibTeX export, read-status, star/bookmark</span></div>
-        <div style="display:flex;gap:.75rem;align-items:baseline"><span style="color:var(--gold);font-size:.7rem;min-width:1.1rem">★</span><span style="font-family:var(--mono);font-size:.72rem;color:var(--text2)"><strong style="color:var(--text)">My Papers</strong> — track your own publications, arXiv preprint sync to ADS/SciX</span></div>
+        <div style="display:flex;gap:.75rem;align-items:baseline"><span style="color:var(--glow);font-size:.7rem;min-width:1.1rem">◈</span><span style="font-family:var(--mono);font-size:.72rem;color:var(--text2)"><strong style="color:var(--text)">Literature Papers</strong> — ADS/SciX/InspireHEP auto-fill, 3-way sync, BibTeX export, read-status, star/bookmark</span></div>
+        <div style="display:flex;gap:.75rem;align-items:baseline"><span style="color:var(--gold);font-size:.7rem;min-width:1.1rem">★</span><span style="font-family:var(--mono);font-size:.72rem;color:var(--text2)"><strong style="color:var(--text)">My Papers</strong> — track your own publications, arXiv preprint sync to ADS/SciX/InspireHEP</span></div>
         <div style="display:flex;gap:.75rem;align-items:baseline"><span style="color:var(--amber);font-size:.7rem;min-width:1.1rem">💡</span><span style="font-family:var(--mono);font-size:.72rem;color:var(--text2)"><strong style="color:var(--text)">Research Ideas</strong> — kanban stages (Backlog → Active → Done), feasibility rating</span></div>
         <div style="display:flex;gap:.75rem;align-items:baseline"><span style="color:var(--purple);font-size:.7rem;min-width:1.1rem">💼</span><span style="font-family:var(--mono);font-size:.72rem;color:var(--text2)"><strong style="color:var(--text)">Proposals</strong> — observational &amp; funding proposals, deadlines, status tracking</span></div>
         <div style="display:flex;gap:.75rem;align-items:baseline"><span style="color:var(--purple);font-size:.7rem;min-width:1.1rem">🏢</span><span style="font-family:var(--mono);font-size:.72rem;color:var(--text2)"><strong style="color:var(--text)">Job Register</strong> — applications, referee tracking, draft reference request emails</span></div>
@@ -1792,7 +1789,7 @@ body.compact .abstract-block,body.compact .bibtex-block{margin-top:.3rem}
         <div style="font-family:var(--head);font-size:1rem;font-weight:600;letter-spacing:.06em;color:var(--text);margin-bottom:.2rem">Dr. Majidul Rahaman</div>
         <div style="font-family:var(--mono);font-size:.65rem;color:var(--text3);line-height:1.8">
           Postdoctoral Researcher · Institute of Astronomy, NTHU, Taiwan<br>
-          <a href="mailto:rmajidul@gmail.com" style="color:var(--glow);text-decoration:none">rmajidul@gmail.com</a>
+          <a href="/cdn-cgi/l/email-protection#95e7f8f4fffcf1e0f9d5f2f8f4fcf9bbf6faf8" style="color:var(--glow);text-decoration:none"><span class="__cf_email__" data-cfemail="186a757972717c6d74587f75797174367b7775">[email&#160;protected]</span></a>
           &nbsp;·&nbsp;
           <a href="https://astr.site.nthu.edu.tw/p/406-1336-223724,r2561.php?Lang=en" target="_blank" style="color:var(--glow);text-decoration:none">Personal page ↗</a>
         </div>
@@ -1806,9 +1803,9 @@ body.compact .abstract-block,body.compact .bibtex-block{margin-top:.3rem}
     <!-- Footer -->
     <div style="text-align:center;padding:1.25rem 0;border-top:1px solid var(--border)">
       <div style="font-family:var(--mono);font-size:.65rem;color:var(--text3);line-height:2.2">
-        Made with ♥ for the astronomy community by <strong style="color:var(--text2)">Dr. M. Rahaman</strong><br>
+        Made with ♥ for the Research Community by <strong style="color:var(--text2)">Dr. M. Rahaman</strong><br>
         Open source &nbsp;·&nbsp; MIT License &nbsp;·&nbsp;
-        <a href="https://github.com" target="_blank" style="color:var(--glow2);text-decoration:none">GitHub ↗</a>
+        <a href="https://github.com/rmajidul/EuKosmos/blob/main/README.md" target="_blank" style="color:var(--glow2);text-decoration:none">GitHub ↗</a>
       </div>
     </div>
 
@@ -1870,7 +1867,7 @@ body.compact .abstract-block,body.compact .bibtex-block{margin-top:.3rem}
 <div id="toast"></div>
 
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ════════════════════════════════════════════════
 //  RICH TEXT — Markdown renderer, KaTeX equations, paste images
 // ════════════════════════════════════════════════
@@ -1973,10 +1970,32 @@ function mdDetailHTML(text) {
   return `<div class="md-body">${mdRender(text)}</div>`;
 }
 
-// ── mdPostRender — trigger KaTeX on a container after innerHTML set ──
+// ── renderAbstractLatex — apply KaTeX to plain-text abstract containers ──
+// Scans the container for elements with class 'abstract-text' or 'detail-abstract-text'
+// and renders any $...$ / $$...$$ math found in their text content.
+function renderAbstractLatex(container) {
+  if(!container) return;
+  container.querySelectorAll('.abstract-text, .detail-abstract-text').forEach(el => {
+    if(el.dataset.katexDone) return;
+    el.dataset.katexDone = '1';
+    // Replace $$...$$ (display) then $...$ (inline) with KaTeX spans
+    let html = esc(el.textContent || '');
+    // Must work on raw text — convert newlines to <br> first
+    html = html.replace(/\n/g, '<br>');
+    // Display math $$...$$
+    html = html.replace(/\$\$([\s\S]*?)\$\$/g, (_, math) =>
+      `<span class="md-math-display" data-math="${math.replace(/"/g,'&quot;')}"></span>`);
+    // Inline math $...$
+    html = html.replace(/\$((?:[^$]|\\.)+?)\$/g, (_, math) =>
+      `<span class="md-math-inline" data-math="${math.replace(/"/g,'&quot;')}"></span>`);
+    el.innerHTML = html;
+    renderKaTeX(el);
+  });
+}
 function mdPostRender(container) {
   if(!container) return;
   container.querySelectorAll('.md-body').forEach(el => renderKaTeX(el));
+  renderAbstractLatex(container);
 }
 
 // ══════════════════════════════════════════════════════════════════════
@@ -2482,8 +2501,10 @@ function exportAllBackup() {
 }
 
 // ── exportMasterBibtex() — downloads master_library.bib ─────────────
-// Cite key format: FirstAuthor_Bibcode (bibcode contains year)
-// Use in LaTeX: \cite{Smith_2024_2024ApJ_961_173H}
+// Cite key format:
+//   ADS/SciX papers:    FirstAuthor_Bibcode  (e.g. Smith_2024ApJ_961_173H)
+//   InspireHEP papers:  InspireHEP texkey   (e.g. Rahaman:2022xkj)
+// Use in LaTeX: \cite{key}
 function exportMasterBibtex(){
   const all=[...(DB.papers||[]).map(p=>({...p,_s:'Lit.Papers'})),...(DB.mypapers||[]).map(p=>({...p,_s:'MyPapers'}))];
   const withB=all.filter(p=>p.bibtex&&p.bibtex.trim().startsWith('@'));
@@ -2501,15 +2522,23 @@ function exportMasterBibtex(){
   toast('✓ master_library.bib downloaded ('+withB.length+' entries)','ok');
 }
 function _rewriteKey(p){
-  // Citekey format: FirstAuthor_Bibcode
-  // e.g. Smith_2024ApJ_961_173H  (bibcode already contains year — no need to repeat it)
+  // If this paper was fetched from or synced to InspireHEP, use the InspireHEP texkey
+  if((p.source==='inspirehep' || p.inspireKey) && p.inspireKey && p.inspireKey.trim()) {
+    const key = p.inspireKey.trim();
+    var bib = p.bibtex.trim();
+    var braceIdx = bib.indexOf('{');
+    var commaIdx = bib.indexOf(',');
+    if(braceIdx >= 0 && commaIdx > braceIdx) {
+      bib = bib.slice(0, braceIdx+1) + key + bib.slice(commaIdx);
+    }
+    return bib;
+  }
+  // ADS/SciX default: FirstAuthor_Bibcode
   const auth=(p.authors||'Unknown').split(/;|,/)[0].trim().split(' ').filter(Boolean).pop().replace(/[^A-Za-z]/g,'')||'Unknown';
   const adsParts=(p.ads||'').split('/abs/');
   const rawCode=adsParts.length>1?adsParts[1].split('/')[0].split('?')[0]:'paper';
   const code=decodeURIComponent(rawCode).replace(/[^A-Za-z0-9]/g,'_').replace(/_+/g,'_').replace(/^_|_$/g,'');
   const key=auth+'_'+(code||'paper');
-  // Replace the opening @type{oldkey, with @type{newkey,
-  // Uses indexOf to find the first comma and replace everything before it
   var bib=p.bibtex.trim();
   var braceIdx=bib.indexOf('{');
   var commaIdx=bib.indexOf(',');
@@ -2592,17 +2621,27 @@ function uid() { return Date.now().toString(36)+Math.random().toString(36).slice
 async function downloadFormPDF(section) {
   if(location.protocol==='file:') { toast('PDF download requires http://localhost (serve.py)','err'); return; }
   const isLit = section==='papers';
-  // Get current form values
   const authors  = document.getElementById(isLit?'p-authors':'mp-authors')?.value || '';
   const adsUrl   = document.getElementById(isLit?'p-ads':'mp-ads')?.value || '';
   const arxivUrl = isLit ? '' : (document.getElementById('mp-arxiv')?.value || '');
   const pdfField = document.getElementById(isLit?'p-pdf':'mp-pdf');
-  // Build filename: FirstAuthor_Bibcode.pdf
-  const firstAuth = authors.split(/;|,/)[0].trim().split(' ').filter(Boolean).pop().replace(/[^A-Za-z]/g,'') || 'Unknown';
-  const bibM = adsUrl.split('/abs/')[1];
-  const bibcode = bibM ? bibM.split('/')[0].split('?')[0] : '';
-  const safeBib = bibcode.replace(/[^A-Za-z0-9]/g,'_').replace(/_+/g,'_').replace(/^_|_$/g,'');
-  const filename = firstAuth + '_' + (safeBib || 'paper');
+  // InspireHEP key → use as filename if available
+  const insKeyEl = document.getElementById(isLit?'p-inspirekey':'mp-inspirekey');
+  const inspireKey = insKeyEl ? (insKeyEl.value||'').trim() : '';
+  const srcEl  = document.getElementById(isLit?'p-source':'mp-source');
+  const source = srcEl ? (srcEl.value||'') : '';
+
+  let filename;
+  if((source==='inspirehep'||inspireKey) && inspireKey) {
+    filename = inspireKey.replace(/[^A-Za-z0-9:_-]/g,'_');
+  } else {
+    const firstAuth = authors.split(/;|,/)[0].trim().split(' ').filter(Boolean).pop().replace(/[^A-Za-z]/g,'') || 'Unknown';
+    const bibM = adsUrl.split('/abs/')[1];
+    const bibcode = bibM ? bibM.split('/')[0].split('?')[0] : '';
+    const safeBib = bibcode.replace(/[^A-Za-z0-9]/g,'_').replace(/_+/g,'_').replace(/^_|_$/g,'');
+    filename = firstAuth + '_' + (safeBib || 'paper');
+  }
+
   // Determine PDF URL: prefer arXiv
   let pdfUrl = '';
   if(arxivUrl && arxivUrl.includes('arxiv.org')) {
@@ -2613,7 +2652,6 @@ async function downloadFormPDF(section) {
     const id = adsUrl.split('/abs/')[1] || '';
     if(id) pdfUrl = 'https://arxiv.org/pdf/' + id.split('?')[0];
   }
-  // Also check the hidden arxivId input (populated by Auto-fill for ADS/SciX papers)
   const axEl = document.getElementById(isLit ? 'p-arxivid' : 'mp-arxivid');
   if(!pdfUrl && axEl && axEl.value) pdfUrl = 'https://arxiv.org/pdf/' + axEl.value.split('?')[0];
   if(!pdfUrl) { toast('No arXiv PDF found. Run Auto-fill first — if paper is on arXiv the PDF link is detected automatically.','err'); return; }
@@ -2641,8 +2679,11 @@ async function downloadPDF(section,id,url,suggestedName){
       entry.pdf=d.path;
       save(section);
       // Refresh detail panel if showing this entry
-      if(currentDetailSection===section&&currentDetailId===id)
-        document.getElementById('detail-body').innerHTML=buildDetailHTML(section,entry);
+      if(currentDetailSection===section&&currentDetailId===id) {
+        const _db=document.getElementById('detail-body');
+        _db.innerHTML=buildDetailHTML(section,entry);
+        mdPostRender(_db);
+      }
       // Refresh the card so 📄 PDF button appears immediately
       if(section==='papers') renderPapers();
       else if(section==='mypapers') renderMyPapers();
@@ -2651,7 +2692,11 @@ async function downloadPDF(section,id,url,suggestedName){
   }catch(e){toast('Download error: '+e.message,'err');}
 }
 function suggestPdfName(e){
-  // Filename: FirstAuthor_Bibcode (no year — bibcode contains year already)
+  // If fetched from InspireHEP, use InspireHEP texkey as filename
+  if((e.source==='inspirehep'||e.inspireKey) && e.inspireKey) {
+    return e.inspireKey.replace(/[^A-Za-z0-9:_-]/g,'_');
+  }
+  // Default: FirstAuthor_Bibcode (no year — bibcode contains year already)
   const auth=(e.authors||'Unknown').split(/;|,/)[0].trim().split(' ').filter(Boolean).pop().replace(/[^A-Za-z]/g,'')||'Unknown';
   const adsParts=(e.ads||'').split('/abs/');
   const rawCode=adsParts.length>1?adsParts[1].split('/')[0].split('?')[0]:'paper';
@@ -2786,64 +2831,18 @@ const NAV_META = {
   proposals:     {icon:'💼', label:'Proposals'},
   jobs:          {icon:'🏢', label:'Job Register'},
 };
+// Nav order is always fixed — no localStorage dependency so the nav never disappears after updates
 const NAV_DEFAULT = ['todos','notes','papers','mypapers','ideas','jobs','proposals','conferences','links','snippets','codelib','collaborators'];
-
-function _loadNavOrder() {
-  try {
-    const s = JSON.parse(localStorage.getItem('astro_nav_order')||'null');
-    if(Array.isArray(s) && s.length===NAV_DEFAULT.length && NAV_DEFAULT.every(k=>s.includes(k))) return s;
-  } catch(_){}
-  return [...NAV_DEFAULT];
-}
-let _navOrder = _loadNavOrder();
-let _navDragSrc = null;
 
 function renderNav() {
   const el = document.getElementById('nav-sortable');
   if(!el) return;
-  el.innerHTML = _navOrder.map(k => {
+  el.innerHTML = NAV_DEFAULT.map(k => {
     const m = NAV_META[k]; if(!m) return '';
-    return '<div class="nav-item-wrap" data-key="'+k+'" draggable="true">'
-      +'<span class="nav-drag-handle" title="Drag to reorder">⠿</span>'
-      +'<a onclick="show(\''+k+'\')" id="nav-'+k+'">'
+    return '<a onclick="show(\''+k+'\')" id="nav-'+k+'">'
       +'<span class="nav-icon">'+m.icon+'</span> '+m.label
-      +' <span class="nav-count" id="cnt-'+k+'">0</span></a></div>';
+      +' <span class="nav-count" id="cnt-'+k+'">0</span></a>';
   }).join('');
-
-  el.querySelectorAll('.nav-item-wrap').forEach(wrap => {
-    wrap.addEventListener('dragstart', e => {
-      _navDragSrc = wrap;
-      setTimeout(()=>wrap.classList.add('dragging'), 0);
-      e.dataTransfer.effectAllowed = 'move';
-    });
-    wrap.addEventListener('dragend', () => {
-      wrap.classList.remove('dragging');
-      el.querySelectorAll('.nav-item-wrap').forEach(w=>w.classList.remove('drag-over'));
-    });
-    wrap.addEventListener('dragover', e => {
-      e.preventDefault();
-      el.querySelectorAll('.nav-item-wrap').forEach(w=>w.classList.remove('drag-over'));
-      if(wrap !== _navDragSrc) wrap.classList.add('drag-over');
-    });
-    wrap.addEventListener('dragleave', () => wrap.classList.remove('drag-over'));
-    wrap.addEventListener('drop', e => {
-      e.preventDefault();
-      if(!_navDragSrc || _navDragSrc===wrap) return;
-      const src = _navDragSrc.dataset.key;
-      const dst = wrap.dataset.key;
-      const si  = _navOrder.indexOf(src);
-      const di  = _navOrder.indexOf(dst);
-      _navOrder.splice(si,1);
-      _navOrder.splice(di,0,src);
-      localStorage.setItem('astro_nav_order', JSON.stringify(_navOrder));
-      renderNav();
-      SECTIONS.forEach(k=>cnt(k));
-      // restore active highlight
-      const cur = window._curSection||'home';
-      const a = document.getElementById('nav-'+cur);
-      if(a) a.classList.add('active');
-    });
-  });
 }
 
 
@@ -3068,7 +3067,11 @@ function cycleIdeaStage(id) {
 }
 function renderIdeas() {
   const q=sq('q-ideas'), el=document.getElementById('list-ideas'); cnt('ideas');
-  let items=(DB.ideas||[]).filter(e=>!q||(e.title||'').toLowerCase().includes(q)||(e.hypothesis||'').toLowerCase().includes(q)||(e.tags||'').toLowerCase().includes(q));
+  let items=(DB.ideas||[]).filter(e=>{
+    if(!q) return true;
+    const blob=[e.title,e.hypothesis,e.tags,e.notes,e.papers,e.feasibility,e.stage,e.ref].filter(Boolean).join(' ').toLowerCase();
+    return blob.includes(q);
+  });
   if(!items.length){el.innerHTML=empty('no ideas yet');return;}
   el.innerHTML=items.map(e=>`
     <div class="card card-clickable" onclick="openDetail('ideas','${e.id}')">
@@ -3088,7 +3091,11 @@ function renderIdeas() {
 // ════ CODE LIBRARY ════
 function renderCodelib() {
   const q=sq('q-codelib'), el=document.getElementById('list-codelib'); cnt('codelib');
-  let items=(DB.codelib||[]).filter(e=>!q||(e.name||'').toLowerCase().includes(q)||(e.lang||'').toLowerCase().includes(q)||(e.purpose||'').toLowerCase().includes(q)||(e.tags||'').toLowerCase().includes(q)||(e.deps||'').toLowerCase().includes(q));
+  let items=(DB.codelib||[]).filter(e=>{
+    if(!q) return true;
+    const blob=[e.name,e.lang,e.purpose,e.tags,e.deps,e.usage,e.notes,e.path].filter(Boolean).join(' ').toLowerCase();
+    return blob.includes(q);
+  });
   if(!items.length){el.innerHTML=empty('no scripts registered yet');return;}
   el.innerHTML=items.map(e=>`
     <div class="card card-clickable" onclick="openDetail('codelib','${e.id}')">
@@ -3158,7 +3165,10 @@ function gsSearch() {
       const label=e.title||e.name||e.tel||e.caption||'Entry';
       const blob=[label,e.body||'',e.summary||'',e.abstract||'',e.authors||'',
         e.tags||'',e.hypothesis||'',e.purpose||'',e.notes||'',e.album||'',e.caption||'',
-        e.url||'',e.desc||'',e.cat||'',e.tel||'',e.targets||'',e.cond||'',e.event||'',e.speaker||''].join(' ').toLowerCase();
+        e.url||'',e.desc||'',e.cat||'',e.tel||'',e.targets||'',e.cond||'',e.event||'',e.speaker||'',
+        e.bibtex||'',e.journal||'',e.code||'',e.usage||'',e.deps||'',
+        e.pi||'',e.agency||'',e.institution||'',e.expertise||'',e.email||'',
+        e.description||'',e.language||'',e.inspireKey||'',e.inspireId||''].join(' ').toLowerCase();
       if(blob.includes(q)) results.push({k,e,label});
     });
   });
@@ -3391,7 +3401,7 @@ function renderTicker() {
     inner.style.transform = 'translateX(' + _tickerX + 'px)';
 
     // Speed: pixels per second. Bigger divisor = slower.
-    const pxPerSec = Math.max(40, halfW / 14);
+    const pxPerSec = Math.max(40, halfW / 24);
 
     let last = null;
     function step(ts) {
@@ -3834,8 +3844,15 @@ function renderPhotos(){
   const el=document.getElementById('list-photos');cnt('photos');
   if(!(DB.photos||[]).length){el.innerHTML='<div style="text-align:center;padding:3rem;font-family:var(--mono);font-size:.7rem;color:var(--text3)">// No photos yet — click ＋ Add Photos</div>';return;}
   const sorted=[...DB.photos].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
-  _lbItems=sorted;
-  el.innerHTML=sorted.map((p,i)=>`<div class="photo-item" onclick="lbOpen(${i})"><img class="photo-img" src="${p.img}" alt="${esc(p.caption)}" loading="lazy"><button class="photo-del" onclick="event.stopPropagation();delPhoto('${p.id}')">✕</button><div class="photo-caption"><div class="photo-caption-title">${esc(p.caption)}</div><div class="photo-caption-meta">${[p.album,p.date].filter(Boolean).join(' · ')}</div>${p.tags?'<div style="margin-top:.3rem">'+p.tags.split(',').map(t=>'<span class="tag tag-purple" style="font-size:.52rem">'+esc(t.trim())+'</span>').join(' ')+'</div>':''}</div></div>`).join('');
+  const filtered = q ? sorted.filter(p=>{
+    const blob=[p.caption,p.album,p.tags,p.date].filter(Boolean).join(' ').toLowerCase();
+    return blob.includes(q);
+  }) : sorted;
+  _lbItems=sorted; // lightbox always uses full sorted list for nav
+  el.innerHTML=filtered.map((p)=>{
+    const i=sorted.indexOf(p);
+    return `<div class="photo-item" onclick="lbOpen(${i})"><img class="photo-img" src="${p.img}" alt="${esc(p.caption)}" loading="lazy"><button class="photo-del" onclick="event.stopPropagation();delPhoto('${p.id}')">✕</button><div class="photo-caption"><div class="photo-caption-title">${esc(p.caption)}</div><div class="photo-caption-meta">${[p.album,p.date].filter(Boolean).join(' · ')}</div>${p.tags?'<div style="margin-top:.3rem">'+p.tags.split(',').map(t=>'<span class="tag tag-purple" style="font-size:.52rem">'+esc(t.trim())+'</span>').join(' ')+'</div>':''}</div></div>`;
+  }).join('');
 }
 function delPhoto(id){if(!confirm('Remove this photo?'))return;DB.photos=(DB.photos||[]).filter(p=>p.id!==id);save('photos');renderPhotos();}
 function lbOpen(i){_lbIdx=i;document.getElementById('photo-lightbox').classList.add('open');lbShow();document.addEventListener('keydown',lbKey);}
@@ -4041,7 +4058,7 @@ function buildDetailHTML(section, e) {
           <span class="abstract-toggle" id="abs-arrow-det">▶</span>
         </div>
         <div class="abstract-body" id="abs-body-det">
-          <div class="abstract-text">${esc(e.abstract)}</div>
+          <div class="abstract-text detail-abstract-text">${esc(e.abstract)}</div>
         </div>
       </div>`;
     }
@@ -4115,8 +4132,36 @@ function buildDetailHTML(section, e) {
 
   // Links area
   html += `<div class="detail-actions">`;
-  if(e.ads) html += `<a class="card-link" href="${esc(e.ads)}" target="_blank" rel="noopener">↗ ${e.source==='scix'?'SciX':e.source==='arxiv'?'arXiv':'ADS'}</a>`;
-  if(e.arxiv) html += `<a class="card-link" href="${esc(e.arxiv)}" target="_blank" rel="noopener">↗ arXiv</a>`;
+  // ADS / SciX / arXiv / InspireHEP links — show each independently when available
+  if(e.ads && e.source !== 'inspirehep') {
+    const _adsLabel = e.source==='scix'?'SciX':e.source==='arxiv'?'arXiv':'ADS';
+    html += `<a class="card-link" href="${esc(e.ads)}" target="_blank" rel="noopener">↗ ${_adsLabel}</a>`;
+  }
+  // Always show arXiv link if we have an arxivId
+  const _arxivIdForDetail = e.arxivId || '';
+  if(_arxivIdForDetail) {
+    const _arxivLinkUrl = 'https://arxiv.org/abs/' + _arxivIdForDetail;
+    // Don't duplicate if already shown as ADS link
+    if(!(e.source==='arxiv' && e.ads && e.ads.includes('arxiv.org')))
+      html += `<a class="card-link" href="${esc(_arxivLinkUrl)}" target="_blank" rel="noopener" style="border-color:rgba(187,102,0,.4);color:var(--amber)">↗ arXiv</a>`;
+    // ADS link
+    const _adsLinkFull = 'https://ui.adsabs.harvard.edu/abs/arxiv:' + _arxivIdForDetail;
+    if(e.source !== 'ads' && e.source !== 'scix')
+      html += `<a class="card-link" href="${esc(_adsLinkFull)}" target="_blank" rel="noopener" style="border-color:rgba(51,217,255,.3);color:var(--glow);opacity:.7">↗ ADS</a>`;
+    // SciX link
+    const _scixLinkFull = 'https://www.scixplorer.org/abs/arxiv:' + _arxivIdForDetail;
+    if(e.source !== 'scix')
+      html += `<a class="card-link" href="${esc(_scixLinkFull)}" target="_blank" rel="noopener" style="border-color:rgba(51,217,255,.3);color:var(--glow);opacity:.7">↗ SciX</a>`;
+    // InspireHEP link for all papers with arXiv ID
+    const _inspireLinkFromArxiv = 'https://inspirehep.net/search?p=arxiv%3A' + _arxivIdForDetail;
+    const _inspireDisplay = e.inspire || e.inspireUrl || _inspireLinkFromArxiv;
+    html += `<a class="card-link" href="${esc(_inspireDisplay)}" target="_blank" rel="noopener" style="border-color:rgba(187,153,255,.4);color:var(--purple)">↗ InspireHEP</a>`;
+  }
+  // Explicit InspireHEP link (stored)
+  if(e.source === 'inspirehep' && e.ads) {
+    html += `<a class="card-link" href="${esc(e.ads)}" target="_blank" rel="noopener" style="border-color:rgba(187,153,255,.4);color:var(--purple)">↗ InspireHEP</a>`;
+  }
+  if(e.arxiv && e.source !== 'arxiv') html += `<a class="card-link" href="${esc(e.arxiv)}" target="_blank" rel="noopener" style="border-color:rgba(187,102,0,.4);color:var(--amber)">↗ arXiv</a>`;
   if(e.link) html += `<a class="card-link" href="${esc(e.link)}" target="_blank" rel="noopener">↗ Link</a>`;
   if(e.url && section==='cutouts') html += `<a class="card-link" href="${esc(e.url)}" target="_blank" rel="noopener">↗ Cutout</a>`;
   if(e.url && section==='links')   html += `<a class="card-link" href="${esc(e.url)}" target="_blank" rel="noopener">↗ Open Link</a>`;
@@ -4143,11 +4188,17 @@ function buildDetailHTML(section, e) {
   const _isPreprint = e.source==='arxiv' || (!e.source && e.ads && e.ads.includes('arxiv.org'));
   const _pArxivId   = e.arxivId || (e.ads&&e.ads.includes('arxiv.org/abs/')?e.ads.split('/abs/')[1]?.split('/')[0]?.split('?')[0]:'');
   if(_isPreprint && _pArxivId){
-    // Preprint banner — shown when source is still 'arxiv' (not yet synced to SciX/ADS)
+    const _btnStyle='background:none;border:1px solid var(--amber);color:var(--amber);font-family:var(--mono);font-size:.6rem;padding:.22rem .65rem;cursor:pointer;border-radius:2px;margin:.2rem .25rem 0 0;transition:all .15s;white-space:nowrap';
+    const _btnStyleScix='background:none;border:1px solid var(--glow);color:var(--glow);font-family:var(--mono);font-size:.6rem;padding:.22rem .65rem;cursor:pointer;border-radius:2px;margin:.2rem .25rem 0 0;transition:all .15s;white-space:nowrap';
+    const _btnStyleIns='background:none;border:1px solid var(--purple);color:var(--purple);font-family:var(--mono);font-size:.6rem;padding:.22rem .65rem;cursor:pointer;border-radius:2px;margin:.2rem .25rem 0 0;transition:all .15s;white-space:nowrap';
     html+=`<div style="margin-top:1rem;padding:.75rem 1rem;background:var(--amber-d);border:1px solid rgba(255,192,85,.35);border-radius:3px;font-family:var(--mono);font-size:.65rem;color:var(--amber)">
-      📄 arXiv preprint — not yet synced to SciX/ADS.
-      <button onclick="syncToPaper('${section}','${e.id}','${_pArxivId}')" style="background:none;border:1px solid var(--amber);color:var(--amber);font-family:var(--mono);font-size:.62rem;padding:.25rem .75rem;cursor:pointer;border-radius:2px;margin-left:.5rem;transition:all .15s" onmouseover="this.style.background='rgba(255,192,85,.15)'" onmouseout="this.style.background='none'">🔄 Sync to SciX/ADS</button>
-      <div style="color:var(--text3);margin-top:.3rem;font-size:.58rem;line-height:1.6">Tries SciX first (broader coverage), then ADS. Once indexed, updates metadata and link automatically.</div>
+      📄 arXiv preprint — not yet synced to a literature database.
+      <div style="display:flex;flex-wrap:wrap;gap:.1rem;margin-top:.5rem">
+        <button onclick="syncToPaper('${section}','${e.id}','${_pArxivId}','ads')"  style="${_btnStyle}">🔄 Sync to [ADS]</button>
+        <button onclick="syncToPaper('${section}','${e.id}','${_pArxivId}','scix')" style="${_btnStyleScix}">🔄 Sync to [SciX]</button>
+        <button onclick="syncToInspireHEP('${section}','${e.id}','${_pArxivId}')"   style="${_btnStyleIns}">🔄 Sync to [InspireHEP]</button>
+      </div>
+      <div style="color:var(--text3);margin-top:.4rem;font-size:.58rem;line-height:1.6">ADS/SciX require your API token · InspireHEP is open access · syncing updates metadata and BibTeX</div>
     </div>`;
   }
   // BibTeX
@@ -4171,42 +4222,30 @@ function closeDetail() {
   document.getElementById('detail-backdrop').style.display='none';
   currentDetailSection = null; currentDetailId = null;
 }
-async function syncToPaper(section,id,overrideArxivId) {
-  // syncToPaper — tries SciX first (more up-to-date), then ADS.
-  // overrideArxivId: optional — used when entry.arxivId is missing (old entries)
-  // On success: updates all metadata, sets source to 'scix' or 'ads',
-  // stores the canonical URL, and refreshes the detail panel.
+async function syncToPaper(section,id,overrideArxivId,target) {
+  // syncToPaper — syncs an arXiv preprint to ADS or SciX.
+  // target = 'ads' | 'scix'  (defaults to 'scix' if omitted for backward compat)
   const entry=(DB[section]||[]).find(e=>e.id===id);
   if(!entry) return;
-  // Use stored arxivId, or the override passed from the banner, or extract from URL
   const _syncId = entry.arxivId || overrideArxivId ||
     (entry.ads&&entry.ads.includes('arxiv.org/abs/')?entry.ads.split('/abs/')[1]?.split('/')[0]?.split('?')[0]:'');
   if(!_syncId){ toast('Cannot sync — no arXiv ID found for this entry','err'); return; }
-  toast('Checking SciX for arxiv:'+_syncId+'…','inf');
 
-  // _adsCoreScixFirst: same as _adsCore but tries SciX proxy before ADS proxy
-  // Returns the result PLUS which service succeeded (_service: 'scix'|'ads')
-  async function _adsCoreScixFirst(bibcode) {
+  // Determine which service to try
+  const _wantScix = (target !== 'ads');
+  const svcLabel  = _wantScix ? 'SciX' : 'ADS';
+  toast('Checking ' + svcLabel + ' for arxiv:'+_syncId+'…','inf');
+
+  async function _adsCoreForTarget(bibcode) {
     const token = getADSToken();
     if(!token) throw new Error('NO_TOKEN');
-    const scixProxy = location.protocol!=='file:' ? location.origin+'/api/scix' : null;
-    const adsProxy  = location.protocol!=='file:' ? location.origin+'/api/ads'  : null;
-    // Try SciX first (newer, broader), then ADS proxy, then direct APIs
-    const APIS = [
-      scixProxy  ? {base:scixProxy,  svc:'scix'} : null,
-      adsProxy   ? {base:adsProxy,   svc:'ads'}  : null,
-      {base:'https://api.scixplorer.org/v1', svc:'scix'},
-      {base:'https://api.adsabs.harvard.edu/v1', svc:'ads'},
-    ].filter(Boolean);
-    for(const {base,svc} of APIS) {
+    const localProxy = location.protocol !== 'file:' ? location.origin + (_wantScix ? '/api/scix' : '/api/ads') : null;
+    const directApi  = _wantScix ? 'https://api.scixplorer.org/v1' : 'https://api.adsabs.harvard.edu/v1';
+    const APIS = [localProxy, directApi].filter(Boolean);
+    for(const base of APIS) {
       try {
-        const params = new URLSearchParams({
-          q: 'arxiv:'+bibcode.replace(/^arxiv:/i,''),
-          fl:'title,author,pub,year,abstract,identifier,bibcode',rows:'1'
-        });
-        const res = await fetch(base+'/search/query?'+params.toString(),{
-          headers:{'Authorization':'Bearer '+token},signal:AbortSignal.timeout(10000)
-        });
+        const params = new URLSearchParams({q:'arxiv:'+bibcode.replace(/^arxiv:/i,''),fl:'title,author,pub,year,abstract,identifier,bibcode',rows:'1'});
+        const res = await fetch(base+'/search/query?'+params.toString(),{headers:{'Authorization':'Bearer '+token},signal:AbortSignal.timeout(10000)});
         if(res.status===401) throw new Error('INVALID_TOKEN');
         if(!res.ok) continue;
         const data = await res.json();
@@ -4218,50 +4257,96 @@ async function syncToPaper(section,id,overrideArxivId) {
         const authors = doc.author ? doc.author.slice(0,8).join('; ')+(doc.author.length>8?' et al.':'') : '';
         const journal = [doc.pub,doc.year].filter(Boolean).join(' ');
         const abstract= doc.abstract||'';
-        // Canonical URL: SciX URL if from SciX, ADS URL otherwise
-        const canonUrl = svc==='scix'
+        const canonUrl = _wantScix
           ? 'https://www.scixplorer.org/abs/'+encodeURIComponent(bc)
           : 'https://ui.adsabs.harvard.edu/abs/'+encodeURIComponent(bc);
         let bibtex='';
         try {
-          const bRes=await fetch(base+'/export/bibtex',{method:'POST',
-            headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},
-            body:JSON.stringify({bibcode:[bc]}),signal:AbortSignal.timeout(8000)});
+          const bRes=await fetch(base+'/export/bibtex',{method:'POST',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({bibcode:[bc]}),signal:AbortSignal.timeout(8000)});
           if(bRes.ok) bibtex=((await bRes.json()).export||'').trim();
         } catch(_){}
         let arxivId='';
         if(doc.identifier){const ax=doc.identifier.find(x=>x.toLowerCase().startsWith('arxiv:'));if(ax)arxivId=ax.replace(/arxiv:/i,'');}
-        return {title,authors,journal,abstract,canonUrl,bibtex,arxivId,bibcode:bc,_service:svc};
+        return {title,authors,journal,abstract,canonUrl,bibtex,arxivId,bibcode:bc,_service:_wantScix?'scix':'ads'};
       } catch(e) {
         if(e.message==='INVALID_TOKEN') throw e;
         if(e.message==='NOT_FOUND') throw e;
-        // network error — try next
       }
     }
     throw new Error('NOT_FOUND');
   }
 
   try {
-    const d = await _adsCoreScixFirst(_syncId);
+    const d = await _adsCoreForTarget(_syncId);
     entry.title   = d.title   || entry.title;
     entry.authors = d.authors || entry.authors;
     entry.journal = d.journal || entry.journal;
     entry.abstract= d.abstract|| entry.abstract;
-    entry.ads     = d.canonUrl;          // stores SciX or ADS URL as appropriate
-    entry.source  = d._service;          // 'scix' or 'ads'
-    entry.arxivId = d.arxivId || entry.arxivId || _syncId; // keep/update arxivId
+    entry.ads     = d.canonUrl;
+    entry.source  = d._service;
+    entry.arxivId = d.arxivId || entry.arxivId || _syncId;
+    entry.arxiv   = entry.arxivId ? 'https://arxiv.org/abs/'+entry.arxivId : entry.arxiv;
     if(d.bibtex) entry.bibtex = d.bibtex;
     save(section);
     const _db=document.getElementById('detail-body');
-  _db.innerHTML=buildDetailHTML(section,entry);
-  mdPostRender(_db);
-    const svcLabel = d._service==='scix' ? 'SciX' : 'ADS';
-    toast('✓ Synced to '+svcLabel+'! Preprint flag removed. Link updated to '+svcLabel+'.','ok');
+    _db.innerHTML=buildDetailHTML(section,entry);
+    mdPostRender(_db);
+    toast('✓ Synced to '+svcLabel+'! Link updated to '+svcLabel+'.','ok');
   } catch(e) {
-    if(e.message==='NOT_FOUND') toast('Not yet indexed in SciX/ADS — paper may still be processing. Try again in a few days.','inf');
+    if(e.message==='NOT_FOUND') toast('Not yet indexed in '+svcLabel+' — try again in a few days.','inf');
     else if(e.message==='INVALID_TOKEN') toast('ADS token invalid — check your token in Lit. Papers settings.','err');
     else if(e.message==='NO_TOKEN') toast('Enter your ADS API token in Lit. Papers first.','err');
     else toast('Sync failed: '+e.message,'err');
+  }
+}
+
+async function syncToInspireHEP(section,id,overrideArxivId) {
+  // Syncs an arXiv preprint to InspireHEP — saves InspireHEP BibTeX key format.
+  const entry=(DB[section]||[]).find(e=>e.id===id);
+  if(!entry) return;
+  const _syncId = entry.arxivId || overrideArxivId ||
+    (entry.ads&&entry.ads.includes('arxiv.org/abs/')?entry.ads.split('/abs/')[1]?.split('/')[0]?.split('?')[0]:'');
+  if(!_syncId){ toast('Cannot sync — no arXiv ID found for this entry','err'); return; }
+  toast('Checking InspireHEP for arxiv:'+_syncId+'…','inf');
+  try {
+    // Search InspireHEP by arXiv ID
+    // On localhost: route through /api/inspire proxy (same CORS benefit)
+    // On file://: call InspireHEP directly (they send proper CORS headers)
+    const searchBase = location.protocol!=='file:'
+      ? location.origin + '/api/inspire'
+      : 'https://inspirehep.net/api/literature';
+    const sRes = await fetch(
+      searchBase + '?sort=mostrecent&size=1&page=1&q=arxiv%3A' + encodeURIComponent(_syncId),
+      {signal: AbortSignal.timeout(15000)}
+    );
+    if(!sRes.ok) throw new Error('InspireHEP search failed: HTTP ' + sRes.status);
+    const sData = await sRes.json();
+    const hits = sData.hits && sData.hits.hits;
+    if(!hits || !hits.length) throw new Error('NOT_FOUND');
+    const insId = String(hits[0].id);
+
+    // Fetch full record
+    const d = await fetchInspireHEP(insId);
+    entry.title      = d.title      || entry.title;
+    entry.authors    = d.authors    || entry.authors;
+    entry.journal    = d.journal    || entry.journal;
+    entry.abstract   = d.abstract   || entry.abstract;
+    entry.ads        = d.inspireUrl;
+    entry.source     = 'inspirehep';
+    entry.arxivId    = d.arxivId    || entry.arxivId || _syncId;
+    entry.arxiv      = entry.arxivId ? 'https://arxiv.org/abs/'+entry.arxivId : entry.arxiv;
+    entry.inspire    = d.inspireUrl;
+    entry.inspireId  = d.inspireId;
+    entry.inspireKey = d.inspireKey;
+    if(d.bibtex) entry.bibtex = d.bibtex;
+    save(section);
+    const _db=document.getElementById('detail-body');
+    _db.innerHTML=buildDetailHTML(section,entry);
+    mdPostRender(_db);
+    toast('✓ Synced to InspireHEP! BibTeX key: ' + (d.inspireKey||insId), 'ok');
+  } catch(e) {
+    if(e.message==='NOT_FOUND') toast('Not yet indexed in InspireHEP — try again later.','inf');
+    else toast('InspireHEP sync failed: '+e.message,'err');
   }
 }
 
@@ -4329,39 +4414,70 @@ function addEntry(k) {
     document.getElementById('n-pdfs-wrap').innerHTML='';
   } else if(k==='papers') {
     if(!g('p-title')) return toast('Title is required','err');
-    // Detect source and arxivId from hidden inputs OR from the URL itself (fallback)
-    const _ps=document.getElementById('p-source');
-    const _pax=document.getElementById('p-arxivid');
-    const _adsVal=g('p-ads');
-    // Detect arxivId from URL if hidden input is missing/empty
+    const _ps    = document.getElementById('p-source');
+    const _pax   = document.getElementById('p-arxivid');
+    const _pins  = document.getElementById('p-inspireid');
+    const _pkey  = document.getElementById('p-inspirekey');
+    const _piurl = document.getElementById('p-inspireurl');
+    const _paxurl= document.getElementById('p-arxivurl');
+    const _adsVal= g('p-ads');
     function _extractArxivId(url){
       if(!url) return '';
       if(url.includes('arxiv.org/abs/')){const p=url.split('/abs/')[1];if(p)return p.split('/')[0].split('?')[0];}
       if(url.includes('arxiv.org/pdf/')){const p=url.split('/pdf/')[1];if(p)return p.split('/')[0].split('?')[0];}
       return '';
     }
-    const _arxivId = (_pax&&_pax.value) || _extractArxivId(_adsVal);
-    const _source  = (_ps&&_ps.value)   || (_adsVal.includes('arxiv.org')?'arxiv':'ads');
-    entry={...entry,title:g('p-title'),authors:g('p-authors'),journal:g('p-journal'),ads:_adsVal,abstract:g('p-abstract'),summary:g('p-summary'),tags:g('p-tags'),rating:g('p-rating'),bibtex:g('p-bibtex'),pdf:g('p-pdf'),source:_source,arxivId:_arxivId};
-    cl(['p-title','p-authors','p-journal','p-ads','p-abstract','p-summary','p-tags','p-bibtex','p-pdf','p-ads-quick']);
-    document.getElementById('p-rating').value='';
+    const _arxivId   = (_pax&&_pax.value)   || _extractArxivId(_adsVal);
+    const _source    = (_ps&&_ps.value)      || (_adsVal.includes('arxiv.org')?'arxiv':'ads');
+    const _inspireId = (_pins&&_pins.value)  || '';
+    const _inspireKey= (_pkey&&_pkey.value)  || '';
+    const _inspireUrl= (_piurl&&_piurl.value)|| '';
+    const _arxivUrl  = (_paxurl&&_paxurl.value) || (_arxivId ? 'https://arxiv.org/abs/'+_arxivId : '');
+    // Title: support both textarea and input
+    const _titleEl = document.getElementById('p-title');
+    const _titleVal = (_titleEl ? (_titleEl.value||'') : '').trim();
+    entry={...entry,title:_titleVal,authors:g('p-authors'),journal:g('p-journal'),ads:_adsVal,
+           abstract:g('p-abstract'),summary:g('p-summary'),tags:g('p-tags'),rating:g('p-rating'),
+           bibtex:g('p-bibtex'),pdf:g('p-pdf'),source:_source,arxivId:_arxivId,
+           arxiv:_arxivUrl, inspire:_inspireUrl, inspireId:_inspireId, inspireKey:_inspireKey};
+    cl(['p-authors','p-journal','p-ads','p-abstract','p-summary','p-tags','p-bibtex','p-pdf','p-ads-quick']);
+    if(_titleEl) _titleEl.value='';
+    const _pRating=document.getElementById('p-rating'); if(_pRating) _pRating.value='';
+    // Clear hidden inputs
+    ['p-source','p-arxivid','p-inspireid','p-inspirekey','p-inspireurl','p-arxivurl'].forEach(hid=>{const h=document.getElementById(hid);if(h)h.value='';});
   } else if(k==='mypapers') {
     if(!g('mp-title')) return toast('Title required','err');
-    // Read mp-source and mp-arxivid; detect from URL fields as fallback
-    const _mpax2=document.getElementById('mp-arxivid');
-    const _mpsrc2=document.getElementById('mp-source');
-    const _mpAdsVal=g('mp-ads');
-    const _mpArxivVal=g('mp-arxiv');
+    const _mpax2   = document.getElementById('mp-arxivid');
+    const _mpsrc2  = document.getElementById('mp-source');
+    const _mpins   = document.getElementById('mp-inspireid');
+    const _mpkey   = document.getElementById('mp-inspirekey');
+    const _mpiurl  = document.getElementById('mp-inspireurl');
+    const _mpaxurl = document.getElementById('mp-arxivurl');
+    const _mpAdsVal  = g('mp-ads');
+    const _mpArxivVal= g('mp-arxiv');
     function _mpExtractId(url){
       if(!url)return '';
       if(url.includes('arxiv.org/abs/')){const p=url.split('/abs/')[1];if(p)return p.split('/')[0].split('?')[0];}
       if(url.includes('arxiv.org/pdf/')){const p=url.split('/pdf/')[1];if(p)return p.split('/')[0].split('?')[0];}
       return '';
     }
-    const _mpArxivId=(_mpax2&&_mpax2.value)||_mpExtractId(_mpAdsVal)||_mpExtractId(_mpArxivVal);
-    const _mpSource =(_mpsrc2&&_mpsrc2.value)||(_mpAdsVal.includes('arxiv.org')||_mpArxivVal.includes('arxiv.org')?'arxiv':_mpAdsVal.includes('scixplorer.org')?'scix':'ads');
-    entry={...entry,title:g('mp-title'),authors:g('mp-authors'),journal:g('mp-journal'),status:document.getElementById('mp-status').value,ads:_mpAdsVal,arxiv:_mpArxivVal,tags:g('mp-tags'),cite:g('mp-cite'),abstract:g('mp-abstract'),bibtex:g('mp-bibtex'),pdf:g('mp-pdf'),arxivId:_mpArxivId,source:_mpSource};
-    cl(['mp-title','mp-authors','mp-journal','mp-ads','mp-arxiv','mp-tags','mp-cite','mp-abstract','mp-bibtex','mp-pdf']);
+    const _mpArxivId  = (_mpax2&&_mpax2.value)   || _mpExtractId(_mpAdsVal) || _mpExtractId(_mpArxivVal);
+    const _mpSource   = (_mpsrc2&&_mpsrc2.value)  || (_mpAdsVal.includes('arxiv.org')||_mpArxivVal.includes('arxiv.org')?'arxiv':_mpAdsVal.includes('scixplorer.org')?'scix':'ads');
+    const _mpInsId    = (_mpins&&_mpins.value)     || '';
+    const _mpInsKey   = (_mpkey&&_mpkey.value)     || '';
+    const _mpInsUrl   = (_mpiurl&&_mpiurl.value)   || '';
+    const _mpAxUrl    = (_mpaxurl&&_mpaxurl.value)  || (_mpArxivId ? 'https://arxiv.org/abs/'+_mpArxivId : _mpArxivVal || '');
+    const _mpTitleEl  = document.getElementById('mp-title');
+    const _mpTitleVal = (_mpTitleEl ? (_mpTitleEl.value||'') : '').trim();
+    entry={...entry,title:_mpTitleVal,authors:g('mp-authors'),journal:g('mp-journal'),
+           status:document.getElementById('mp-status').value,ads:_mpAdsVal,
+           arxiv:_mpAxUrl||_mpArxivVal,tags:g('mp-tags'),cite:g('mp-cite'),
+           abstract:g('mp-abstract'),bibtex:g('mp-bibtex'),pdf:g('mp-pdf'),
+           arxivId:_mpArxivId,source:_mpSource,
+           inspire:_mpInsUrl, inspireId:_mpInsId, inspireKey:_mpInsKey};
+    cl(['mp-authors','mp-journal','mp-ads','mp-arxiv','mp-tags','mp-cite','mp-abstract','mp-bibtex','mp-pdf']);
+    if(_mpTitleEl) _mpTitleEl.value='';
+    ['mp-source','mp-arxivid','mp-inspireid','mp-inspirekey','mp-inspireurl','mp-arxivurl'].forEach(hid=>{const h=document.getElementById(hid);if(h)h.value='';});
   } else if(k==='links') {
     if(!g('l-name')||!g('l-url')) return toast('Name and URL required','err');
     entry={...entry,name:g('l-name'),url:g('l-url'),desc:g('l-desc'),cat:document.getElementById('l-cat').value};
@@ -4491,7 +4607,12 @@ function cardActions(k, id) {
 function renderNotes() {
   const q=sq('q-notes');
   const el=document.getElementById('list-notes'); cnt('notes');
-  let items=DB.notes.filter(n=>!q||n.title?.toLowerCase().includes(q)||(n.body||'').toLowerCase().includes(q)||(n.tags||'').toLowerCase().includes(q));
+  let items=DB.notes.filter(n=>{
+    if(!q) return true;
+    const blob=[n.title,n.body,n.tags,n.notes,n.link,
+      (n.links||[]).map(l=>l.label+' '+l.url).join(' ')].filter(Boolean).join(' ').toLowerCase();
+    return blob.includes(q);
+  });
   if(!items.length){el.innerHTML=empty('no notes found');return;}
   el.innerHTML=items.map(n=>`
     <div class="card card-clickable" onclick="openDetail('notes','${n.id}')">
@@ -4518,18 +4639,29 @@ function cycleReadStatus(id) {
 function renderPapers() {
   const q=sq('q-papers');
   const el=document.getElementById('list-papers'); cnt('papers');
-  let items=DB.papers.filter(p=>!q||p.title?.toLowerCase().includes(q)||(p.authors||'').toLowerCase().includes(q)||(p.tags||'').toLowerCase().includes(q));
+  let items=DB.papers.filter(p=>{
+    if(!q) return true;
+    const blob=[p.title,p.authors,p.tags,p.abstract,p.summary,p.bibtex,p.journal,p.notes].filter(Boolean).join(' ').toLowerCase();
+    return blob.includes(q);
+  });
   if(!items.length){el.innerHTML=empty('no papers found');return;}
-  el.innerHTML=items.map(p=>`
+  el.innerHTML=items.map(p=>{
+    const _arxivLnk = p.arxivId ? 'https://arxiv.org/abs/'+p.arxivId : (p.arxiv||'');
+    const _inspLnk  = p.inspire || p.inspireUrl || (p.arxivId ? 'https://inspirehep.net/search?p=arxiv%3A'+p.arxivId : '');
+    const _adsLnk   = (p.source!=='arxiv'&&p.source!=='inspirehep'&&p.ads) ? p.ads : '';
+    const _scixLnk  = p.source==='scix'&&p.ads ? p.ads : '';
+    return `
     <div class="card card-clickable" onclick="openDetail('papers','${p.id}')">
       <div class="card-top"><div><div class="card-title">${esc(p.title)}</div><div class="card-meta">${[p.authors,p.journal,p.date].filter(Boolean).join(' · ')}</div></div><div style="display:flex;align-items:center;gap:.2rem"><button class="star-btn ${p.starred?'starred':''}" onclick="event.stopPropagation();toggleStar('${p.id}')" title="${p.starred?'Unstar':'Star'}">★</button>${cardActions('papers',p.id)}</div></div>
       <div class="md-card-preview">${esc(mdPlain(p.summary||''))}</div>
       <div class="tags">${mkTags(p.tags,'tag-amber')}</div>
-      <!-- rating in flex row below -->
       <div style="display:flex;align-items:center;flex-wrap:wrap;gap:.25rem;margin-top:.4rem">
         ${p.rating?`<span class="rating" style="margin-top:0;display:inline-flex;align-items:center">${esc(p.rating)}</span>`:''}
         <span class="read-badge ${READ_CLS[p.read||'unread']}" onclick="event.stopPropagation();cycleReadStatus('${p.id}')" title="Click: Unread → Reading → Read" style="margin-top:0">${READ_LABEL[p.read||'unread']}</span>
-        ${p.ads?`<a class="card-link" href="${esc(p.ads)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ ${p.source==='scix'?'SciX':p.source==='arxiv'?'arXiv':'ADS'}</a>`:''}
+        ${_adsLnk||_scixLnk?`<a class="card-link" href="${esc(p.ads)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ ${p.source==='scix'?'SciX':'ADS'}</a>`:''}
+        ${p.source==='arxiv'&&p.ads?`<a class="card-link" href="${esc(p.ads)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--amber)">↗ arXiv</a>`:''}
+        ${_arxivLnk&&p.source!=='arxiv'?`<a class="card-link" href="${esc(_arxivLnk)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--amber);opacity:.8">↗ arXiv</a>`:''}
+        ${_inspLnk?`<a class="card-link" href="${esc(_inspLnk)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--purple);border-color:rgba(187,153,255,.4)">↗ InspireHEP</a>`:''}
         ${p.source==='arxiv'?`<span style="font-family:var(--mono);font-size:.58rem;color:var(--amber);border:1px solid rgba(255,192,85,.35);padding:.1rem .38rem;border-radius:2px">PREPRINT</span>`:''}
         ${p.pdf?`<button class="pdf-link" onclick="event.stopPropagation();openPDF('${esc(p.pdf)}')" style="cursor:pointer">📄 PDF</button>`:''}
       </div>
@@ -4541,16 +4673,22 @@ function renderPapers() {
         <div class="bibtex-header" onclick="toggleBibtex('${p.id}')"><span class="bibtex-label">{ } BibTeX</span><span class="bibtex-toggle" id="bibtex-arrow-${p.id}">▶</span></div>
         <div class="bibtex-body" id="bibtex-body-${p.id}"><pre class="bibtex-pre" id="bibtex-pre-${p.id}">${esc(p.bibtex)}</pre><button class="btn-copy-bib" onclick="copyBibtex('${p.id}')">⎘ Copy BibTeX</button></div>
       </div>`:''}
-    </div>`).join('');
+    </div>`}).join('');
 }
 
 function renderMyPapers() {
   const q=sq('q-mypapers');
   const el=document.getElementById('list-mypapers'); cnt('mypapers');
-  let items=DB.mypapers.filter(p=>!q||p.title?.toLowerCase().includes(q)||(p.authors||'').toLowerCase().includes(q)||(p.tags||'').toLowerCase().includes(q));
+  let items=DB.mypapers.filter(p=>{
+    if(!q) return true;
+    const blob=[p.title,p.authors,p.tags,p.abstract,p.bibtex,p.journal,p.notes].filter(Boolean).join(' ').toLowerCase();
+    return blob.includes(q);
+  });
   if(!items.length){el.innerHTML=empty('no papers yet — add your first one');return;}
   el.innerHTML=items.map(p=>{
     const scls=p.status==='published'?'mps-published':p.status==='submitted'?'mps-submitted':'mps-in-prep';
+    const _arxivLnk = p.arxivId ? 'https://arxiv.org/abs/'+p.arxivId : (p.arxiv||'');
+    const _inspLnk  = p.inspire || p.inspireUrl || (p.arxivId ? 'https://inspirehep.net/search?p=arxiv%3A'+p.arxivId : '');
     return `<div class="my-paper-card" onclick="openDetail('mypapers','${p.id}')">
       <div class="card-top"><div>
         <div class="card-title">${esc(p.title)}</div>
@@ -4562,8 +4700,10 @@ function renderMyPapers() {
       </div>
       <div class="tags" style="margin-top:.5rem">${mkTags(p.tags,'tag-gold')}</div>
       <div style="display:flex;align-items:center;flex-wrap:wrap;gap:.25rem;margin-top:.5rem">
-        ${p.ads?`<a class="card-link" href="${esc(p.ads)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ ${p.source==='scix'?'SciX':p.source==='arxiv'?'arXiv':'ADS'}</a>`:''}
-        ${p.arxiv&&p.source!=='arxiv'?`<a class="card-link" href="${esc(p.arxiv)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ arXiv</a>`:''}
+        ${p.ads&&p.source!=='arxiv'&&p.source!=='inspirehep'?`<a class="card-link" href="${esc(p.ads)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ ${p.source==='scix'?'SciX':'ADS'}</a>`:''}
+        ${p.source==='inspirehep'&&p.ads?`<a class="card-link" href="${esc(p.ads)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--purple);border-color:rgba(187,153,255,.4)">↗ InspireHEP</a>`:''}
+        ${_arxivLnk?`<a class="card-link" href="${esc(_arxivLnk)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--amber);opacity:.9">↗ arXiv</a>`:''}
+        ${_inspLnk&&p.source!=='inspirehep'?`<a class="card-link" href="${esc(_inspLnk)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--purple);border-color:rgba(187,153,255,.4)">↗ InspireHEP</a>`:''}
         ${p.source==='arxiv'?`<span style="font-family:var(--mono);font-size:.58rem;color:var(--amber);border:1px solid rgba(255,192,85,.35);padding:.1rem .38rem;border-radius:2px">PREPRINT</span>`:''}
         ${p.pdf?`<button class="pdf-link" onclick="event.stopPropagation();openPDF('${esc(p.pdf)}')" style="cursor:pointer">📄 PDF</button>`:''}
         ${p.arxivId?`<button class="pdf-link" onclick="event.stopPropagation();downloadPDF('mypapers','${p.id}','https://arxiv.org/pdf/${esc(p.arxivId)}','${esc(suggestPdfName(p))}')" style="cursor:pointer;border-color:rgba(0,255,187,.4);color:var(--green)" title="Download arXiv PDF to ./pdf/">${p.pdf?'⬇ Re-download PDF':'⬇ Download PDF'}</button>`:''}
@@ -4602,7 +4742,11 @@ function renderLinks() {
 function renderConferences() {
   const q=sq('q-conferences');
   const el=document.getElementById('list-conferences'); cnt('conferences');
-  let items=DB.conferences.filter(c=>!q||c.title?.toLowerCase().includes(q)||(c.event||'').toLowerCase().includes(q)||(c.speaker||'').toLowerCase().includes(q));
+  let items=DB.conferences.filter(c=>{
+    if(!q) return true;
+    const blob=[c.title,c.event,c.speaker,c.notes,c.link,c.date].filter(Boolean).join(' ').toLowerCase();
+    return blob.includes(q);
+  });
   if(!items.length){el.innerHTML=empty('no conference notes');return;}
   el.innerHTML=items.map(c=>`
     <div class="card card-clickable" onclick="openDetail('conferences','${c.id}')">
@@ -4615,7 +4759,11 @@ function renderConferences() {
 function renderSnippets() {
   const q=sq('q-snippets');
   const el=document.getElementById('list-snippets'); cnt('snippets');
-  let items=DB.snippets.filter(s=>!q||s.title?.toLowerCase().includes(q)||(s.tags||'').toLowerCase().includes(q)||(s.language||'').toLowerCase().includes(q));
+  let items=DB.snippets.filter(s=>{
+    if(!q) return true;
+    const blob=[s.title,s.language,s.tags,s.description,s.code].filter(Boolean).join(' ').toLowerCase();
+    return blob.includes(q);
+  });
   if(!items.length){el.innerHTML=empty('no snippets');return;}
   el.innerHTML=items.map(s=>`
     <div class="card card-clickable" onclick="openDetail('snippets','${s.id}')">
@@ -4641,7 +4789,11 @@ function renderTodos() {
     const ord={high:0,medium:1,low:2};
     return(ord[a.priority]||1)-(ord[b.priority]||1);
   });
-  const filtered=q?items.filter(t=>(t.title||'').toLowerCase().includes(q)||(t.notes||'').toLowerCase().includes(q)):items;
+  const filtered=q?items.filter(t=>{
+    const blob=[t.title,t.notes,t.priority,t.status,t.due,t.tags,
+      (t.links||[]).map(l=>l.label+' '+l.url).join(' ')].filter(Boolean).join(' ').toLowerCase();
+    return blob.includes(q);
+  }):items;
   if(!filtered.length){el.innerHTML=empty('no tasks match');return;}
   el.innerHTML=filtered.map(t=>`
     <div class="card ${PR_CLS[t.priority]||''}" style="cursor:pointer" onclick="openDetail('todos','${t.id}')">
@@ -4662,7 +4814,11 @@ function renderTodos() {
 function renderCollaborators() {
   const q=sq('q-collaborators');
   const el=document.getElementById('list-collaborators'); cnt('collaborators');
-  let items=DB.collaborators.filter(c=>!q||c.name?.toLowerCase().includes(q)||(c.affiliation||'').toLowerCase().includes(q)||(c.expertise||'').toLowerCase().includes(q));
+  let items=DB.collaborators.filter(c=>{
+    if(!q) return true;
+    const blob=[c.name,c.affiliation,c.expertise,c.email,c.notes,c.link].filter(Boolean).join(' ').toLowerCase();
+    return blob.includes(q);
+  });
   if(!items.length){el.innerHTML=empty('no contacts');return;}
   el.innerHTML=`<div class="collab-grid">${items.map(c=>`
     <div class="collab-card" onclick="openDetail('collaborators','${c.id}')">
@@ -4758,6 +4914,70 @@ function editEntry(section,id) {
     document.getElementById('edit-modal').classList.add('open'); return;
   }
 
+  // ── papers / mypapers — rich dedicated editor ─────────────────────
+  if(section==='papers' || section==='mypapers') {
+    const isLit = section==='papers';
+    const pfx   = isLit ? 'ef-p' : 'ef-mp';
+    const ratingOpts = ['','★ Interesting','★★ Very relevant','★★★ Essential'];
+    const readOpts   = ['unread','reading','done'];
+    const srcOpts    = ['ads','scix','arxiv','inspirehep'];
+    const statusOpts = isLit ? [] : ['published','submitted','in-prep'];
+    let html='<div class="form-grid">'
+      // Title — full-width textarea
+      +'<div class="f-row full"><label>Title</label>'
+      +'<textarea id="'+pfx+'-title" style="min-height:3rem;resize:none;overflow:hidden;line-height:1.5" rows="2" oninput="this.style.height=\'auto\';this.style.height=this.scrollHeight+\'px\'">'+esc(entry.title||'')+'</textarea></div>'
+      // Authors
+      +'<div class="f-row"><label>Authors</label><input id="'+pfx+'-authors" value="'+esc(entry.authors||'')+'"></div>'
+      // Journal
+      +'<div class="f-row"><label>Journal / Year</label><input id="'+pfx+'-journal" value="'+esc(entry.journal||'')+'"></div>'
+      // Date
+      +'<div class="f-row"><label>Date Added</label><input id="'+pfx+'-date" type="date" value="'+esc(entry.date||'')+'"></div>'
+      // Source dropdown
+      +'<div class="f-row"><label>Source</label><select id="'+pfx+'-source">'
+      +srcOpts.map(function(o){return '<option value="'+o+'"'+(entry.source===o?' selected':'')+'>'+o+'</option>';}).join('')
+      +'</select></div>';
+
+    // Rating (lit papers only)
+    if(isLit) {
+      html+='<div class="f-row"><label>Rating</label><select id="'+pfx+'-rating">'
+        +ratingOpts.map(function(o){return '<option'+(entry.rating===o?' selected':'')+'>'+esc(o)+'</option>';}).join('')
+        +'</select></div>';
+      // Read status
+      html+='<div class="f-row"><label>Read Status</label><select id="'+pfx+'-read">'
+        +readOpts.map(function(o){return '<option value="'+o+'"'+(entry.read===o?' selected':'')+'>'+o+'</option>';}).join('')
+        +'</select></div>';
+    }
+
+    // Status (my papers only)
+    if(!isLit) {
+      html+='<div class="f-row"><label>Status</label><select id="'+pfx+'-status">'
+        +statusOpts.map(function(o){return '<option value="'+o+'"'+(entry.status===o?' selected':'')+'>'+o+'</option>';}).join('')
+        +'</select></div>';
+      html+='<div class="f-row"><label>Citations</label><input id="'+pfx+'-cite" type="number" min="0" value="'+esc(entry.cite||'')+'"></div>';
+    }
+
+    html+=
+      // ADS / primary link
+      '<div class="f-row"><label>ADS / SciX / InspireHEP URL</label><input id="'+pfx+'-ads" value="'+esc(entry.ads||'')+'"></div>'
+      +'<div class="f-row"><label>arXiv URL</label><input id="'+pfx+'-arxiv" value="'+esc(entry.arxiv||(entry.arxivId?'https://arxiv.org/abs/'+entry.arxivId:''))+'"></div>'
+      +'<div class="f-row"><label>InspireHEP URL</label><input id="'+pfx+'-inspire" value="'+esc(entry.inspire||entry.inspireUrl||'')+'"></div>'
+      +'<div class="f-row"><label>InspireHEP Key (texkey)</label><input id="'+pfx+'-inspirekey" value="'+esc(entry.inspireKey||'')+'"></div>'
+      +'<div class="f-row"><label>Tags</label><input id="'+pfx+'-tags" value="'+esc(entry.tags||'')+'"></div>'
+      // Abstract
+      +'<div class="f-row full"><label>Abstract</label><textarea id="'+pfx+'-abstract" style="min-height:100px">'+esc(entry.abstract||'')+'</textarea></div>'
+      // Notes/Summary
+      +'<div class="f-row full"><label>'+(isLit?'Your Notes / Summary':'Notes')+'</label>'
+      +'<textarea id="'+pfx+'-summary" style="min-height:80px">'+esc(entry.summary||entry.notes||'')+'</textarea></div>'
+      // BibTeX
+      +'<div class="f-row full"><label>BibTeX</label><textarea id="'+pfx+'-bibtex" style="min-height:90px;font-family:var(--mono);font-size:.78rem;line-height:1.5">'+esc(entry.bibtex||'')+'</textarea></div>'
+      // PDF
+      +'<div class="f-row full"><label>PDF Path / URL</label><input id="'+pfx+'-pdf" value="'+esc(entry.pdf||'')+'"></div>'
+      +'</div>'
+      +'<div style="font-family:var(--mono);font-size:.6rem;color:var(--text3);margin-top:.5rem">Created: '+entry.date+'</div>';
+    document.getElementById('edit-fields').innerHTML=html;
+    document.getElementById('edit-modal').classList.add('open'); return;
+  }
+
   // Default generic editor
   const skip=['id','date'];
   let html='<div class="form-grid">';
@@ -4778,6 +4998,51 @@ function saveEdit() {
   const entry=(DB[_editSection]||[]).find(e=>e.id===_editId);
   if(!entry) return;
   entry._edited=today();
+
+  // ── papers / mypapers ────────────────────────────────────────────────
+  if(_editSection==='papers' || _editSection==='mypapers') {
+    const isLit = _editSection==='papers';
+    const pfx   = isLit ? 'ef-p' : 'ef-mp';
+    const gv = id => (document.getElementById(id)?.value||'').trim();
+    const _titleEl = document.getElementById(pfx+'-title');
+    entry.title      = (_titleEl ? _titleEl.value : '').trim() || entry.title;
+    entry.authors    = gv(pfx+'-authors')    || entry.authors;
+    entry.journal    = gv(pfx+'-journal')    || entry.journal;
+    entry.date       = gv(pfx+'-date')       || entry.date;
+    entry.source     = document.getElementById(pfx+'-source')?.value  || entry.source;
+    entry.ads        = gv(pfx+'-ads');
+    entry.abstract   = gv(pfx+'-abstract');
+    entry.bibtex     = gv(pfx+'-bibtex');
+    entry.pdf        = gv(pfx+'-pdf');
+    entry.tags       = gv(pfx+'-tags');
+    // arXiv
+    const _arxivVal  = gv(pfx+'-arxiv');
+    if(_arxivVal) {
+      entry.arxiv = _arxivVal;
+      if(_arxivVal.includes('arxiv.org/abs/')) {
+        const _ax = _arxivVal.split('/abs/')[1]; if(_ax) entry.arxivId = _ax.split('/')[0].split('?')[0];
+      }
+    }
+    // InspireHEP
+    entry.inspire    = gv(pfx+'-inspire')    || entry.inspire;
+    entry.inspireKey = gv(pfx+'-inspirekey') || entry.inspireKey;
+    if(entry.inspire && entry.inspire.includes('inspirehep.net/literature/')) {
+      entry.inspireId = entry.inspire.split('/literature/')[1]?.split('?')[0] || entry.inspireId;
+    }
+    if(isLit) {
+      entry.rating   = document.getElementById(pfx+'-rating')?.value  || '';
+      entry.read     = document.getElementById(pfx+'-read')?.value    || entry.read;
+      entry.summary  = gv(pfx+'-summary');
+    } else {
+      entry.status   = document.getElementById(pfx+'-status')?.value  || entry.status;
+      entry.cite     = gv(pfx+'-cite');
+      entry.notes    = gv(pfx+'-summary'); // stored as notes in mypapers
+    }
+    save(_editSection); closeEdit(); render(_editSection);
+    if(currentDetailId===_editId) openDetail(_editSection,_editId);
+    toast('Entry updated','ok'); return;
+  }
+
   if(_editSection==='proposals') {
     entry.title   =(document.getElementById('ef-title')?.value||'').trim();
     entry.type    = document.getElementById('ef-type')?.value||entry.type;
@@ -4919,6 +5184,8 @@ function toggleAbstract(id) {
   const open=body.style.display==='none'||!body.style.display;
   body.style.display=open?'block':'none';
   if(arrow) arrow.classList.toggle('open',open);
+  // Fire LaTeX rendering the first time the abstract is expanded
+  if(open) renderAbstractLatex(body);
 }
 
 function copyBibtex(id) {
@@ -4990,6 +5257,18 @@ function parseBibcode(raw) {
   raw = (raw || '').trim();
   var lo = raw.toLowerCase();
 
+  // InspireHEP URL: https://inspirehep.net/literature/2168967
+  if(lo.includes('inspirehep.net/literature/')) {
+    var insParts = raw.split('/literature/');
+    var insId = (insParts[1]||'').split('?')[0].split('#')[0].split('/')[0].trim();
+    if(insId) return {bibcode:insId, source:'inspirehep', arxivId:'', inspireId:insId};
+  }
+  // InspireHEP search URL: https://inspirehep.net/search?p=...
+  if(lo.includes('inspirehep.net')) {
+    // Try to extract recid from various InspireHEP URL forms
+    var insMatch = raw.match(/\/(\d{6,8})(?:[/?#]|$)/);
+    if(insMatch) return {bibcode:insMatch[1], source:'inspirehep', arxivId:'', inspireId:insMatch[1]};
+  }
   // arXiv URL: https://arxiv.org/abs/2603.09562 or .../pdf/2603.09562
   if(lo.includes('arxiv.org/abs/') || lo.includes('arxiv.org/pdf/')) {
     var parts = raw.split('/');
@@ -5079,6 +5358,82 @@ async function fetchArxiv(arxivId) {
     arxivId  : cleanId,
     source   : 'arxiv',
     journal  : 'arXiv:' + cleanId + (category ? ' [' + category + ']' : '')
+  };
+}
+
+// ── fetchInspireHEP(inspireId) — InspireHEP REST API, no token needed ─
+async function fetchInspireHEP(inspireId) {
+  // InspireHEP provides a clean REST API with good CORS support.
+  // We try localhost proxy first (/api/inspire/<id>), then direct API.
+  // No token required — InspireHEP is fully open access.
+  const cleanId = String(inspireId).trim().split('?')[0];
+
+  let baseUrl;
+  if(location.protocol !== 'file:') {
+    baseUrl = location.origin + '/api/inspire/' + cleanId;
+  } else {
+    baseUrl = 'https://inspirehep.net/api/literature/' + cleanId;
+  }
+
+  const res = await fetch(baseUrl, {signal: AbortSignal.timeout(15000)});
+  if(!res.ok) throw new Error('InspireHEP API returned HTTP ' + res.status);
+  const data = await res.json();
+  const meta = data.metadata || {};
+
+  // Title
+  const title = (meta.titles && meta.titles[0] && meta.titles[0].title) || '';
+
+  // Authors (up to 8)
+  const authorList = meta.authors || [];
+  const authors = authorList.slice(0,8).map(a => a.full_name || a.last_name || '').filter(Boolean).join('; ')
+                + (authorList.length > 8 ? ' et al.' : '');
+
+  // Abstract
+  const abstract = (meta.abstracts && meta.abstracts[0] && meta.abstracts[0].value) || '';
+
+  // arXiv ID
+  let arxivId = '';
+  if(meta.arxiv_eprints && meta.arxiv_eprints[0]) {
+    arxivId = meta.arxiv_eprints[0].value || '';
+  }
+
+  // InspireHEP cite key (texkey), e.g. "Rahaman:2022xkj"
+  const inspireKey = (meta.texkeys && meta.texkeys[0]) || '';
+
+  // Journal info
+  let journal = '';
+  if(meta.publication_info && meta.publication_info[0]) {
+    const pi = meta.publication_info[0];
+    journal = [pi.journal_title, pi.journal_volume, pi.year ? String(pi.year) : ''].filter(Boolean).join(' ');
+  }
+  if(!journal && arxivId) journal = 'arXiv:' + arxivId;
+
+  // InspireHEP URL
+  const inspireUrl = 'https://inspirehep.net/literature/' + cleanId;
+
+  // Fetch BibTeX via InspireHEP API
+  let bibtex = '';
+  try {
+    let bibUrl;
+    if(location.protocol !== 'file:') {
+      bibUrl = location.origin + '/api/inspire/' + cleanId + '?format=bibtex';
+    } else {
+      bibUrl = 'https://inspirehep.net/api/literature/' + cleanId + '?format=bibtex';
+    }
+    const bRes = await fetch(bibUrl, {signal: AbortSignal.timeout(10000)});
+    if(bRes.ok) {
+      const bText = (await bRes.text()).trim();
+      if(bText.startsWith('@')) bibtex = bText;
+    }
+  } catch(_) {}
+
+  return {
+    title, authors, abstract, arxivId, inspireKey,
+    journal, inspireUrl, inspireId: cleanId,
+    bibtex,
+    arxivUrl  : arxivId ? 'https://arxiv.org/abs/' + arxivId : '',
+    adsUrl    : arxivId ? 'https://ui.adsabs.harvard.edu/abs/arxiv:' + arxivId : inspireUrl,
+    source    : 'inspirehep'
   };
 }
 
@@ -5217,10 +5572,41 @@ async function _adsCore(bibcode) {
 
 async function fetchADS() {
   const raw = document.getElementById('p-ads-quick').value.trim();
-  if(!raw) { toast('Paste ADS, SciX, or arXiv URL/bibcode first', 'err'); return; }
-  const parsed = parseBibcode(raw);  // {bibcode, source, arxivId}
+  if(!raw) { toast('Paste ADS, SciX, arXiv, or InspireHEP URL/bibcode first', 'err'); return; }
+  const parsed = parseBibcode(raw);  // {bibcode, source, arxivId, inspireId?}
   const btn = document.getElementById('p-fetch-btn');
   btn.disabled=true; btn.textContent='⌛ Fetching…';
+
+  // ── Helper to set/create a hidden input ──
+  function _setHidden(id, val) {
+    let el = document.getElementById(id);
+    if(!el) { el=document.createElement('input'); el.type='hidden'; el.id=id; document.getElementById('p-ads').parentElement.appendChild(el); }
+    el.value = val;
+  }
+
+  // ── InspireHEP path ──
+  if(parsed.source === 'inspirehep') {
+    toast('Querying InspireHEP API…', 'inf');
+    try {
+      const d = await fetchInspireHEP(parsed.inspireId || parsed.bibcode);
+      if(d.title)    document.getElementById('p-title').value    = d.title;
+      if(d.authors)  document.getElementById('p-authors').value  = d.authors;
+      if(d.journal)  document.getElementById('p-journal').value  = d.journal;
+      if(d.abstract) document.getElementById('p-abstract').value = d.abstract;
+      if(d.bibtex)   document.getElementById('p-bibtex').value   = d.bibtex;
+      document.getElementById('p-ads').value = d.inspireUrl;
+      _setHidden('p-source',    'inspirehep');
+      _setHidden('p-arxivid',   d.arxivId || '');
+      _setHidden('p-inspireid', d.inspireId || '');
+      _setHidden('p-inspirekey',d.inspireKey || '');
+      _setHidden('p-inspireurl',d.inspireUrl || '');
+      if(d.arxivId) _setHidden('p-arxivurl', 'https://arxiv.org/abs/' + d.arxivId);
+      toast('✓ Fields filled from InspireHEP!', 'ok');
+    } catch(e) { toast('InspireHEP fetch failed: ' + e.message, 'err'); }
+    btn.disabled=false; btn.textContent='⚡ Auto-fill'; return;
+  }
+
+  // ── arXiv path ──
   if(parsed.source==='arxiv') {
     toast('Querying arXiv API…','inf');
     try {
@@ -5230,22 +5616,18 @@ async function fetchADS() {
       if(d.journal)  document.getElementById('p-journal').value  = d.journal;
       if(d.abstract) document.getElementById('p-abstract').value = d.abstract;
       document.getElementById('p-ads').value = d.arxivUrl;
-      // Store source='arxiv' in hidden input
-      let s=document.getElementById('p-source');
-      if(!s){s=document.createElement('input');s.type='hidden';s.id='p-source';document.getElementById('p-ads').parentElement.appendChild(s);}
-      s.value='arxiv';
-      // *** BUG FIX: also store arxivId — this was missing, causing arxivId to save as '' ***
-      let ax=document.getElementById('p-arxivid');
-      if(!ax){ax=document.createElement('input');ax.type='hidden';ax.id='p-arxivid';document.getElementById('p-ads').parentElement.appendChild(ax);}
-      ax.value=d.arxivId||parsed.arxivId||'';
+      _setHidden('p-source',   'arxiv');
+      _setHidden('p-arxivid',  d.arxivId || parsed.arxivId || '');
+      _setHidden('p-arxivurl', d.arxivUrl || '');
+      _setHidden('p-inspireid',''); _setHidden('p-inspirekey',''); _setHidden('p-inspireurl','');
       const pdfEl=document.getElementById('p-pdf');
       if(pdfEl&&!pdfEl.value) pdfEl.value=d.pdfLink;
       toast('✓ Fields filled from arXiv (preprint)!','ok');
     } catch(e){ toast('arXiv fetch failed: '+e.message,'err'); }
     btn.disabled=false; btn.textContent='⚡ Auto-fill'; return;
   }
-  // ADS / SciX path
-  if(!raw) { toast('Paste ADS, SciX, or arXiv URL/bibcode first','err'); btn.disabled=false; btn.textContent='⚡ Auto-fill'; return; }
+
+  // ── ADS / SciX path ──
   const token = getADSToken();
   if(!token) { toast('Enter your ADS API token first','err'); document.getElementById('ads-token-input').focus(); btn.disabled=false; btn.textContent='⚡ Auto-fill'; return; }
   const bibcode = parsed.bibcode;
@@ -5255,19 +5637,14 @@ async function fetchADS() {
     if(d.title)   document.getElementById('p-title').value   = d.title;
     if(d.authors) document.getElementById('p-authors').value = d.authors;
     if(d.journal) document.getElementById('p-journal').value = d.journal;
-    const linkUrl = parsed.source==='scix' ? 'https://www.scixplorer.org/abs/'+encodeURIComponent(parsed.bibcode) : d.adsUrl;
-    document.getElementById('p-ads').value = linkUrl;
-    let _s=document.getElementById('p-source');
-    if(!_s){_s=document.createElement('input');_s.type='hidden';_s.id='p-source';document.getElementById('p-ads').parentElement.appendChild(_s);}
-    _s.value=parsed.source||'ads';
-    // Store arxivId so Download PDF works for papers added via ADS/SciX
-    if(d.arxivId){
-      let _ax=document.getElementById('p-arxivid');
-      if(!_ax){_ax=document.createElement('input');_ax.type='hidden';_ax.id='p-arxivid';document.getElementById('p-ads').parentElement.appendChild(_ax);}
-      _ax.value=d.arxivId;
-    }
     if(d.bibtex)  document.getElementById('p-bibtex').value  = d.bibtex;
     if(d.abstract) document.getElementById('p-abstract').value = d.abstract;
+    const linkUrl = parsed.source==='scix' ? 'https://www.scixplorer.org/abs/'+encodeURIComponent(parsed.bibcode) : d.adsUrl;
+    document.getElementById('p-ads').value = linkUrl;
+    _setHidden('p-source',   parsed.source || 'ads');
+    _setHidden('p-arxivid',  d.arxivId || '');
+    _setHidden('p-arxivurl', d.arxivId ? 'https://arxiv.org/abs/' + d.arxivId : '');
+    _setHidden('p-inspireid',''); _setHidden('p-inspirekey',''); _setHidden('p-inspireurl','');
     toast('✓ Fields filled from ' + (d._method && d._method.includes('proxy') ? 'ADS (proxy)' : d._method && d._method.includes('scix') ? 'SciX API' : 'ADS API') + '!', 'ok');
   } catch(e) {
     if(e.message === 'INVALID_TOKEN') toast('ADS token rejected — check it at adsabs.harvard.edu/user/settings/token', 'err');
@@ -5275,16 +5652,46 @@ async function fetchADS() {
     else if(e.message === 'PROXY_FAILED' || e.message === 'PROXY_EMPTY' || e.message === 'PARSE_FAILED') toast('Both API and proxy failed — try again or fill manually', 'err');
     else toast('Auto-fill failed: ' + e.message, 'err');
     document.getElementById('p-ads').value = 'https://ui.adsabs.harvard.edu/abs/' + encodeURIComponent(bibcode);
-  } finally { btn.disabled = false; btn.textContent = '⚡ Auto-fill from ADS'; }
+  } finally { btn.disabled = false; btn.textContent = '⚡ Auto-fill'; }
 }
 
 async function fetchADSMyPaper() {
   const raw = document.getElementById('mp-ads-quick').value.trim();
-  if(!raw) { toast('Paste ADS, SciX, or arXiv URL/bibcode first', 'err'); return; }
-  const parsed = parseBibcode(raw);  // now returns {bibcode, source, arxivId}
+  if(!raw) { toast('Paste ADS, SciX, arXiv, or InspireHEP URL/bibcode first', 'err'); return; }
+  const parsed = parseBibcode(raw);
   const btn = document.getElementById('mp-fetch-btn');
   btn.disabled = true; btn.textContent = '⌛ Fetching…';
-  // arXiv path for My Papers
+
+  function _setMpHidden(id, val) {
+    let el = document.getElementById(id);
+    if(!el) { el=document.createElement('input'); el.type='hidden'; el.id=id; document.getElementById('mp-ads').parentElement.appendChild(el); }
+    el.value = val;
+  }
+
+  // ── InspireHEP path ──
+  if(parsed.source === 'inspirehep') {
+    toast('Querying InspireHEP API…', 'inf');
+    try {
+      const d = await fetchInspireHEP(parsed.inspireId || parsed.bibcode);
+      if(d.title)    document.getElementById('mp-title').value    = d.title;
+      if(d.authors)  document.getElementById('mp-authors').value  = d.authors;
+      if(d.journal)  document.getElementById('mp-journal').value  = d.journal;
+      if(d.abstract) document.getElementById('mp-abstract').value = d.abstract;
+      if(d.bibtex)   document.getElementById('mp-bibtex').value   = d.bibtex;
+      document.getElementById('mp-ads').value = d.inspireUrl;
+      if(d.arxivId) document.getElementById('mp-arxiv').value = 'https://arxiv.org/abs/' + d.arxivId;
+      _setMpHidden('mp-source',    'inspirehep');
+      _setMpHidden('mp-arxivid',   d.arxivId || '');
+      _setMpHidden('mp-inspireid', d.inspireId || '');
+      _setMpHidden('mp-inspirekey',d.inspireKey || '');
+      _setMpHidden('mp-inspireurl',d.inspireUrl || '');
+      if(d.arxivId) _setMpHidden('mp-arxivurl', 'https://arxiv.org/abs/' + d.arxivId);
+      toast('✓ Fields filled from InspireHEP!', 'ok');
+    } catch(e) { toast('InspireHEP fetch failed: ' + e.message, 'err'); }
+    btn.disabled=false; btn.textContent='⚡ Auto-fill'; return;
+  }
+
+  // ── arXiv path ──
   if(parsed.source === 'arxiv') {
     toast('Querying arXiv API…','inf');
     try {
@@ -5296,19 +5703,16 @@ async function fetchADSMyPaper() {
       document.getElementById('mp-arxiv').value = d.arxivUrl;
       const pdfEl = document.getElementById('mp-pdf');
       if(pdfEl && !pdfEl.value) pdfEl.value = d.pdfLink;
-      let _mpax=document.getElementById('mp-arxivid');
-      if(!_mpax){_mpax=document.createElement('input');_mpax.type='hidden';_mpax.id='mp-arxivid';document.getElementById('mp-ads').parentElement.appendChild(_mpax);}
-      _mpax.value=d.arxivId||parsed.arxivId||'';
-      // Use mp-source (not p-source) to avoid collision with lit papers hidden input
-      let _mpsrc=document.getElementById('mp-source');
-      if(!_mpsrc){_mpsrc=document.createElement('input');_mpsrc.type='hidden';_mpsrc.id='mp-source';document.getElementById('mp-ads').parentElement.appendChild(_mpsrc);}
-      _mpsrc.value='arxiv';
-      const _mpPdf=document.getElementById('mp-pdf');
-      if(_mpPdf&&!_mpPdf.value) _mpPdf.value=d.pdfLink;
+      _setMpHidden('mp-source',    'arxiv');
+      _setMpHidden('mp-arxivid',   d.arxivId || parsed.arxivId || '');
+      _setMpHidden('mp-arxivurl',  d.arxivUrl || '');
+      _setMpHidden('mp-inspireid', ''); _setMpHidden('mp-inspirekey',''); _setMpHidden('mp-inspireurl','');
       toast('✓ Fields filled from arXiv (preprint)!', 'ok');
     } catch(e) { toast('arXiv fetch failed: '+e.message, 'err'); }
     btn.disabled=false; btn.textContent='⚡ Auto-fill'; return;
   }
+
+  // ── ADS / SciX path ──
   const token = getADSToken();
   if(!token) {
     toast('Enter your ADS API token in Lit. Papers section first', 'err');
@@ -5321,24 +5725,21 @@ async function fetchADSMyPaper() {
     if(d.title)    document.getElementById('mp-title').value    = d.title;
     if(d.authors)  document.getElementById('mp-authors').value  = d.authors;
     if(d.journal)  document.getElementById('mp-journal').value  = d.journal;
-    document.getElementById('mp-ads').value = d.adsUrl;
     if(d.bibtex)   document.getElementById('mp-bibtex').value   = d.bibtex;
     if(d.abstract) document.getElementById('mp-abstract').value = d.abstract;
-    if(d.arxivId)  document.getElementById('mp-arxiv').value    = `https://arxiv.org/abs/${d.arxivId}`;
-    // Store source in mp-source (not p-source — different id to avoid clash with lit papers)
-    let _mps=document.getElementById('mp-source');
-    if(!_mps){_mps=document.createElement('input');_mps.type='hidden';_mps.id='mp-source';document.getElementById('mp-ads').parentElement.appendChild(_mps);}
-    _mps.value=parsed&&parsed.source?parsed.source:'ads';
-    let _mpa=document.getElementById('mp-arxivid');
-    if(!_mpa){_mpa=document.createElement('input');_mpa.type='hidden';_mpa.id='mp-arxivid';document.getElementById('mp-ads').parentElement.appendChild(_mpa);}
-    _mpa.value=d.arxivId||'';
+    document.getElementById('mp-ads').value = d.adsUrl;
+    if(d.arxivId)  document.getElementById('mp-arxiv').value = 'https://arxiv.org/abs/' + d.arxivId;
+    _setMpHidden('mp-source',   parsed.source || 'ads');
+    _setMpHidden('mp-arxivid',  d.arxivId || '');
+    _setMpHidden('mp-arxivurl', d.arxivId ? 'https://arxiv.org/abs/' + d.arxivId : '');
+    _setMpHidden('mp-inspireid',''); _setMpHidden('mp-inspirekey',''); _setMpHidden('mp-inspireurl','');
     toast('✓ Fields filled from ADS!', 'ok');
   } catch(e) {
     if(e.message === 'INVALID_TOKEN') toast('ADS token rejected — check it in Lit. Papers section', 'err');
     else if(e.message === 'NOT_FOUND') toast('Bibcode not found in ADS', 'err');
     else toast('Auto-fill failed: ' + e.message, 'err');
     document.getElementById('mp-ads').value = 'https://ui.adsabs.harvard.edu/abs/' + encodeURIComponent(bibcode);
-  } finally { btn.disabled = false; btn.textContent = '⚡ Auto-fill from ADS'; }
+  } finally { btn.disabled = false; btn.textContent = '⚡ Auto-fill'; }
 }
 
 // ════════════════════════════════════════════════
@@ -5428,6 +5829,8 @@ if(!DB.links.length) {
   DB.links=[
     {id:'l01',name:'NASA/ADS',url:'https://ui.adsabs.harvard.edu/',desc:'Astrophysics Data System — paper search & references',cat:'journals'},
     {id:'l02',name:'arXiv astro-ph',url:'https://arxiv.org/list/astro-ph/recent',desc:'Latest preprints across all astro sub-fields',cat:'journals'},
+    {id:'l17',name:'InspireHEP',url:'https://inspirehep.net/',desc:'High Energy Physics literature database — HEP papers, BibTeX, citations',cat:'journals'},
+    {id:'l18',name:'SciX',url:'https://www.scixplorer.org/',desc:'NASA SciX — next-generation ADS, extended to heliophysics & planetary science',cat:'journals'},
     {id:'l03',name:'SIMBAD',url:'https://simbad.u-strasbg.fr/simbad/',desc:'Object database — coordinates, cross-IDs, measurements',cat:'archive'},
     {id:'l04',name:'NED (IPAC)',url:'https://ned.ipac.caltech.edu/',desc:'NASA/IPAC Extragalactic Database',cat:'archive'},
     {id:'l05',name:'VizieR',url:'https://vizier.u-strasbg.fr/',desc:'Astronomical catalogues and data tables (CDS)',cat:'archive'},
@@ -5448,6 +5851,7 @@ if(!DB.links.length) {
 
 if(!DB.mypapers) DB.mypapers=[];
 
+renderNav();          // always populate sidebar nav on load
 SECTIONS.forEach(k=>cnt(k));
 updateStorageStatus();
 renderHome();
@@ -5468,14 +5872,14 @@ if(location.protocol !== 'file:' && _fsOK()) {
 }
 // Pre-fill CV form if already saved
 if(CV_DATA && CV_DATA.path) {
-  document.getElementById('cv-path-input').value = CV_DATA.path;
-  document.getElementById('cv-label-input').value = CV_DATA.label||'';
+    document.getElementById('cv-path-input').value = CV_DATA.path;
+    document.getElementById('cv-label-input').value = CV_DATA.label||'';
 }
 renderNav();
 show('home');
 // Show folder-connect welcome modal on every startup
 if(_fsOK()) {
-  setTimeout(showWelcomeModal, 200); // slight delay so page renders first
+    setTimeout(showWelcomeModal, 200); // slight delay so page renders first
 }
 </script>
 </body>

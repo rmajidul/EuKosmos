@@ -108,6 +108,7 @@ class Handler(SimpleHTTPRequestHandler):
         elif self.path.startswith('/api/serve-pdf'):   self._serve_pdf()
         elif self.path.startswith('/api/open-path'):   self._open_path()
         elif self.path.startswith('/api/arxiv'):         self._proxy_arxiv()
+        elif self.path.startswith('/api/inspire'):       self._proxy_inspire()
         elif self.path.startswith('/api/scix'):          self._proxy_scix()
         elif self.path.startswith('/api/download-lib'):    self._download_lib()
         else: super().do_GET()
@@ -121,6 +122,7 @@ class Handler(SimpleHTTPRequestHandler):
     #    Only /api/ads/ accepts POST; anything else gets a 405 error.
     def do_POST(self):
         if   self.path.startswith('/api/scix'):           self._proxy_scix()
+        elif self.path.startswith('/api/inspire'):        self._proxy_inspire()
         elif self.path.startswith('/api/ads/'):          self._proxy_ads('POST')
         elif self.path.startswith('/api/download-pdf'):  self._download_pdf()
         else: self.send_error(405)
@@ -516,6 +518,45 @@ class Handler(SimpleHTTPRequestHandler):
             err = json.dumps({'error': str(e)}).encode()
             self.send_response(502); self._cors()
             self.send_header('Content-Type','application/json')
+            self.send_header('Content-Length', str(len(err)))
+            self.end_headers(); self.wfile.write(err)
+
+    def _proxy_inspire(self):
+        # ── /api/inspire/<id> — proxy to InspireHEP REST API ────────────────
+        #
+        # InspireHEP (inspirehep.net) is the primary literature database for
+        # High Energy Physics (HEP). It has excellent CORS support, but routing
+        # through this proxy ensures consistent behaviour and lets us cache in future.
+        #
+        # Usage: GET /api/inspire/2168967           → paper metadata JSON
+        #        GET /api/inspire/2168967?format=bibtex → BibTeX text
+        #
+        # The path /api/inspire/ is replaced with the InspireHEP API base.
+        INSPIRE_BASE = "https://inspirehep.net/api/literature"
+        # Strip "/api/inspire" prefix; what remains is "/<id>" or "/<id>?format=bibtex"
+        sub = self.path[len('/api/inspire'):]   # e.g. /2168967 or /2168967?format=bibtex
+        inspire_url = INSPIRE_BASE + sub
+        try:
+            req = urllib.request.Request(inspire_url)
+            req.add_header('User-Agent', 'AstroNotebook/1.0')
+            req.add_header('Accept', 'application/json, text/plain, */*')
+            with urllib.request.urlopen(req, timeout=15) as r:
+                data = r.read()
+                ct = r.headers.get('Content-Type', 'application/json')
+            self.send_response(200); self._cors()
+            self.send_header('Content-Type', ct)
+            self.send_header('Content-Length', str(len(data)))
+            self.end_headers(); self.wfile.write(data)
+            print(f"  [InspireHEP] {inspire_url[:70]}")
+        except urllib.error.HTTPError as e:
+            data = e.read(); self.send_response(e.code); self._cors()
+            self.send_header('Content-Type', 'application/json')
+            self.send_header('Content-Length', str(len(data)))
+            self.end_headers(); self.wfile.write(data)
+        except Exception as e:
+            err = json.dumps({'error': str(e)}).encode()
+            self.send_response(502); self._cors()
+            self.send_header('Content-Type', 'application/json')
             self.send_header('Content-Length', str(len(err)))
             self.end_headers(); self.wfile.write(err)
 
