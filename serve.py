@@ -33,9 +33,29 @@
 # platform: detects the operating system (macOS / Linux / Windows)
 # urllib:   makes HTTP requests to the ADS API
 import sys, os, json, subprocess, platform, urllib.request, urllib.error, urllib.parse
+import datetime as _dt
 
 # http.server is Python's built-in web server — no installation needed
 from http.server import HTTPServer, SimpleHTTPRequestHandler
+
+# ── Optional calendar libraries (for iCal proxy) ──────────────────────
+# icalendar and python-dateutil are only needed for the calendar feature.
+# If they are not installed, iCal sync is disabled gracefully and all
+# other notebook features continue working normally.
+# Install with:  pip install icalendar python-dateutil
+try:
+    from icalendar import Calendar as _iCalendar
+    _ICAL_OK = True
+except ImportError:
+    _ICAL_OK = False
+
+try:
+    from dateutil.rrule import rrulestr as _rrulestr, rruleset as _rruleset
+    _RRULE_OK = True
+except ImportError:
+    _RRULE_OK = False
+
+ICAL_URLS_FILE = 'data_icalurl.json'
 
 
 # ══════════════════════════════════════════════════════════════════════
@@ -111,6 +131,8 @@ class Handler(SimpleHTTPRequestHandler):
         elif self.path.startswith('/api/inspire'):       self._proxy_inspire()
         elif self.path.startswith('/api/scix'):          self._proxy_scix()
         elif self.path.startswith('/api/download-lib'):    self._download_lib()
+        elif self.path == '/api/icalurls':               self._get_icalurls()
+        elif self.path.startswith('/api/calendar/ical'): self._proxy_ical()
         else: super().do_GET()
         # super().do_GET() means "use the parent class's normal file-serving"
 
@@ -125,6 +147,7 @@ class Handler(SimpleHTTPRequestHandler):
         elif self.path.startswith('/api/inspire'):        self._proxy_inspire()
         elif self.path.startswith('/api/ads/'):          self._proxy_ads('POST')
         elif self.path.startswith('/api/download-pdf'):  self._download_pdf()
+        elif self.path == '/api/icalurls':               self._post_icalurls()
         else: self.send_error(405)
         # 405 = "Method Not Allowed" — standard HTTP error code
 
@@ -365,27 +388,46 @@ class Handler(SimpleHTTPRequestHandler):
         arxiv_id = urllib.parse.parse_qs(qs).get('id', [''])[0].strip()
         if not arxiv_id:
             self._json(400, {'error': 'No arXiv ID provided'}); return
-        # Strip version suffix (v1, v2) for the query — arXiv returns all versions
+        # Strip version suffix (v1, v2) for the query
         clean_id = arxiv_id.split('v')[0] if 'v' in arxiv_id else arxiv_id
-        arxiv_url = 'https://export.arxiv.org/api/query?id_list=' + urllib.parse.quote(clean_id)
-        try:
-            req = urllib.request.Request(arxiv_url)
-            req.add_header('User-Agent', 'AstroNotebook/1.0 (mailto:your@email.com)')
-            # arXiv's fair-use policy asks for a User-Agent with contact info
-            with urllib.request.urlopen(req, timeout=15) as r:
-                data = r.read()
-            # Return the XML to the browser with CORS headers
-            self.send_response(200)
-            self._cors()
-            self.send_header('Content-Type', 'application/xml; charset=utf-8')
-            self.send_header('Content-Length', str(len(data)))
-            self.end_headers()
-            self.wfile.write(data)
-            print(f"  [arXiv] Fetched metadata for: {clean_id}")
-        except urllib.error.HTTPError as e:
-            self._json(e.code, {'error': f'arXiv API returned HTTP {e.code}'})
-        except Exception as e:
-            self._json(502, {'error': str(e)})
+        # Try primary arXiv API endpoint, then fallback
+        urls_to_try = [
+            'https://export.arxiv.org/api/query?id_list=' + urllib.parse.quote(clean_id),
+            'https://arxiv.org/search/?query=' + urllib.parse.quote(clean_id) + '&searchtype=all&start=0',
+        ]
+        last_error = 'Unknown error'
+        for attempt in range(2):   # try twice — once immediately, once after 3s delay
+            for arxiv_url in urls_to_try:
+                try:
+                    req = urllib.request.Request(arxiv_url)
+                    req.add_header('User-Agent', 'Eukosmos/2.0 (https://github.com/rmajidul/EuKosmos; mailto:rmajidul@gmail.com)')
+                    req.add_header('Accept', 'application/xml, application/atom+xml, text/xml, */*')
+                    with urllib.request.urlopen(req, timeout=20) as r:
+                        data = r.read()
+                    ct = 'application/xml; charset=utf-8'
+                    self.send_response(200)
+                    self._cors()
+                    self.send_header('Content-Type', ct)
+                    self.send_header('Content-Length', str(len(data)))
+                    self.end_headers()
+                    self.wfile.write(data)
+                    print(f"  [arXiv] Fetched metadata for: {clean_id}" + (" (retry)" if attempt else ""))
+                    return
+                except urllib.error.HTTPError as e:
+                    last_error = f'HTTP {e.code}'
+                    if e.code == 429 and attempt == 0:
+                        import time
+                        print(f"  [arXiv] 429 rate-limited for {clean_id} — waiting 3s then retrying…")
+                        time.sleep(3)
+                        break   # break inner loop to retry after delay
+                    continue
+                except Exception as e:
+                    last_error = str(e)
+                    continue
+            else:
+                continue  # inner loop finished without break — try next attempt
+            break  # inner loop broke (429 retry) — proceed to next attempt
+        self._json(502, {'error': f'arXiv API unreachable: {last_error}'})
 
     def _download_lib(self):
         # ── /api/download-lib — download KaTeX files to ./lib/ ────────────
@@ -559,6 +601,240 @@ class Handler(SimpleHTTPRequestHandler):
             self.send_header('Content-Type', 'application/json')
             self.send_header('Content-Length', str(len(err)))
             self.end_headers(); self.wfile.write(err)
+
+    # ── _get_icalurls — returns saved iCal URLs from data_icalurl.json ──
+    def _get_icalurls(self):
+        try:
+            if os.path.exists(ICAL_URLS_FILE):
+                with open(ICAL_URLS_FILE, 'r') as f:
+                    urls = json.load(f)
+            else:
+                urls = []
+        except Exception:
+            urls = []
+        self._json(200, {'urls': urls})
+
+    # ── _post_icalurls — saves iCal URLs to data_icalurl.json ──────────
+    def _post_icalurls(self):
+        try:
+            n = int(self.headers.get('Content-Length', 0))
+            body = json.loads(self.rfile.read(n)) if n else {}
+            urls = body.get('urls', [])
+            with open(ICAL_URLS_FILE, 'w') as f:
+                json.dump(urls, f, indent=2)
+            self._json(200, {'ok': True})
+        except Exception as e:
+            self._json(500, {'error': str(e)})
+
+    # ── _proxy_ical — fetches .ics file and expands recurring events ───
+    # GET /api/calendar/ical?url=https://calendar.google.com/…/basic.ics
+    # Returns JSON: {"ok": true, "events": [...]}
+    # Each event: {id, title, datetime, duration, location, notes}
+    # Window: 30 days before today → 180 days (6 months) after today.
+    # Recurring events that started years ago are correctly expanded into
+    # the current window — a weekly meeting from 2022 still appears this week.
+    # Requires icalendar + python-dateutil (pip install icalendar python-dateutil).
+    def _proxy_ical(self):
+        if not _ICAL_OK or not _RRULE_OK:
+            missing = []
+            if not _ICAL_OK:   missing.append('icalendar')
+            if not _RRULE_OK:  missing.append('python-dateutil')
+            self._json(503, {'error':
+                'Calendar sync requires Python packages that are not installed.\n'
+                'Missing: ' + ', '.join(missing) + '\n\n'
+                'Fix — open a Terminal and run:\n'
+                '  pip install ' + ' '.join(missing) + '\n'
+                'Then restart serve.py and try again.',
+                'missing_packages': missing})
+            return
+
+        qs     = urllib.parse.urlparse(self.path).query
+        params = urllib.parse.parse_qs(qs)
+        url    = params.get('url', [''])[0]
+        if not url:
+            self._json(400, {'error': 'Missing ?url= parameter'}); return
+
+        # Optional window parameters (ISO date strings, e.g. 2026-01-01)
+        limit_days = 365   # expanded from 180
+        win_start_str = params.get('start', [''])[0]
+        win_end_str   = params.get('end',   [''])[0]
+
+        try:
+            req = urllib.request.Request(url,
+                headers={'User-Agent': 'Eukosmos/2.0 (calendar sync)'})
+            with urllib.request.urlopen(req, timeout=20) as r:
+                ics_data = r.read()
+
+            cal    = _iCalendar.from_ical(ics_data)
+            events = []
+            for component in cal.walk():
+                if component.name != 'VEVENT':
+                    continue
+                try:
+                    evs = self._expand_ical_event(component, limit_days=limit_days,
+                                                  win_start_str=win_start_str,
+                                                  win_end_str=win_end_str)
+                    events.extend(evs)
+                except Exception as e:
+                    # Fallback: emit as single non-recurring event
+                    single = self._ical_single(component)
+                    if single:
+                        events.append(single)
+
+            self._json(200, {'ok': True, 'events': events})
+            print(f'  [iCal] {len(events)} events from {url[:60]}')
+        except urllib.error.HTTPError as e:
+            msg = f'HTTP {e.code} fetching calendar URL'
+            if e.code == 404: msg += ' — URL not found. Check the iCal URL is correct.'
+            elif e.code == 401 or e.code == 403: msg += ' — Access denied. The calendar may require authentication.'
+            elif e.code == 429: msg += ' — Rate limited. Try again later.'
+            print(f'  [iCal] Fetch failed ({e.code}): {url[:60]}')
+            self._json(e.code, {'error': msg, 'url': url})
+        except urllib.error.URLError as e:
+            msg = f'Cannot reach calendar URL: {e.reason}'
+            if 'Name or service not known' in str(e.reason) or 'nodename nor servname' in str(e.reason):
+                msg = 'Cannot resolve calendar URL — check the URL is correct and you have internet access.'
+            print(f'  [iCal] URL error: {e.reason}')
+            self._json(502, {'error': msg, 'url': url})
+        except Exception as e:
+            print(f'  [iCal] Fetch failed: {e}')
+            self._json(500, {'error': str(e), 'url': url})
+
+    def _ical_dt(self, val):
+        """Normalise an icalendar date/datetime value.
+        Returns (datetime, is_allday, is_utc) tuple.
+        Timezone-aware datetimes are converted to UTC (is_utc=True).
+        All-day dates are returned as midnight local (is_utc=False)."""
+        import datetime as _dt
+        if val is None:
+            return None, False, False
+        d = val.dt
+        if isinstance(d, _dt.datetime):
+            if d.tzinfo is not None:
+                # Convert to UTC, strip tzinfo so it's a naive UTC datetime
+                d = d.astimezone(_dt.timezone.utc).replace(tzinfo=None)
+                return d, False, True
+            # Floating time (no timezone) — treat as-is
+            return d, False, False
+        if isinstance(d, _dt.date):
+            # Pure date (no time) → all-day event
+            return _dt.datetime.combine(d, _dt.time(0, 0, 0)), True, False
+        return None, False, False
+
+    def _ical_single(self, comp):
+        """Return a single event dict from a VEVENT component."""
+        import datetime as _dt
+        start_raw = comp.get('dtstart')
+        if not start_raw:
+            return None
+        start, is_allday, start_is_utc = self._ical_dt(start_raw)
+        if not start:
+            return None
+        end_raw = comp.get('dtend')
+        end, _, end_is_utc = self._ical_dt(end_raw) if end_raw else (None, False, False)
+        if end and not is_allday:
+            dur = int((end - start).total_seconds() // 60)
+        elif end and is_allday:
+            dur = int((end - start).total_seconds() // 60)
+        else:
+            dur = 1440 if is_allday else 60
+        # Emit UTC timestamps with 'Z' so the browser converts to local time correctly
+        dt_str = (start.isoformat() + 'Z') if start_is_utc else start.isoformat()
+        end_str = None
+        if is_allday and end:
+            # All-day end is exclusive in iCal (end = day after); store as date string
+            end_date = (end - _dt.timedelta(days=1)) if end > start else end
+            end_str = end_date.date().isoformat()
+        return {
+            'id'      : str(comp.get('uid', '')),
+            'title'   : str(comp.get('summary',     'Untitled')),
+            'datetime': dt_str,
+            'endDate' : end_str,
+            'duration': dur,
+            'allDay'  : is_allday,
+            'location': str(comp.get('location',    '')),
+            'notes'   : str(comp.get('description', '')),
+        }
+
+    def _expand_ical_event(self, comp, limit_days=365, win_start_str='', win_end_str=''):
+        """Expand a VEVENT including RRULE into individual occurrences.
+        All tz-aware times are normalised to UTC; datetimes are emitted as UTC ISO strings."""
+        import datetime as _dt
+        start_raw = comp.get('dtstart')
+        if not start_raw:
+            return []
+        start, is_allday, start_is_utc = self._ical_dt(start_raw)
+        if not start:
+            return []
+        end_raw = comp.get('dtend')
+        end, _, _ = self._ical_dt(end_raw) if end_raw else (None, False, False)
+        if end:
+            dur = int((end - start).total_seconds() // 60)
+        else:
+            dur = 1440 if is_allday else 60
+
+        # For all-day events, compute endDate (iCal DTEND is exclusive)
+        allday_end = None
+        if is_allday and end and end > start:
+            allday_end = (end - _dt.timedelta(days=1)).date().isoformat()
+
+        rrule_prop = comp.get('RRULE')
+        if not rrule_prop:
+            single = self._ical_single(comp)
+            if not single:
+                return []
+            return [single]   # include all non-recurring events; client filters by view
+
+        rs = _rruleset()
+        try:
+            rrule_text = rrule_prop.to_ical().decode()
+            rs.rrule(_rrulestr(rrule_text, dtstart=start, ignoretz=True))
+        except Exception as e:
+            print(f'  [RRULE parse error] {e}')
+            return [self._ical_single(comp)] if self._ical_single(comp) else []
+
+        # Apply EXDATEs
+        exdate_prop = comp.get('EXDATE')
+        if exdate_prop:
+            ex_list = exdate_prop if isinstance(exdate_prop, list) else [exdate_prop]
+            for ex in ex_list:
+                for ex_val in (ex.dts if hasattr(ex, 'dts') else []):
+                    ex_dt, _, _ = self._ical_dt(ex_val)
+                    if ex_dt:
+                        rs.exdate(ex_dt)
+
+        # Determine query window
+        today        = _dt.datetime.utcnow() if start_is_utc else _dt.datetime.now()
+        today        = today.replace(tzinfo=None)
+        window_start = today - _dt.timedelta(days=30)
+        window_end   = today + _dt.timedelta(days=limit_days)
+        # Override with explicit params if provided
+        if win_start_str:
+            try:
+                window_start = _dt.datetime.fromisoformat(win_start_str.replace('Z',''))
+            except Exception:
+                pass
+        if win_end_str:
+            try:
+                window_end = _dt.datetime.fromisoformat(win_end_str.replace('Z',''))
+            except Exception:
+                pass
+        query_start = max(start, window_start)
+
+        result = []
+        for occ in rs.between(query_start, window_end, inc=True):
+            dt_str = (occ.isoformat() + 'Z') if start_is_utc else occ.isoformat()
+            result.append({
+                'id'      : str(comp.get('uid', '')) + '_' + occ.isoformat(),
+                'title'   : str(comp.get('summary',     'Untitled')),
+                'datetime': dt_str,
+                'endDate' : allday_end,
+                'duration': dur,
+                'allDay'  : is_allday,
+                'location': str(comp.get('location',    '')),
+                'notes'   : str(comp.get('description', '')),
+            })
+        return result
 
     def _proxy_ads(self, method):
         # ── WHAT THIS DOES:

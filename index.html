@@ -712,7 +712,154 @@ body.compact .abstract-block,body.compact .bibtex-block{margin-top:.3rem}
 .pin-unpin:hover{opacity:1;color:var(--red)}
 .pin-add-card{background:none;border:1px dashed var(--border2);border-radius:4px;padding:1rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;cursor:pointer;transition:all .2s;min-height:100px;color:var(--text3)}
 .pin-add-card:hover{border-color:var(--glow);color:var(--glow);background:var(--glow-dim)}
-/* ── Photo Gallery ── */
+/* ════════════════════════════════════════════════════
+   CALENDAR WIDGET  (7-day view on Dashboard)
+════════════════════════════════════════════════════ */
+.cal-section{margin:1.25rem 0 1rem}
+.cal-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem}
+.cal-title{font-family:var(--mono);font-size:.75rem;letter-spacing:.2em;color:var(--text3);text-transform:uppercase}
+/* ── Nav bar — full-width bar with bigger buttons ── */
+.cal-nav{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.cal-range{font-family:var(--mono);font-size:.82rem;color:var(--text);padding:0 .6rem;font-weight:600}
+.cal-btn{background:none;border:1px solid var(--border2);color:var(--text2);font-family:var(--mono);font-size:.72rem;padding:.38rem .85rem;cursor:pointer;border-radius:3px;transition:all .15s;line-height:1.4;letter-spacing:.04em}
+.cal-btn:hover{border-color:var(--glow);color:var(--glow);background:var(--glow-dim)}
+.cal-btn.cal-today{border-color:var(--glow2);color:var(--glow);background:var(--glow-dim)}
+/* ── 7-day grid ── */
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:.6rem}
+.cal-day{background:var(--panel);border:1px solid var(--border);border-radius:4px;overflow:hidden;min-height:120px}
+.cal-day.cal-today-col{border-color:var(--glow);box-shadow:0 0 12px rgba(51,217,255,.15)}
+.cal-day-head{padding:.55rem .6rem;font-family:var(--mono);font-size:.68rem;border-bottom:1px solid var(--border);display:flex;flex-direction:column;align-items:center;gap:.15rem;background:var(--surface);cursor:pointer;transition:background .12s;user-select:none}
+.cal-day-head:hover{background:var(--panel2)}
+.cal-today-col .cal-day-head{background:var(--glow-dim);color:var(--glow)}
+.cal-day-name{letter-spacing:.12em;text-transform:uppercase;color:var(--text3);font-size:.62rem}
+.cal-day-num{font-size:1.15rem;font-weight:700;color:var(--text);line-height:1.1}
+.cal-day-month{font-size:.58rem;color:var(--text3)}
+.cal-day-events{padding:.45rem .5rem;display:flex;flex-direction:column;gap:.4rem}
+/* ── Event cards — bigger, more readable ── */
+.cal-event{background:var(--surface);border-left:3px solid var(--glow2);border-radius:0 3px 3px 0;padding:.42rem .6rem;cursor:pointer;transition:background .12s}
+.cal-event:hover{background:var(--panel2)}
+.cal-event.cal-ev-manual{border-left-color:var(--green)}
+.cal-event.cal-ev-ical{border-left-color:var(--purple)}
+.cal-ev-title{font-family:var(--head);font-size:.88rem;color:var(--text);line-height:1.3;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-ev-time{font-family:var(--mono);font-size:.65rem;color:var(--text2);margin-top:.2rem}
+.cal-ev-loc{font-family:var(--mono);font-size:.6rem;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:.1rem}
+.cal-ev-countdown{font-family:var(--mono);font-size:.65rem;color:var(--amber);margin-top:.15rem;font-weight:600}
+.cal-ev-countdown[data-state="live"]{color:var(--red)}
+.cal-ev-countdown[data-state="ended"]{color:var(--green);opacity:.7}
+.cal-empty{font-family:var(--mono);font-size:.62rem;color:var(--text3);text-align:center;padding:1rem .25rem;opacity:.45}
+/* URL management strip */
+.cal-urls{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.5rem;align-items:center}
+.cal-url-badge{background:var(--surface);border:1px solid var(--border2);border-radius:20px;font-family:var(--mono);font-size:.58rem;color:var(--text2);padding:.2rem .6rem;display:inline-flex;align-items:center;gap:.3rem;max-width:260px}
+.cal-url-badge span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cal-url-remove{background:none;border:none;color:var(--red);cursor:pointer;font-size:.75rem;padding:0 .1rem;opacity:.6;line-height:1}
+.cal-url-remove:hover{opacity:1}
+.cal-add-row{display:flex;gap:.5rem;margin-bottom:.5rem;flex-wrap:wrap}
+.cal-url-input{flex:1;min-width:200px;background:var(--surface);border:1px solid var(--border2);color:var(--text);font-family:var(--mono);font-size:.68rem;padding:.38rem .7rem;border-radius:3px;outline:none}
+.cal-url-input:focus{border-color:var(--glow)}
+.cal-status{font-family:var(--mono);font-size:.62rem;color:var(--text2);margin-bottom:.45rem;min-height:.9rem}
+/* Manual event form */
+#cal-manual-form{background:var(--panel);border:1px solid var(--border2);border-top:2px solid var(--green);padding:1rem 1.25rem;margin-bottom:.75rem;border-radius:0 0 4px 4px;display:none}
+#cal-manual-form.open{display:block;animation:fadeUp .2s ease}
+.cal-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:.65rem;margin-top:.65rem}
+/* Event detail modal */
+#cal-event-modal{position:fixed;inset:0;z-index:1100;background:rgba(2,5,15,.9);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center}
+#cal-event-modal.open{display:flex}
+.cal-modal-box{background:var(--panel);border:1px solid var(--border2);border-top:2px solid var(--glow);padding:1.5rem;width:min(520px,94vw);max-height:85vh;overflow-y:auto;border-radius:0 0 6px 6px;box-shadow:0 24px 60px rgba(0,0,0,.7)}
+.cal-modal-title{font-family:var(--head);font-size:1.25rem;font-weight:700;color:#fff;margin-bottom:.3rem;line-height:1.25}
+.cal-modal-countdown{font-family:var(--mono);font-size:.9rem;color:var(--amber);font-weight:700;margin-bottom:.85rem;letter-spacing:.05em}
+.cal-modal-row{font-family:var(--mono);font-size:.72rem;color:var(--text2);margin:.45rem 0;line-height:1.7}
+.cal-modal-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem;padding-top:.85rem;border-top:1px solid var(--border)}
+/* Day timeline modal */
+#cal-day-timeline{position:fixed;inset:0;z-index:1150;background:rgba(2,5,15,.92);backdrop-filter:blur(8px);display:none;align-items:flex-start;justify-content:center;padding-top:4vh}
+#cal-day-timeline.open{display:flex}
+.cal-timeline-box{background:var(--panel);border:1px solid var(--border2);border-top:2px solid var(--glow);padding:0;width:min(640px,96vw);max-height:88vh;overflow-y:auto;border-radius:0 0 6px 6px;box-shadow:0 24px 80px rgba(0,0,0,.8);display:flex;flex-direction:column}
+.cal-timeline-head{padding:1rem 1.25rem .75rem;border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center;flex-shrink:0;position:sticky;top:0;background:var(--panel);z-index:2}
+.cal-timeline-title{font-family:var(--head);font-size:1.1rem;font-weight:700;color:#fff}
+.cal-timeline-body{flex:1;padding:.5rem 0}
+.cal-tl-slot{display:flex;align-items:stretch;min-height:32px;border-bottom:1px solid var(--border)}
+.cal-tl-slot.cal-tl-hour{border-bottom-color:var(--border2)}
+.cal-tl-time{font-family:var(--mono);font-size:.6rem;color:var(--text3);width:52px;flex-shrink:0;padding:.35rem .5rem 0;text-align:right;line-height:1}
+.cal-tl-bar{flex:1;padding:.2rem .5rem .2rem .6rem;border-left:1px solid var(--border)}
+.cal-tl-event{background:var(--surface);border-left:3px solid var(--glow2);border-radius:0 3px 3px 0;padding:.4rem .6rem;margin-bottom:.25rem;cursor:pointer;transition:background .12s}
+.cal-tl-event:hover{background:var(--panel2)}
+.cal-tl-event.cal-ev-manual{border-left-color:var(--green)}
+.cal-tl-event.cal-ev-ical{border-left-color:var(--purple)}
+.cal-tl-ev-title{font-family:var(--head);font-size:.85rem;font-weight:600;color:var(--text);line-height:1.25}
+.cal-tl-ev-meta{font-family:var(--mono);font-size:.6rem;color:var(--text3);margin-top:.15rem}
+.cal-tl-ev-countdown{font-family:var(--mono);font-size:.62rem;color:var(--amber);font-weight:600}
+.cal-tl-empty{font-family:var(--mono);font-size:.58rem;color:var(--text3);opacity:.35;padding:.2rem 0}
+.cal-tl-addslot{font-family:var(--mono);font-size:.62rem;color:var(--glow);opacity:.45;cursor:pointer;padding:.25rem .5rem;transition:all .12s;border-radius:2px;display:block;width:100%}
+.cal-tl-addslot:hover{opacity:1;background:var(--glow-dim);color:var(--glow)}
+@media(max-width:720px){.cal-grid{grid-template-columns:repeat(3,1fr)}.cal-form-grid{grid-template-columns:1fr}}
+/* ── Week Timeline modal ── */
+#cal-week-timeline{position:fixed;inset:0;z-index:1150;background:rgba(2,5,15,.92);backdrop-filter:blur(8px);display:none;align-items:flex-start;justify-content:center;padding-top:2vh}
+#cal-week-timeline.open{display:flex}
+.cal-wtl-box{background:var(--panel);border:1px solid var(--border2);border-top:2px solid var(--amber);padding:0;width:min(98vw,1500px);max-height:92vh;overflow:hidden;border-radius:0 0 6px 6px;box-shadow:0 24px 80px rgba(0,0,0,.8);display:flex;flex-direction:column}
+.cal-wtl-head{padding:.85rem 1.1rem .65rem;border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center;flex-shrink:0;background:var(--panel)}
+.cal-wtl-title{font-family:var(--head);font-size:1rem;font-weight:700;color:#fff}
+.cal-wtl-scroll{flex:1;overflow:auto}
+/* week grid: time col + 7 day cols */
+.cal-wtl-grid{display:grid;grid-template-columns:54px repeat(7,1fr);min-width:700px}
+.cal-wtl-day-hd{padding:.45rem .35rem;background:var(--surface);border-bottom:2px solid var(--border2);border-right:1px solid var(--border);text-align:center;position:sticky;top:0;z-index:2;cursor:pointer;transition:background .12s}
+.cal-wtl-day-hd:hover{background:var(--panel2)}
+.cal-wtl-day-hd.cal-today-hd{background:var(--glow-dim);border-bottom-color:var(--glow)}
+.cal-wtl-time-hd{padding:.45rem 0;background:var(--surface);border-bottom:2px solid var(--border2);position:sticky;top:0;z-index:2}
+.cal-wtl-day-name{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text3)}
+.cal-wtl-day-num{font-family:var(--head);font-size:1rem;font-weight:700;color:var(--text);line-height:1.1}
+.cal-today-hd .cal-wtl-day-name,.cal-today-hd .cal-wtl-day-num{color:var(--glow)}
+.cal-wtl-ev-count{font-family:var(--mono);font-size:.48rem;color:var(--glow);opacity:.7}
+.cal-wtl-slot{border-bottom:1px solid var(--border);border-right:1px solid var(--border);padding:.18rem .25rem;min-height:28px;position:relative}
+.cal-wtl-slot.cal-wtl-hour{border-bottom-color:var(--border2)}
+.cal-wtl-time-cell{border-bottom:1px solid var(--border);border-right:1px solid var(--border2);padding:.18rem .3rem 0 0;min-height:28px;font-family:var(--mono);font-size:.58rem;color:var(--text3);text-align:right;vertical-align:top}
+.cal-wtl-time-cell.cal-wtl-hour{border-bottom-color:var(--border2);font-size:.62rem;color:var(--text2)}
+/* event in week grid cell */
+.cal-wtl-event{background:var(--surface);border-left:3px solid var(--glow2);border-radius:0 2px 2px 0;padding:.22rem .35rem;margin-bottom:.18rem;cursor:pointer;transition:background .12s;overflow:hidden}
+.cal-wtl-event:hover{background:var(--panel2)}
+.cal-wtl-event.cal-ev-manual{border-left-color:var(--green)}
+.cal-wtl-event.cal-ev-ical{border-left-color:var(--purple)}
+.cal-wtl-ev-title{font-family:var(--head);font-size:.72rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2}
+.cal-wtl-ev-time{font-family:var(--mono);font-size:.55rem;color:var(--text3);margin-top:.08rem}
+.cal-wtl-ev-cd{font-family:var(--mono);font-size:.55rem;color:var(--amber);font-weight:600}
+/* continuation stripe (event ongoing from prev slot) */
+.cal-tl-cont{border-left:3px solid var(--glow2);background:linear-gradient(var(--glow-dim),transparent);border-radius:0 1px 1px 0;padding:.22rem .5rem;margin-bottom:.1rem;font-family:var(--mono);font-size:.58rem;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.75;min-height:28px;display:flex;align-items:center;gap:.3rem}
+.cal-tl-cont::before{content:'↕';font-size:.5rem;opacity:.6;flex-shrink:0}
+.cal-tl-cont.cal-ev-manual{border-left-color:var(--green);background:linear-gradient(var(--green-d),transparent)}
+.cal-tl-cont.cal-ev-ical{border-left-color:var(--purple);background:linear-gradient(var(--purple-d),transparent)}
+/* continuation stripe (event ongoing from prev slot) */
+.cal-wtl-cont{border-left:3px solid var(--glow2);background:linear-gradient(var(--glow-dim),transparent);border-radius:0 1px 1px 0;padding:.12rem .25rem;margin-bottom:.12rem;font-family:var(--mono);font-size:.5rem;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.75;min-height:22px;display:flex;align-items:center;gap:.2rem}
+.cal-wtl-cont::before{content:'↕';font-size:.45rem;opacity:.6;flex-shrink:0}
+.cal-wtl-cont.cal-ev-manual{border-left-color:var(--green);background:linear-gradient(var(--green-d),transparent)}
+.cal-wtl-cont.cal-ev-ical{border-left-color:var(--purple);background:linear-gradient(var(--purple-d),transparent)}
+.cal-wtl-addslot{font-family:var(--mono);font-size:.55rem;color:var(--glow);opacity:0;cursor:pointer;padding:.15rem .25rem;transition:all .12s;white-space:nowrap;overflow:hidden;border-radius:2px;display:block;width:100%}
+.cal-wtl-slot:hover .cal-wtl-addslot{opacity:.7;background:var(--glow-dim)}
+/* ── All-day event banner ── */
+.cal-allday-banner{background:var(--amber-d);border:1px solid rgba(255,192,85,.3);border-left:3px solid var(--amber);border-radius:0 3px 3px 0;padding:.2rem .45rem;margin-bottom:.28rem;cursor:pointer;transition:background .12s;font-family:var(--head);font-size:.78rem;font-weight:600;color:var(--amber);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.cal-allday-banner:hover{background:rgba(255,192,85,.22)}
+.cal-allday-banner.cal-ev-manual{border-left-color:var(--green);background:var(--green-d);color:var(--green)}
+/* ── Month view cells ── */
+.cal-month-cell{background:var(--panel);border:1px solid var(--border);border-radius:4px;min-height:90px;padding:.4rem .45rem;cursor:pointer;transition:background .12s;overflow:hidden;display:flex;flex-direction:column}
+.cal-month-cell:hover{background:var(--panel2);border-color:var(--border2)}
+.cal-month-cell.cal-mc-today{border-color:var(--glow);border-width:2px;background:var(--glow-dim)}
+.cal-mc-num{font-family:var(--head);font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:.3rem;line-height:1}
+.cal-mc-today .cal-mc-num{color:var(--glow)}
+.cal-mc-ev{font-family:var(--mono);font-size:.62rem;color:var(--text);background:var(--glow-mid);border-radius:3px;padding:.1rem .3rem;margin-bottom:.12rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;line-height:1.4}
+.cal-mc-ev.cal-mc-allday{color:var(--bg);background:var(--amber);font-weight:600}
+.cal-mc-more{font-family:var(--mono);font-size:.58rem;color:var(--glow);opacity:.8;margin-top:.1rem}
+.cal-month-day-hd{font-family:var(--head);font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text2);padding:.4rem .35rem;text-align:center;background:var(--surface);border-radius:3px}
+/* Light theme overrides for month view */
+body.light .cal-mc-ev{color:var(--bg);background:rgba(21,88,192,.18)}
+body.light .cal-mc-ev.cal-mc-allday{color:#fff;background:#c47000}
+body.light .cal-month-cell{border-color:#dde5f0}
+body.light .cal-month-cell:hover{background:#eef3fb}
+body.light .cal-month-cell.cal-mc-today{background:rgba(21,88,192,.07);border-color:rgba(21,88,192,.5)}
+/* Timezone display badge */
+.cal-tz-badge{font-family:var(--mono);font-size:.62rem;color:var(--glow);background:var(--glow-dim);border:1px solid rgba(51,217,255,.25);border-radius:3px;padding:.18rem .5rem;cursor:pointer;transition:all .15s;white-space:nowrap}
+.cal-tz-badge:hover{background:var(--glow-mid)}
+/* ── Clickable links inside cal modal ── */
+.cal-modal-link{color:var(--glow);text-decoration:underline;word-break:break-all}
+
+
+
 .photo-masonry{columns:3 260px;column-gap:1rem;margin-top:1rem}
 @media(max-width:700px){.photo-masonry{columns:2 140px}}
 .photo-item{break-inside:avoid;margin-bottom:1rem;position:relative;border-radius:4px;overflow:hidden;background:var(--surface);border:1px solid var(--border2);cursor:pointer;transition:transform .18s,box-shadow .18s}
@@ -1023,6 +1170,50 @@ textarea#p-title, textarea#mp-title,
   <div class="ticker-wrap" id="home-ticker-wrap">
     <div class="ticker-label">⏰ DEADLINES</div>
     <div class="ticker-track"><div class="ticker-inner" id="home-ticker"></div></div>
+  </div>
+
+  <!-- ── CALENDAR ── -->
+  <div class="cal-section" id="home-calendar">
+    <div class="cal-header">
+      <div style="display:flex;align-items:center;gap:.5rem">
+        <div class="cal-title">📅 Calendar</div>
+        <button class="cal-btn" id="cal-collapse-btn" title="Collapse/expand calendar" style="font-size:.6rem;padding:.18rem .45rem;opacity:.7">▼</button>
+        <span class="cal-tz-badge" id="cal-tz-badge" title="Click to change timezone" onclick="calShowTzPicker()">🌐 <span id="cal-tz-label">Local</span></span>
+      </div>
+      <div class="cal-nav" id="cal-nav-controls">
+        <button class="cal-btn" id="cal-prev-week">◀ Prev</button>
+        <span class="cal-range" id="cal-range">—</span>
+        <button class="cal-btn" id="cal-next-week">Next ▶</button>
+        <button class="cal-btn cal-today" id="cal-today-btn">⦿ Today</button>
+        <button class="cal-btn" id="cal-month-btn">▦ Month</button>
+        <button class="cal-btn" id="cal-weekview-btn" style="border-color:rgba(255,192,85,.35);color:var(--amber)">☰ Week View</button>
+        <button class="cal-btn" id="cal-dayview-btn" style="border-color:rgba(51,217,255,.35);color:var(--glow)">☰ Day View</button>
+        <button class="cal-btn" id="cal-sync-btn" style="border-color:rgba(51,217,255,.3);color:var(--glow)">⟳ Sync</button>
+        <button class="cal-btn" id="cal-manage-urls-btn" style="border-color:rgba(0,255,187,.35);color:var(--green)">📅 Add Calendar</button>
+      </div>
+    </div>
+    <!-- Collapsible body — everything below the header -->
+    <div id="cal-body">
+    <!-- iCal URL management (togglable) -->
+    <div id="cal-url-panel" style="display:none;margin-bottom:.65rem;background:var(--surface);border:1px solid var(--border2);border-radius:3px;padding:.65rem .85rem">
+      <div style="font-family:var(--mono);font-size:.58rem;color:var(--text3);margin-bottom:.3rem;letter-spacing:.1em">// ADD PUBLIC CALENDAR — paste your calendar's public iCal (.ics) URL</div>
+      <div style="font-family:var(--mono);font-size:.52rem;color:var(--text3);margin-bottom:.5rem;line-height:1.7">
+        <strong style="color:var(--glow)">Google Calendar:</strong> Open Google Calendar → Settings → your calendar → Scroll to "Integrate calendar" → Copy the <em>Public address in iCal format</em> URL (make sure the calendar is public)<br>
+        <strong style="color:var(--amber)">Outlook / Office 365:</strong> Calendar → Share → Publish → Copy the ICS link<br>
+        <strong style="color:var(--green)">Other:</strong> Any iCal (.ics) feed URL works — from Apple Calendar, Fastmail, ProtonMail, etc.
+      </div>
+      <div class="cal-add-row">
+        <input class="cal-url-input" id="cal-new-url" placeholder="https://calendar.google.com/calendar/ical/…/basic.ics">
+        <button class="cal-btn" id="cal-add-url-btn" style="border-color:rgba(51,217,255,.35);color:var(--glow)">＋ Add</button>
+        <button class="cal-btn" id="cal-close-url-panel" style="color:var(--text3)">✕ Close</button>
+      </div>
+      <div class="cal-urls" id="cal-url-list"></div>
+    </div>
+    <!-- Status -->
+    <div class="cal-status" id="cal-status"></div>
+    <!-- 7-day grid -->
+    <div class="cal-grid" id="cal-day-grid"></div>
+    </div><!-- end #cal-body -->
   </div>
 
   <!-- ── PINBOARD ── -->
@@ -2369,6 +2560,8 @@ async function _writeFolderAll() {
   if(!_dir) return;
   for(const k of SECTIONS) await _writeJson('data_'+k+'.json', DB[k]);
   await _writeJson('data_slides.json', SLIDES);
+  await _writeJson('data_pins.json', PINS);
+  if(typeof CAL_events !== 'undefined') await _writeJson('data_cal_events.json', CAL_events);
   if(typeof CV_DATA!=='undefined' && CV_DATA) await _writeJson('data_cv.json', CV_DATA);
 }
 
@@ -2387,6 +2580,17 @@ async function _readFolderAll() {
     const fh = await _dir.getFileHandle('data_slides.json');
     const d  = JSON.parse(await (await fh.getFile()).text());
     if(Array.isArray(d)) SLIDES = d;
+  } catch(e) {}
+  try {
+    const fh = await _dir.getFileHandle('data_pins.json');
+    const d  = JSON.parse(await (await fh.getFile()).text());
+    if(Array.isArray(d)) { PINS = d; localStorage.setItem('astro_pins', JSON.stringify(PINS)); }
+  } catch(e) {}
+  // Load calendar events from folder (survives browser history clear)
+  try {
+    const fh = await _dir.getFileHandle('data_cal_events.json');
+    const d  = JSON.parse(await (await fh.getFile()).text());
+    if(Array.isArray(d)) { CAL_events = d; localStorage.setItem('cal_events', JSON.stringify(d)); }
   } catch(e) {}
   SECTIONS.forEach(k=>cnt(k)); renderHome();
   const cur=document.querySelector('.section.active');
@@ -2594,9 +2798,11 @@ function importBackupFile() {
 window.addEventListener('beforeunload', () => {
   SECTIONS.forEach(k => { try { localStorage.setItem('astro_'+k, JSON.stringify(DB[k])); } catch(e){} });
   try { localStorage.setItem('astro_slides', JSON.stringify(SLIDES)); } catch(e) {}
+  try { localStorage.setItem('astro_pins',   JSON.stringify(PINS));   } catch(e) {}
+  try { if(typeof CAL_events!=='undefined') localStorage.setItem('cal_events', JSON.stringify(CAL_events)); } catch(e) {}
   // Keep rolling auto-backup (last 3 snapshots)
   try {
-    const snap = {_v:2, _date:new Date().toISOString(), slides:SLIDES};
+    const snap = {_v:2, _date:new Date().toISOString(), slides:SLIDES, pins:PINS};
     SECTIONS.forEach(k => snap[k]=DB[k]);
     localStorage.setItem('astro_autobackup_'+Date.now(), JSON.stringify(snap));
     const keys = Object.keys(localStorage).filter(k=>k.startsWith('astro_autobackup_')).sort();
@@ -2853,7 +3059,11 @@ function show(k) {
   document.getElementById('sec-'+k).classList.add('active');
   const _na=document.getElementById('nav-'+k); if(_na)_na.classList.add('active');
   document.getElementById('footer-section').textContent = LABELS[k]||'';
-  if(k==='home') renderHome();
+  if(k==='home') {
+    renderHome();
+    // Guard against being called before calendar variables are initialised
+    if(typeof CAL_weekStart !== 'undefined') { calRenderDayGrid(); calUpdateRange(); }
+  }
   else if(k==='cv') renderCV();
   else render(k);
 }
@@ -4137,23 +4347,32 @@ function buildDetailHTML(section, e) {
     const _adsLabel = e.source==='scix'?'SciX':e.source==='arxiv'?'arXiv':'ADS';
     html += `<a class="card-link" href="${esc(e.ads)}" target="_blank" rel="noopener">↗ ${_adsLabel}</a>`;
   }
-  // Always show arXiv link if we have an arxivId
+  // Always show arXiv link if we have an arxivId OR a stored arxiv URL
   const _arxivIdForDetail = e.arxivId || '';
-  if(_arxivIdForDetail) {
-    const _arxivLinkUrl = 'https://arxiv.org/abs/' + _arxivIdForDetail;
-    // Don't duplicate if already shown as ADS link
+  // For old entries without arxivId, extract it from the stored arxiv URL
+  const _arxivFallbackId = (!_arxivIdForDetail && e.arxiv && e.arxiv.includes('arxiv.org/abs/'))
+    ? e.arxiv.split('/abs/')[1]?.split('/')[0]?.split('?')[0] : '';
+  const _effectiveArxivId = _arxivIdForDetail || _arxivFallbackId;
+  // Also cover source='arxiv' entries where arXiv URL is stored in e.ads
+  const _arxivFromAds = (!_effectiveArxivId && e.source==='arxiv' && e.ads && e.ads.includes('arxiv.org/abs/'))
+    ? e.ads.split('/abs/')[1]?.split('/')[0]?.split('?')[0] : '';
+  const _finalArxivId = _effectiveArxivId || _arxivFromAds;
+
+  if(_finalArxivId) {
+    const _arxivLinkUrl = 'https://arxiv.org/abs/' + _finalArxivId;
+    // Don't duplicate if already shown as the primary ADS link (source='arxiv')
     if(!(e.source==='arxiv' && e.ads && e.ads.includes('arxiv.org')))
       html += `<a class="card-link" href="${esc(_arxivLinkUrl)}" target="_blank" rel="noopener" style="border-color:rgba(187,102,0,.4);color:var(--amber)">↗ arXiv</a>`;
-    // ADS link
-    const _adsLinkFull = 'https://ui.adsabs.harvard.edu/abs/arxiv:' + _arxivIdForDetail;
+    // ADS link — only if not already shown as primary
+    const _adsLinkFull = 'https://ui.adsabs.harvard.edu/abs/arxiv:' + _finalArxivId;
     if(e.source !== 'ads' && e.source !== 'scix')
       html += `<a class="card-link" href="${esc(_adsLinkFull)}" target="_blank" rel="noopener" style="border-color:rgba(51,217,255,.3);color:var(--glow);opacity:.7">↗ ADS</a>`;
     // SciX link
-    const _scixLinkFull = 'https://www.scixplorer.org/abs/arxiv:' + _arxivIdForDetail;
+    const _scixLinkFull = 'https://www.scixplorer.org/abs/arxiv:' + _finalArxivId;
     if(e.source !== 'scix')
       html += `<a class="card-link" href="${esc(_scixLinkFull)}" target="_blank" rel="noopener" style="border-color:rgba(51,217,255,.3);color:var(--glow);opacity:.7">↗ SciX</a>`;
-    // InspireHEP link for all papers with arXiv ID
-    const _inspireLinkFromArxiv = 'https://inspirehep.net/search?p=arxiv%3A' + _arxivIdForDetail;
+    // InspireHEP link
+    const _inspireLinkFromArxiv = 'https://inspirehep.net/search?p=arxiv%3A' + _finalArxivId;
     const _inspireDisplay = e.inspire || e.inspireUrl || _inspireLinkFromArxiv;
     html += `<a class="card-link" href="${esc(_inspireDisplay)}" target="_blank" rel="noopener" style="border-color:rgba(187,153,255,.4);color:var(--purple)">↗ InspireHEP</a>`;
   }
@@ -4161,7 +4380,6 @@ function buildDetailHTML(section, e) {
   if(e.source === 'inspirehep' && e.ads) {
     html += `<a class="card-link" href="${esc(e.ads)}" target="_blank" rel="noopener" style="border-color:rgba(187,153,255,.4);color:var(--purple)">↗ InspireHEP</a>`;
   }
-  if(e.arxiv && e.source !== 'arxiv') html += `<a class="card-link" href="${esc(e.arxiv)}" target="_blank" rel="noopener" style="border-color:rgba(187,102,0,.4);color:var(--amber)">↗ arXiv</a>`;
   if(e.link) html += `<a class="card-link" href="${esc(e.link)}" target="_blank" rel="noopener">↗ Link</a>`;
   if(e.url && section==='cutouts') html += `<a class="card-link" href="${esc(e.url)}" target="_blank" rel="noopener">↗ Cutout</a>`;
   if(e.url && section==='links')   html += `<a class="card-link" href="${esc(e.url)}" target="_blank" rel="noopener">↗ Open Link</a>`;
@@ -4646,7 +4864,9 @@ function renderPapers() {
   });
   if(!items.length){el.innerHTML=empty('no papers found');return;}
   el.innerHTML=items.map(p=>{
-    const _arxivLnk = p.arxivId ? 'https://arxiv.org/abs/'+p.arxivId : (p.arxiv||'');
+    const _arxivLnk  = p.arxivId ? 'https://arxiv.org/abs/'+p.arxivId
+                      : (p.arxiv && p.arxiv.includes('arxiv.org') ? p.arxiv
+                      : (p.source==='arxiv' && p.ads ? p.ads : ''));
     const _inspLnk  = p.inspire || p.inspireUrl || (p.arxivId ? 'https://inspirehep.net/search?p=arxiv%3A'+p.arxivId : '');
     const _adsLnk   = (p.source!=='arxiv'&&p.source!=='inspirehep'&&p.ads) ? p.ads : '';
     const _scixLnk  = p.source==='scix'&&p.ads ? p.ads : '';
@@ -4687,7 +4907,9 @@ function renderMyPapers() {
   if(!items.length){el.innerHTML=empty('no papers yet — add your first one');return;}
   el.innerHTML=items.map(p=>{
     const scls=p.status==='published'?'mps-published':p.status==='submitted'?'mps-submitted':'mps-in-prep';
-    const _arxivLnk = p.arxivId ? 'https://arxiv.org/abs/'+p.arxivId : (p.arxiv||'');
+    const _arxivLnk = p.arxivId ? 'https://arxiv.org/abs/'+p.arxivId
+                    : (p.arxiv && p.arxiv.includes('arxiv.org') ? p.arxiv
+                    : (p.source==='arxiv' && p.ads ? p.ads : ''));
     const _inspLnk  = p.inspire || p.inspireUrl || (p.arxivId ? 'https://inspirehep.net/search?p=arxiv%3A'+p.arxivId : '');
     return `<div class="my-paper-card" onclick="openDetail('mypapers','${p.id}')">
       <div class="card-top"><div>
@@ -5305,61 +5527,101 @@ function parseBibcode(raw) {
   return {bibcode:raw, source:'ads', arxivId:''};
 }
 
-// ── fetchArxiv(arxivId) — arXiv XML API, no key, no proxy needed ─────
+// ── fetchArxiv(arxivId) — tries arXiv API, falls back to Semantic Scholar ──
+//
+// WHY THE FALLBACK IS NEEDED:
+//   arXiv's export.arxiv.org has been returning HTTP 429 "Rate exceeded"
+//   even for users making 1-2 requests/day, due to LLM scrapers overwhelming
+//   their servers (confirmed on arXiv API discussion group, Nov 2025).
+//   Official rate limit is 1 req/3s but 429s happen even below this.
+//
+//   Semantic Scholar (api.semanticscholar.org) by the Allen Institute for AI:
+//   - Covers ALL arXiv papers with same metadata (title, authors, abstract)
+//   - No API key required for basic lookups
+//   - 5000 requests / 5 minutes rate limit
+//   - Proper CORS headers — works directly from the browser
+//   Lookup: GET /graph/v1/paper/arXiv:{id}?fields=...
 async function fetchArxiv(arxivId) {
-  // fetchArxiv — arXiv Atom/XML API via serve.py proxy (no CORS issues).
-  // export.arxiv.org does NOT send CORS headers — direct browser fetch is blocked.
-  // We route through /api/arxiv just like ADS routes through /api/ads.
-  // Falls back to allorigins public proxy when running on file:// (no serve.py).
-  const cleanId = arxivId.replace(/v\d+$/, '');  // strip version suffix e.g. 2603.09562v1→2603.09562
+  const cleanId = arxivId.replace(/v\d+$/, '');  // strip version suffix
 
-  let fetchUrl;
-  if(location.protocol !== 'file:') {
-    // Use our local serve.py proxy — bypasses CORS, most reliable
-    fetchUrl = location.origin + '/api/arxiv?id=' + encodeURIComponent(cleanId);
-  } else {
-    // No serve.py on file:// — use public allorigins CORS proxy as fallback
-    fetchUrl = 'https://api.allorigins.win/raw?url=' +
-      encodeURIComponent('https://export.arxiv.org/api/query?id_list=' + cleanId);
+  // ── Attempt 1: arXiv API via serve.py proxy (most accurate, has category) ──
+  try {
+    let fetchUrl;
+    if(location.protocol !== 'file:') {
+      fetchUrl = location.origin + '/api/arxiv?id=' + encodeURIComponent(cleanId);
+    } else {
+      fetchUrl = 'https://api.allorigins.win/raw?url=' +
+        encodeURIComponent('https://export.arxiv.org/api/query?id_list=' + cleanId);
+    }
+    const res = await fetch(fetchUrl, {signal: AbortSignal.timeout(12000)});
+    if(res.ok) {
+      const xmlText = await res.text();
+      if(xmlText && xmlText.length > 50) {
+        const xml   = new DOMParser().parseFromString(xmlText, 'application/xml');
+        const entry = xml.querySelector('entry');
+        if(entry) {
+          const title    = (entry.querySelector('title')?.textContent  || '').replace(/\s+/g,' ').trim();
+          const abstract = (entry.querySelector('summary')?.textContent|| '').replace(/\s+/g,' ').trim();
+          const authorEls = [...entry.querySelectorAll('author name')];
+          const authors   = authorEls.slice(0,8).map(n=>n.textContent.trim()).join('; ')
+                          + (authorEls.length > 8 ? ' et al.' : '');
+          const published = (entry.querySelector('published')?.textContent || '').slice(0,10);
+          const catEl     = entry.querySelector('primary_category') || entry.querySelector('[term]');
+          const category  = catEl?.getAttribute('term') || '';
+          const linkEls   = [...entry.querySelectorAll('link')];
+          const pdfEl     = linkEls.find(l => l.getAttribute('title') === 'pdf');
+          const pdfLink   = pdfEl?.getAttribute('href') || 'https://arxiv.org/pdf/' + cleanId;
+          if(title) {
+            return {
+              title, authors, abstract, published, category, pdfLink,
+              arxivUrl : 'https://arxiv.org/abs/' + cleanId,
+              arxivId  : cleanId, source: 'arxiv',
+              journal  : 'arXiv:' + cleanId + (category ? ' [' + category + ']' : '')
+            };
+          }
+        }
+      }
+    }
+    if(res.status === 429) toast('arXiv API rate-limited (429) — trying Semantic Scholar…', 'inf');
+  } catch(_) { /* timeout or network error — fall through to Semantic Scholar */ }
+
+  // ── Attempt 2: Semantic Scholar API (free, no key, great CORS) ───────────
+  toast('arXiv busy — fetching from Semantic Scholar…', 'inf');
+  try {
+    const s2Url = 'https://api.semanticscholar.org/graph/v1/paper/arXiv:' + cleanId
+      + '?fields=title,authors,abstract,year,publicationDate,externalIds,journal';
+    const s2Res = await fetch(s2Url, {
+      headers: {'Accept': 'application/json'},
+      signal: AbortSignal.timeout(15000)
+    });
+    if(!s2Res.ok) throw new Error('Semantic Scholar returned HTTP ' + s2Res.status);
+    const s2 = await s2Res.json();
+    if(!s2 || !s2.title) throw new Error('Paper not found on Semantic Scholar');
+
+    const title    = (s2.title || '').replace(/\s+/g,' ').trim();
+    const abstract = (s2.abstract || '').replace(/\s+/g,' ').trim();
+    const authors  = (s2.authors || []).slice(0,8).map(a => a.name || '').filter(Boolean).join('; ')
+                   + ((s2.authors||[]).length > 8 ? ' et al.' : '');
+    const year     = s2.year ? String(s2.year) : '';
+    const jName    = s2.journal?.name || '';
+    const journal  = jName ? jName + (year ? ' ' + year : '') : 'arXiv:' + cleanId + (year ? ' [' + year + ']' : '');
+    const pdfLink  = 'https://arxiv.org/pdf/' + cleanId;
+
+    return {
+      title, authors, abstract,
+      published : s2.publicationDate || year || '',
+      category  : '', pdfLink,
+      arxivUrl  : 'https://arxiv.org/abs/' + cleanId,
+      arxivId   : cleanId, source: 'arxiv', journal
+    };
+  } catch(e2) {
+    throw new Error(
+      'arXiv API returned 429 (rate-limited) and Semantic Scholar also failed: ' + e2.message
+      + '\n\nTip: wait 30–60 s and try again, or paste the ADS/SciX URL instead.'
+    );
   }
-
-  const res = await fetch(fetchUrl, {signal: AbortSignal.timeout(15000)});
-  if(!res.ok) throw new Error('arXiv proxy returned HTTP ' + res.status);
-  const xmlText = await res.text();
-  if(!xmlText || xmlText.length < 100) throw new Error('Empty response from arXiv proxy');
-
-  const xml   = new DOMParser().parseFromString(xmlText, 'application/xml');
-  const entry = xml.querySelector('entry');
-  if(!entry) throw new Error('arXiv paper not found for ID: ' + cleanId);
-
-  const title    = (entry.querySelector('title')?.textContent  || '').replace(/\s+/g,' ').trim();
-  const abstract = (entry.querySelector('summary')?.textContent|| '').replace(/\s+/g,' ').trim();
-
-  const authorEls = [...entry.querySelectorAll('author name')];
-  const authors   = authorEls.slice(0,8).map(n=>n.textContent.trim()).join('; ')
-                  + (authorEls.length > 8 ? ' et al.' : '');
-
-  const published = (entry.querySelector('published')?.textContent || '').slice(0,10);
-
-  // Primary category: try <arxiv:primary_category> or any [term] attribute
-  const catEl   = entry.querySelector('primary_category') || entry.querySelector('[term]');
-  const category = catEl?.getAttribute('term') || '';
-
-  const linkEls = [...entry.querySelectorAll('link')];
-  const pdfEl   = linkEls.find(l => l.getAttribute('title') === 'pdf');
-  const pdfLink = pdfEl?.getAttribute('href') || 'https://arxiv.org/pdf/' + cleanId;
-
-  return {
-    title, authors, abstract,
-    published,
-    category,
-    pdfLink,
-    arxivUrl : 'https://arxiv.org/abs/' + cleanId,
-    arxivId  : cleanId,
-    source   : 'arxiv',
-    journal  : 'arXiv:' + cleanId + (category ? ' [' + category + ']' : '')
-  };
 }
+
 
 // ── fetchInspireHEP(inspireId) — InspireHEP REST API, no token needed ─
 async function fetchInspireHEP(inspireId) {
@@ -5872,15 +6134,1333 @@ if(location.protocol !== 'file:' && _fsOK()) {
 }
 // Pre-fill CV form if already saved
 if(CV_DATA && CV_DATA.path) {
-    document.getElementById('cv-path-input').value = CV_DATA.path;
-    document.getElementById('cv-label-input').value = CV_DATA.label||'';
+  document.getElementById('cv-path-input').value = CV_DATA.path;
+  document.getElementById('cv-label-input').value = CV_DATA.label||'';
 }
-renderNav();
+// ══════════════════════════════════════════════════════════════════════
+//  CALENDAR — 7-day dashboard widget
+//  Namespaced with CAL_ prefix to avoid clashes with notebook globals.
+//  Events stored in localStorage as 'cal_events'.
+//  iCal URLs stored server-side in data_icalurl.json via /api/icalurls.
+//  Server-side proxy: /api/calendar/ical?url=... (see serve.py)
+// ══════════════════════════════════════════════════════════════════════
+let CAL_events   = [];
+let CAL_icalUrls = [];
+// Detect locale first-day-of-week (0=Sun, 1=Mon). Falls back to Sunday.
+const CAL_weekStartDay = (() => {
+  try {
+    const loc = new Intl.Locale(navigator.language || 'en');
+    if(loc.weekInfo) return loc.weekInfo.firstDay === 1 ? 1 : 0;
+  } catch(_) {}
+  return 0;
+})();
+// Snap any date to the start of its week (Sunday or Monday per CAL_weekStartDay)
+function calSnapToWeekStart(d) {
+  const day = d.getDay();
+  const diff = (day - CAL_weekStartDay + 7) % 7;
+  const r = new Date(d); r.setDate(d.getDate() - diff); r.setHours(0,0,0,0); return r;
+}
+// Start from today — grid always shows today + 6 days, recalculated each day
+let CAL_weekStart = (() => { const d = new Date(); d.setHours(0,0,0,0); return d; })();
+let CAL_currentEvent = null;
+let CAL_currentMonthYear = new Date();
+
+// ── Storage ──────────────────────────────────────────────────────────
+function calLoadEvents() {
+  // Load from localStorage first (instant)
+  try { CAL_events = JSON.parse(localStorage.getItem('cal_events')) || []; } catch(_) { CAL_events = []; }
+}
+async function calLoadEventsFromFolder() {
+  // Then try to load from folder JSON (authoritative copy, survives browser history clear)
+  if(!window._dir) return;
+  try {
+    const fh = await window._dir.getFileHandle('data_cal_events.json');
+    const d  = JSON.parse(await (await fh.getFile()).text());
+    if(Array.isArray(d)) {
+      CAL_events = d;
+      localStorage.setItem('cal_events', JSON.stringify(CAL_events));
+      calRenderDayGrid();
+    }
+  } catch(_) {}
+}
+function calSaveEvents() {
+  // Always save to localStorage (sync, immediate)
+  try { localStorage.setItem('cal_events', JSON.stringify(CAL_events)); } catch(_) {}
+  // Also write to folder JSON if a folder is connected (async, non-blocking)
+  if(window._dir && typeof _writeJson === 'function') {
+    _writeJson('data_cal_events.json', CAL_events).catch(()=>{});
+  }
+  calRenderDayGrid();
+}
+
+// ── iCal URL management ───────────────────────────────────────────────
+async function calLoadUrls() {
+  try {
+    const r = await fetch('/api/icalurls', {signal: AbortSignal.timeout(5000)});
+    if(r.ok) { const d = await r.json(); CAL_icalUrls = d.urls || []; }
+  } catch(_) {}
+  calRenderUrlList();
+}
+async function calSaveUrls() {
+  try {
+    await fetch('/api/icalurls', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({urls: CAL_icalUrls}),
+      signal: AbortSignal.timeout(5000)
+    });
+  } catch(_) {}
+}
+function calRenderUrlList(errors) {
+  errors = errors || {};
+  const el = document.getElementById('cal-url-list'); if(!el) return;
+  el.innerHTML = CAL_icalUrls.map(url => {
+    const err = errors[url];
+    const shortUrl = url.length>50 ? url.slice(0,50)+'…' : url;
+    const errHtml = err
+      ? `<div style="font-family:var(--mono);font-size:.55rem;color:#f87171;margin-top:.2rem;white-space:normal;word-break:break-word" title="${esc(err)}">⚠ ${esc(err.length>120?err.slice(0,120)+'…':err)}</div>`
+      : '';
+    return `<div class="cal-url-badge" style="flex-direction:column;align-items:flex-start">`+
+      `<div style="display:flex;align-items:center;gap:.4rem;width:100%"><span title="${esc(url)}">${esc(shortUrl)}</span>`+
+      `<button class="cal-url-remove" data-calurl="${esc(url)}" style="margin-left:auto">✕</button></div>`+
+      errHtml+`</div>`;
+  }).join('');
+  el.querySelectorAll('.cal-url-remove').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      CAL_icalUrls = CAL_icalUrls.filter(u => u !== btn.dataset.calurl);
+      await calSaveUrls(); calRenderUrlList({}); calSyncAll();
+    });
+  });
+}
+
+// ── Sync from iCal URLs ───────────────────────────────────────────────
+async function calSyncFromUrl(url) {
+  try {
+    const r = await fetch('/api/calendar/ical?url='+encodeURIComponent(url), {signal: AbortSignal.timeout(20000)});
+    const d = await r.json();
+    if(!d.ok) throw new Error(d.error||'failed');
+    return {events: d.events.map(ev => ({...ev, source:'ical', sourceUrl:url})), error: null};
+  } catch(e) {
+    const msg = e.message || 'Unknown error';
+    // Surface actionable hints for common failures
+    const hint = msg.includes('pip install') ? ' — run: pip install icalendar python-dateutil'
+               : msg.includes('503')         ? ' — server missing packages (see above)'
+               : '';
+    console.warn('[Cal] sync failed for', url, msg);
+    return {events: [], error: msg + hint};
+  }
+}
+async function calSyncAll() {
+  const st = document.getElementById('cal-status'); if(st) st.textContent = '⌛ Syncing calendars…';
+  let fetched = [];
+  const urlErrors = {};
+  for(const url of CAL_icalUrls) {
+    const res = await calSyncFromUrl(url);
+    fetched.push(...res.events);
+    if(res.error) urlErrors[url] = res.error;
+  }
+  // Keep manual events, replace all ical events, then deduplicate by id
+  const manual = CAL_events.filter(e => e.source !== 'ical');
+  const merged = manual.concat(fetched);
+  const idMap = new Map();
+  for(const e of merged) {
+    if(!idMap.has(e.id) || e.source !== 'ical') idMap.set(e.id, e);
+  }
+  CAL_events = Array.from(idMap.values());
+  calSaveEvents();
+  const errCount = Object.keys(urlErrors).length;
+  if(errCount) {
+    if(st) st.textContent = `⚠️ ${errCount} calendar${errCount>1?'s':''} failed — see URL list for details`;
+  } else {
+    if(st) st.textContent = `✓ ${fetched.length} event${fetched.length!==1?'s':''} from ${CAL_icalUrls.length} calendar${CAL_icalUrls.length!==1?'s':''}`;
+  }
+  calRenderUrlList(urlErrors);
+}
+
+// ── Recurrence expansion (client-side, for manual events) ────────────
+function calExpandRecurring(ev, startDate, endDate) {
+  if(!ev.recurrence) return [ev];
+  const rec = ev.recurrence;
+  const base = new Date(ev.datetime);
+  const type = rec.type || rec;
+  const interval = rec.interval || 1;
+  const days = rec.days || null;
+  const occurrences = [];
+  // Bug 3 fix: support exdates array — skip excluded occurrences
+  const exdateSet = new Set((ev.exdates||[]).map(d => new Date(d).toDateString()));
+  const addOcc = d => {
+    if(!exdateSet.has(d.toDateString()))
+      occurrences.push({...ev, datetime:d.toISOString(), id:ev.id+'_'+d.toISOString()});
+  };
+  if(type==='DAILY') {
+    let cur = new Date(base);
+    while(cur <= endDate) { if(cur >= startDate) addOcc(new Date(cur)); cur.setDate(cur.getDate()+interval); }
+  } else if(type==='WEEKLY') {
+    const wdays = days&&days.length ? days : [base.getDay()];
+    // Bug 2 fix: honour interval — compute which calendar weeks are "on" weeks
+    // Reference: the Sunday of the base event's week
+    const baseSun = new Date(base);
+    baseSun.setDate(base.getDate() - base.getDay()); baseSun.setHours(0,0,0,0);
+    let cur = new Date(startDate);
+    while(cur <= endDate) {
+      if(wdays.includes(cur.getDay())) {
+        const curSun = new Date(cur);
+        curSun.setDate(cur.getDate() - cur.getDay()); curSun.setHours(0,0,0,0);
+        const weekOffset = Math.round((curSun - baseSun) / (7*86400000));
+        const occ = new Date(cur); occ.setHours(base.getHours(), base.getMinutes(), 0, 0);
+        if(occ >= startDate && occ <= endDate && occ >= base && weekOffset % interval === 0)
+          addOcc(occ);
+      }
+      cur.setDate(cur.getDate()+1);
+    }
+  } else if(type==='MONTHLY') {
+    let cur = new Date(base);
+    while(cur <= endDate) { if(cur >= startDate) addOcc(new Date(cur)); cur.setMonth(cur.getMonth()+interval); }
+  } else if(type==='YEARLY') {
+    let cur = new Date(base);
+    while(cur <= endDate) { if(cur >= startDate) addOcc(new Date(cur)); cur.setFullYear(cur.getFullYear()+interval); }
+  }
+  return occurrences.length ? occurrences : [ev];
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────
+// calLinkify — convert URLs in a plain text string to clickable <a> tags
+// Fix: extract URLs from raw text BEFORE escaping, so href attrs are never HTML-mangled
+function calLinkify(text) {
+  if(!text) return '';
+  const urlRe = /(https?:\/\/[^\s<>"]+)/g;
+  let result = '', lastIndex = 0, match;
+  while((match = urlRe.exec(text)) !== null) {
+    // escape the non-URL plain text before this match
+    result += esc(text.slice(lastIndex, match.index));
+    // raw URL goes into href; escaped copy shown as display text
+    const rawUrl = match[1];
+    result += `<a class="cal-modal-link" href="${rawUrl}" target="_blank" rel="noopener">${esc(rawUrl)}</a>`;
+    lastIndex = match.index + rawUrl.length;
+  }
+  result += esc(text.slice(lastIndex));
+  return result;
+}
+function calFmtTime(iso) {
+  // Always show in the user's local timezone (browser default)
+  return new Date(iso).toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit',hour12:false});
+}
+// calCountdown — 3-state smart status label, refreshed every minute by the live timer below
+// States: upcoming → "In: Xh Ym" | in-progress → "🔴 Started: Xm ago" | ended → "✓ Meeting Ended"
+function calCountdown(iso, durMin) {
+  const now   = new Date();
+  const start = new Date(iso);
+  const diff  = start - now;  // ms until start (negative = already started)
+
+  // ── Not yet started ──
+  if (diff > 0) {
+    const SEVEN_DAYS = 7 * 86400000;
+    if (diff > SEVEN_DAYS) {
+      return '📅 ' + start.toLocaleDateString(undefined,{month:'short',day:'numeric',weekday:'short'});
+    }
+    const d=Math.floor(diff/86400000), h=Math.floor((diff%86400000)/3600000), m=Math.floor((diff%3600000)/60000);
+    const p=[];
+    if(d>0) p.push(d+'d'); if(h>0||d>0) p.push(h+'h'); p.push(m+'m');
+    return 'In: '+p.join(' ');
+  }
+
+  // ── Already started — check if still within duration ──
+  const elapsed = now - start;  // ms since start
+  const durMs   = (durMin || 60) * 60000;
+  if (elapsed < durMs) {
+    const elapsedMin = Math.floor(elapsed / 60000);
+    return '🔴 Started: ' + elapsedMin + 'm ago';
+  }
+
+  // ── Duration over ──
+  return '✓ Meeting Ended';
+}
+function calGroupByDay(startDate) {
+  const weekEnd = new Date(startDate); weekEnd.setDate(startDate.getDate()+6); weekEnd.setHours(23,59,59,999);
+  let expanded = [];
+  for(const ev of CAL_events) {
+    expanded.push(...(ev.recurrence ? calExpandRecurring(ev,startDate,weekEnd) : [ev]));
+  }
+  // Bug 10 fix: for multi-day all-day events, clone onto every intermediate day
+  const extraDays = [];
+  for(const ev of expanded) {
+    if(!ev.allDay || !ev.endDate) continue;
+    const evStart = new Date(ev.datetime.slice(0,10)+'T00:00:00');
+    const evEnd   = new Date(ev.endDate+'T00:00:00');
+    let d = new Date(evStart); d.setDate(d.getDate()+1);
+    while(d <= evEnd) {
+      const iso = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+      extraDays.push({...ev, datetime: iso+'T00:00:00', id: ev.id+'_span_'+iso});
+      d.setDate(d.getDate()+1);
+    }
+  }
+  expanded.push(...extraDays);
+  const days = [];
+  for(let i=0;i<7;i++) {
+    const date = new Date(startDate); date.setDate(startDate.getDate()+i);
+    const ds = date.toDateString();
+    const dayEvs = expanded.filter(ev => {
+      const evd = new Date(ev.datetime); evd.setHours(0,0,0,0); return evd.toDateString()===ds;
+    }).sort((a,b) => new Date(a.datetime)-new Date(b.datetime));
+    days.push({date, events:dayEvs});
+  }
+  return days;
+}
+
+// ── Render 7-day grid ────────────────────────────────────────────────
+function calRenderDayGrid() {
+  const grid = document.getElementById('cal-day-grid'); if(!grid) return;
+  const days = calGroupByDay(CAL_weekStart);
+  const todayStr = new Date().toDateString();
+  const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  grid.innerHTML = days.map(day => {
+    const isToday = day.date.toDateString() === todayStr;
+    const _d=day.date, dateIso=_d.getFullYear()+'-'+String(_d.getMonth()+1).padStart(2,'0')+'-'+String(_d.getDate()).padStart(2,'0');
+    // Separate all-day from timed events
+    const allDayEvs = day.events.filter(ev => ev.allDay);
+    const timedEvs  = day.events.filter(ev => !ev.allDay);
+    return `<div class="cal-day${isToday?' cal-today-col':''}">
+      <div class="cal-day-head" onclick="calOpenDayTimeline('${dateIso}')" title="Click to see full day schedule">
+        <span class="cal-day-name">${DAYS[day.date.getDay()]}</span>
+        <span class="cal-day-num">${day.date.getDate()}</span>
+        <span class="cal-day-month">${MONTHS[day.date.getMonth()]}</span>
+        ${day.events.length ? `<span style="font-family:var(--mono);font-size:.5rem;color:var(--glow);opacity:.7">${day.events.length} event${day.events.length>1?'s':''}</span>` : ''}
+      </div>
+      <div class="cal-day-events">
+        ${allDayEvs.map(ev => {
+          const cls = ev.source==='manual'?'cal-ev-manual':'';
+          const baseId = ev.id.split('_20')[0];
+          return `<div class="cal-allday-banner ${cls}" onclick="calShowEventModal('${esc(ev.id)}','${esc(baseId)}')" title="${esc(ev.title)}">🗓 ${esc(ev.title)}</div>`;
+        }).join('')}
+        ${timedEvs.length ? timedEvs.map(ev => {
+          const cls = ev.source==='manual'?'cal-ev-manual':ev.source==='ical'?'cal-ev-ical':'';
+          const baseId = ev.id.split('_20')[0];
+          return `<div class="cal-event ${cls}" onclick="calShowEventModal('${esc(ev.id)}','${esc(baseId)}')">
+            <div class="cal-ev-title">${esc(ev.title)}</div>
+            <div class="cal-ev-time">${calFmtTime(ev.datetime)}${ev.duration?' · '+ev.duration+'m':''}</div>
+            ${ev.location?`<div class="cal-ev-loc">📍 ${esc(ev.location.slice(0,50))}</div>`:''}
+            ${(() => { const _cd=calCountdown(ev.datetime,ev.duration); const _cc=_cd.startsWith('🔴')?'var(--red)':_cd.startsWith('✓')?'var(--green)':'var(--amber)'; return `<div class="cal-ev-countdown" style="color:${_cc}">${_cd}</div>`; })()}
+          </div>`;
+        }).join('') : (!allDayEvs.length ? '<div class="cal-empty">— no events —</div>' : '')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function calUpdateRange() {
+  const el = document.getElementById('cal-range'); if(!el) return;
+  const end = new Date(CAL_weekStart); end.setDate(CAL_weekStart.getDate()+6);
+  const fmt = d => d.toLocaleDateString(undefined,{month:'short',day:'numeric'});
+  el.textContent = fmt(CAL_weekStart)+' – '+fmt(end);
+}
+function calShiftWeek(delta) {
+  CAL_weekStart.setDate(CAL_weekStart.getDate()+delta);
+  calRenderDayGrid(); calUpdateRange();
+}
+
+// ── Day timeline view ─────────────────────────────────────────────────
+let CAL_timelineDate = null;
+function calOpenDayTimeline(dateIso) {
+  // Parse as LOCAL date (not UTC) to avoid timezone off-by-one:
+  // new Date('2026-04-08') = UTC midnight = previous day in UTC+8 timezones
+  const [y,m,d] = dateIso.split('-').map(Number);
+  CAL_timelineDate = new Date(y, m-1, d);   // local midnight, correct day always
+  calRenderDayTimeline();
+  const modal = document.getElementById('cal-day-timeline'); if(modal) modal.classList.add('open');
+  document.addEventListener('keydown', calTimelineKey);
+}
+function calCloseDayTimeline() {
+  const m = document.getElementById('cal-day-timeline'); if(m) m.classList.remove('open');
+  document.removeEventListener('keydown', calTimelineKey);
+}
+function calTimelineKey(e) { if(e.key==='Escape') calCloseDayTimeline(); }
+function calShiftTimelineDay(delta) {
+  if(!CAL_timelineDate) return;
+  CAL_timelineDate.setDate(CAL_timelineDate.getDate()+delta);
+  calRenderDayTimeline();
+}
+// ── Shared: build a slotMap for a single day ──────────────────────────
+// slotMap[slotIdx] = { starts: [events], conts: [events] }
+// slotIdx = h*2 + half  (each slot = 30 min)
+function calBuildSlotMap(dayEvs) {
+  const slotMap = {};
+  dayEvs.forEach(ev => {
+    const evDate = new Date(ev.datetime);
+    const startSlot = evDate.getHours()*2 + (evDate.getMinutes() >= 30 ? 1 : 0);
+    const durSlots  = Math.max(1, Math.ceil((ev.duration||60) / 30));
+    for(let s = startSlot; s < startSlot + durSlots; s++) {
+      if(!slotMap[s]) slotMap[s] = {starts:[], conts:[]};
+      if(s === startSlot) slotMap[s].starts.push(ev);
+      else                slotMap[s].conts.push(ev);
+    }
+  });
+  return slotMap;
+}
+// ── Get events for a day ──────────────────────────────────────────────
+function calGetDayEvents(date) {
+  const dayStart = new Date(date); dayStart.setHours(0,0,0,0);
+  const dayEnd   = new Date(date); dayEnd.setHours(23,59,59,999);
+  let expanded = [];
+  for(const ev of CAL_events) {
+    expanded.push(...(ev.recurrence ? calExpandRecurring(ev, dayStart, dayEnd) : [ev]));
+  }
+  // Bug 10 fix: include multi-day all-day events on their intermediate days
+  for(const ev of CAL_events) {
+    if(!ev.allDay || !ev.endDate) continue;
+    const evStart = new Date(ev.datetime.slice(0,10)+'T00:00:00');
+    const evEnd   = new Date(ev.endDate+'T00:00:00');
+    if(date > evStart && date <= evEnd) {
+      // this day is inside a multi-day span — add a clone
+      const iso = date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0')+'-'+String(date.getDate()).padStart(2,'0');
+      expanded.push({...ev, datetime: iso+'T00:00:00', id: ev.id+'_span_'+iso});
+    }
+  }
+  return expanded.filter(ev => {
+    const evd = new Date(ev.datetime); evd.setHours(0,0,0,0);
+    return evd.toDateString() === date.toDateString();
+  }).sort((a,b) => new Date(a.datetime)-new Date(b.datetime));
+}
+
+function calRenderDayTimeline() {
+  const date = CAL_timelineDate; if(!date) return;
+  const DAYS   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const titleEl = document.getElementById('cal-tl-title');
+  if(titleEl) titleEl.textContent =
+    DAYS[date.getDay()]+', '+date.getDate()+' '+MONTHS[date.getMonth()]+' '+date.getFullYear();
+
+  const allDayEvs = calGetDayEvents(date).filter(ev => ev.allDay);
+  const dayEvs    = calGetDayEvents(date).filter(ev => !ev.allDay);
+  const slotMap   = calBuildSlotMap(dayEvs);
+
+  // Find range (default 07:00–22:00, expand to fit all events)
+  let firstSlot = 7*2, lastSlot = 22*2;
+  if(dayEvs.length) {
+    const evFirst = new Date(dayEvs[0].datetime);
+    const s0 = Math.max(0, evFirst.getHours()*2 + (evFirst.getMinutes()>=30?1:0) - 2);
+    firstSlot = Math.min(firstSlot, s0);
+    const evLast = dayEvs[dayEvs.length-1];
+    const evLastDate = new Date(evLast.datetime);
+    const endSlot = evLastDate.getHours()*2 + Math.ceil((evLast.duration||60)/30);
+    lastSlot = Math.max(lastSlot, Math.min(47, endSlot + 1));
+  }
+
+  const addPad = n => String(n).padStart(2,'0');
+  const body = document.getElementById('cal-tl-body'); if(!body) return;
+  let html = '';
+
+  // Bug 4 fix: render all-day banners at the top
+  if(allDayEvs.length) {
+    html += `<div style="padding:.4rem .75rem .3rem;border-bottom:1px solid var(--border2);display:flex;flex-direction:column;gap:.25rem">`;
+    allDayEvs.forEach(ev => {
+      const cls = ev.source==='manual'?'cal-ev-manual':'';
+      const baseId = ev.id.replace(/_span_\d{4}-\d{2}-\d{2}$/,'').split('_20')[0];
+      html += `<div class="cal-allday-banner ${cls}" onclick="calShowEventModal('${esc(ev.id)}','${esc(baseId)}');calCloseDayTimeline()">🗓 ${esc(ev.title)}</div>`;
+    });
+    html += `</div>`;
+  }
+
+  for(let s = firstSlot; s <= lastSlot; s++) {
+    const h    = Math.floor(s/2), half = s%2;
+    const isHour   = half===0;
+    const timeLabel = isHour ? addPad(h)+':00' : '';
+    const slot      = slotMap[s] || {starts:[], conts:[]};
+    const isFree    = !slot.starts.length && !slot.conts.length;
+    const addDT     = date.getFullYear()+'-'+addPad(date.getMonth()+1)+'-'+addPad(date.getDate())
+                    +'T'+addPad(h)+':'+addPad(half*30);
+    html += `<div class="cal-tl-slot${isHour?' cal-tl-hour':''}">
+      <div class="cal-tl-time">${timeLabel}</div>
+      <div class="cal-tl-bar">
+        ${slot.starts.map(ev => {
+          const cls = ev.source==='manual'?'cal-ev-manual':ev.source==='ical'?'cal-ev-ical':'';
+          const baseId = ev.id.split('_20')[0];
+          const durTxt = (ev.duration||60)+'min';
+          return `<div class="cal-tl-event ${cls}" onclick="calShowEventModal('${esc(ev.id)}','${esc(baseId)}');calCloseDayTimeline()">
+            <div class="cal-tl-ev-title">${esc(ev.title)}</div>
+            <div class="cal-tl-ev-meta">${calFmtTime(ev.datetime)} · ${durTxt}${ev.location?' · 📍'+esc(ev.location.slice(0,60)):''}</div>
+            ${(() => { const _cd=calCountdown(ev.datetime,ev.duration); const _cc=_cd.startsWith('🔴')?'var(--red)':_cd.startsWith('✓')?'var(--green)':'var(--amber)'; return `<div class="cal-tl-ev-countdown" style="color:${_cc}">${_cd}</div>`; })()}
+          </div>`;
+        }).join('')}
+        ${slot.conts.map(ev => {
+          const cls = ev.source==='manual'?'cal-ev-manual':ev.source==='ical'?'cal-ev-ical':'';
+          return `<div class="cal-tl-cont ${cls}">${esc(ev.title)}</div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }
+  body.innerHTML = html;
+}
+
+function calPrefillManualForm(datetimeLocal, closeDay, closeWeek) {
+  if(closeDay)  calCloseDayTimeline();
+  if(closeWeek) calCloseWeekTimeline();
+  // If caller omitted both flags, default to closing day timeline (called from day slots)
+  if(!closeDay && !closeWeek) calCloseDayTimeline();
+
+  // Ensure the cal-body is expanded (not collapsed)
+  const calBodyEl = document.getElementById('cal-body');
+  if(calBodyEl && calBodyEl.style.display === 'none') {
+    // Trigger expand via collapse button logic
+    const colBtn = document.getElementById('cal-collapse-btn');
+    if(colBtn) colBtn.click();
+  }
+
+  calShowManualForm();
+
+  // Pre-fill all three datetime fields from the provided ISO string
+  if(datetimeLocal) calSyncDTFromFull(datetimeLocal);
+
+  // Scroll form into view with a short delay to allow animation
+  const form = document.getElementById('cal-manual-form');
+  if(form) setTimeout(() => {
+    form.scrollIntoView({behavior:'smooth', block:'nearest'});
+    document.getElementById('cal-ev-title')?.focus();
+  }, 150);
+}
+
+// ── Week Timeline view ────────────────────────────────────────────────
+let CAL_weekTlStart = null;  // Monday of the displayed week
+
+function calOpenWeekTimeline() {
+  // Start from the current CAL_weekStart (already snapped to locale week boundary)
+  CAL_weekTlStart = new Date(CAL_weekStart); CAL_weekTlStart.setHours(0,0,0,0);
+  calRenderWeekTimeline();
+  const m = document.getElementById('cal-week-timeline'); if(m) m.classList.add('open');
+  document.addEventListener('keydown', calWeekTlKey);
+}
+function calCloseWeekTimeline() {
+  const m = document.getElementById('cal-week-timeline'); if(m) m.classList.remove('open');
+  document.removeEventListener('keydown', calWeekTlKey);
+}
+function calWeekTlKey(e) { if(e.key==='Escape') calCloseWeekTimeline(); }
+function calShiftWeekTl(delta) {
+  if(!CAL_weekTlStart) return;
+  CAL_weekTlStart.setDate(CAL_weekTlStart.getDate() + delta*7);
+  calRenderWeekTimeline();
+}
+
+function calRenderWeekTimeline() {
+  const ws = CAL_weekTlStart; if(!ws) return;
+  const we = new Date(ws); we.setDate(ws.getDate()+6);
+  const DAYS   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const addPad = n => String(n).padStart(2,'0');
+  const todayStr = new Date().toDateString();
+
+  // Update title
+  const titleEl = document.getElementById('cal-wtl-title');
+  const fmt = d => d.getDate()+' '+MONTHS[d.getMonth()]+' '+d.getFullYear();
+  if(titleEl) titleEl.textContent = fmt(ws)+' – '+fmt(we);
+
+  // Gather all 7 days' events and slot maps
+  const weekDays = [];
+  let firstSlot = 7*2, lastSlot = 22*2;
+  for(let i=0; i<7; i++) {
+    const date = new Date(ws); date.setDate(ws.getDate()+i);
+    const evs  = calGetDayEvents(date);
+    const timedEvs = evs.filter(e => !e.allDay);
+    const smap = calBuildSlotMap(timedEvs);
+    weekDays.push({date, evs, smap});
+    // Expand range to fit all timed events
+    if(timedEvs.length) {
+      const evFirst = new Date(timedEvs[0].datetime);
+      const s0 = Math.max(0, evFirst.getHours()*2 + (evFirst.getMinutes()>=30?1:0) - 2);
+      firstSlot = Math.min(firstSlot, s0);
+      const evLast = timedEvs[timedEvs.length-1];
+      const evLastDate = new Date(evLast.datetime);
+      const endSlot = evLastDate.getHours()*2 + Math.ceil((evLast.duration||60)/30);
+      lastSlot = Math.max(lastSlot, Math.min(47, endSlot+1));
+    }
+  }
+
+  const grid = document.getElementById('cal-wtl-body'); if(!grid) return;
+  let html = '';
+
+  // ── Header row ──
+  html += `<div class="cal-wtl-grid" style="position:sticky;top:0;z-index:3">`;
+  html += `<div class="cal-wtl-time-hd"></div>`;
+  weekDays.forEach(({date}) => {
+    const isToday = date.toDateString() === todayStr;
+    const dateIso = date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0')+'-'+String(date.getDate()).padStart(2,'0');
+    html += `<div class="cal-wtl-day-hd${isToday?' cal-today-hd':''}" onclick="calCloseWeekTimeline();calOpenDayTimeline('${dateIso}')">
+      <div class="cal-wtl-day-name">${DAYS[date.getDay()]}</div>
+      <div class="cal-wtl-day-num">${date.getDate()} <span style="font-size:.65rem;font-weight:400">${MONTHS[date.getMonth()]}</span></div>
+    </div>`;
+  });
+  html += `</div>`;  // end header
+
+  // Bug 4 fix: All-day row (sticky under header)
+  const hasAnyAllDay = weekDays.some(({evs}) => evs.some(e=>e.allDay));
+  if(hasAnyAllDay) {
+    html += `<div class="cal-wtl-grid" style="position:sticky;top:var(--wtl-hd-h,52px);z-index:2;background:var(--panel);border-bottom:1px solid var(--border2)">`;
+    html += `<div class="cal-wtl-time-cell" style="font-size:.5rem;color:var(--text3);display:flex;align-items:center;justify-content:center">all‑day</div>`;
+    weekDays.forEach(({date, evs}) => {
+      const adEvs = evs.filter(e=>e.allDay);
+      html += `<div class="cal-wtl-slot" style="flex-direction:column;gap:.15rem;padding:.2rem .3rem">`;
+      adEvs.forEach(ev => {
+        const cls = ev.source==='manual'?'cal-ev-manual':'';
+        const baseId = ev.id.replace(/_span_\d{4}-\d{2}-\d{2}$/,'').split('_20')[0];
+        html += `<div class="cal-allday-banner ${cls}" style="font-size:.65rem" onclick="calShowEventModal('${esc(ev.id)}','${esc(baseId)}');calCloseWeekTimeline()">🗓 ${esc(ev.title)}</div>`;
+      });
+      html += `</div>`;
+    });
+    html += `</div>`;
+  }
+
+  // ── Time slots ──
+  html += `<div class="cal-wtl-grid">`;
+  for(let s = firstSlot; s <= lastSlot; s++) {
+    const h = Math.floor(s/2), half = s%2;
+    const isHour = half===0;
+    const timeLabel = isHour ? addPad(h)+':00' : '';
+
+    // time cell
+    html += `<div class="cal-wtl-time-cell${isHour?' cal-wtl-hour':''}">${timeLabel}</div>`;
+
+    // one cell per day
+    weekDays.forEach(({date, smap}) => {
+      const slot   = smap[s] || {starts:[], conts:[]};
+      const isFree = !slot.starts.length && !slot.conts.length;
+      const addDT  = date.getFullYear()+'-'+addPad(date.getMonth()+1)+'-'+addPad(date.getDate())
+                   +'T'+addPad(h)+':'+addPad(half*30);
+      html += `<div class="cal-wtl-slot${isHour?' cal-wtl-hour':''}">
+        ${slot.starts.map(ev => {
+          const cls = ev.source==='manual'?'cal-ev-manual':ev.source==='ical'?'cal-ev-ical':'';
+          const baseId = ev.id.split('_20')[0];
+          return `<div class="cal-wtl-event ${cls}" onclick="calShowEventModal('${esc(ev.id)}','${esc(baseId)}');calCloseWeekTimeline()">
+            <div class="cal-wtl-ev-title">${esc(ev.title)}</div>
+            <div class="cal-wtl-ev-time">${calFmtTime(ev.datetime)} · ${ev.duration||60}m</div>
+            ${(() => { const _cd=calCountdown(ev.datetime,ev.duration); const _cc=_cd.startsWith('🔴')?'var(--red)':_cd.startsWith('✓')?'var(--green)':'var(--amber)'; return `<div class="cal-wtl-ev-cd" style="color:${_cc}">${_cd}</div>`; })()}
+          </div>`;
+        }).join('')}
+        ${slot.conts.map(ev => {
+          const cls = ev.source==='manual'?'cal-ev-manual':ev.source==='ical'?'cal-ev-ical':'';
+          return `<div class="cal-wtl-cont ${cls}">${esc(ev.title)}</div>`;
+        }).join('')}
+        
+      </div>`;
+    });
+  }
+  html += `</div>`;  // end grid
+
+  grid.innerHTML = html;
+}
+
+// ── Manual event form ────────────────────────────────────────────────
+// calShowManualForm, calHideManualForm, calSaveManualEvent — defined below after CAL_timezone
+
+// ── Event modal ───────────────────────────────────────────────────────
+function calShowEventModal(occId, baseId) {
+  // Find the base event (not occurrence) for editing/deleting
+  const base = CAL_events.find(e => e.id === baseId) || CAL_events.find(e => e.id === occId);
+  // For display, reconstruct datetime from occurrence id if needed
+  let displayDatetime = base ? base.datetime : '';
+  if(occId !== baseId && occId.includes('_')) {
+    // Extract ISO datetime from occurrence suffix: baseId_2024-03-01T10:00:00.000Z
+    const suffix = occId.slice(baseId.length + 1);
+    if(suffix) displayDatetime = suffix;
+  }
+  if(!base && !displayDatetime) return;
+  CAL_currentEvent = base ? {...base, _occDatetime: displayDatetime||base?.datetime, _occId: occId} : null;
+  const ev = CAL_currentEvent;
+  const modal = document.getElementById('cal-event-modal'); if(!modal) return;
+  document.getElementById('cal-modal-title').textContent = ev?.title || '—';
+  // Countdown — shown prominently right under the title
+  const cdEl = document.getElementById('cal-modal-countdown');
+  if(cdEl) {
+    const cd = calCountdown(ev._occDatetime||ev.datetime, ev.duration);
+    cdEl.textContent = cd;
+    cdEl.style.display = '';
+    // Color: red for in-progress, green for ended, amber for upcoming
+    cdEl.style.color = cd.startsWith('🔴') ? 'var(--red)' : cd.startsWith('✓') ? 'var(--green)' : 'var(--amber)';
+  }
+  const start = new Date(ev._occDatetime||ev.datetime);
+  const end   = new Date(start.getTime()+(ev.duration||60)*60000);
+  const _tzName = Intl.DateTimeFormat().resolvedOptions().timeZone || 'local';
+  document.getElementById('cal-modal-time').innerHTML =
+    `<strong style="color:var(--text3)">When:</strong> ${start.toLocaleString(undefined,{weekday:'short',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:false})} – ${end.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit',hour12:false})} <span style="font-family:var(--mono);font-size:.55rem;color:var(--text3)">(${_tzName})</span>`;
+  document.getElementById('cal-modal-location').innerHTML =
+    ev.location ? `<strong style="color:var(--text3)">📍 Location:</strong> ${calLinkify(ev.location)}` : '';
+  document.getElementById('cal-modal-notes').innerHTML =
+    ev.notes ? `<strong style="color:var(--text3)">Notes:</strong><br>${calLinkify(ev.notes)}` : '';
+  document.getElementById('cal-modal-source').innerHTML =
+    `Source: ${ev.source==='manual'?'✏ Manual':ev.source==='ical'?('📅 iCal: '+(ev.sourceUrl||'').slice(0,40)):'—'}`;
+  modal.classList.add('open');
+  document.addEventListener('keydown', calModalKey);
+  modal.addEventListener('click', calModalOutside);
+}
+function calCloseModal() {
+  const m = document.getElementById('cal-event-modal'); if(m) m.classList.remove('open');
+  document.removeEventListener('keydown', calModalKey);
+}
+function calModalKey(e) { if(e.key==='Escape') calCloseModal(); }
+function calModalOutside(e) { if(e.target===document.getElementById('cal-event-modal')) calCloseModal(); }
+function calDeleteCurrentEvent() {
+  if(!CAL_currentEvent) return;
+  if(!confirm('Delete this event?')) return;
+  CAL_events = CAL_events.filter(e => e.id !== CAL_currentEvent.id);
+  calSaveEvents(); calCloseModal(); toast('Event deleted','ok');
+}
+function calEditCurrentEvent() {
+  if(!CAL_currentEvent) return;
+  const base = CAL_events.find(e => e.id === CAL_currentEvent.id);
+  if(!base) { toast('Cannot edit iCal events — edit them in your calendar app','inf'); return; }
+  calCloseModal();
+  // Ensure cal-body is visible
+  const calBodyEl = document.getElementById('cal-body');
+  if(calBodyEl && calBodyEl.style.display === 'none') {
+    document.getElementById('cal-collapse-btn')?.click();
+  }
+  calShowManualForm(base);
+}
+
+// ── Export helpers ────────────────────────────────────────────────────
+function calFmtGcal(iso, durMin) {
+  const s=new Date(iso), e=new Date(s.getTime()+durMin*60000);
+  const f=d=>d.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
+  return f(s)+'/'+f(e);
+}
+function calAddToGoogle() {
+  if(!CAL_currentEvent) return;
+  const ev = CAL_currentEvent;
+  const url = `https://www.google.com/calendar/render?action=TEMPLATE`+
+    `&text=${encodeURIComponent(ev.title)}`+
+    `&dates=${calFmtGcal(ev._occDatetime||ev.datetime, ev.duration||60)}`+
+    `&details=${encodeURIComponent(ev.notes||'')}&location=${encodeURIComponent(ev.location||'')}`;
+  window.open(url,'_blank');
+}
+function calAddToApple() {
+  if(!CAL_currentEvent) return;
+  const ev = CAL_currentEvent;
+  const s=new Date(ev._occDatetime||ev.datetime), e=new Date(s.getTime()+(ev.duration||60)*60000);
+  const f=d=>d.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
+  const ics=`BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Eukosmos//EN\nBEGIN:VEVENT\nUID:${ev.id}\nDTSTAMP:${f(new Date())}\nDTSTART:${f(s)}\nDTEND:${f(e)}\nSUMMARY:${ev.title}\nDESCRIPTION:${ev.notes||''}\nLOCATION:${ev.location||''}\nEND:VEVENT\nEND:VCALENDAR`;
+  const blob=new Blob([ics],{type:'text/calendar'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=(ev.title.replace(/[^a-z0-9]/gi,'_')||'event')+'.ics'; a.click();
+  URL.revokeObjectURL(a.href);
+}
+function calAddToOutlook() {
+  if(!CAL_currentEvent) return;
+  const ev = CAL_currentEvent;
+  const s=new Date(ev._occDatetime||ev.datetime), e=new Date(s.getTime()+(ev.duration||60)*60000);
+  const url=`https://outlook.live.com/calendar/0/deeplink/compose?subject=${encodeURIComponent(ev.title)}`+
+    `&startdt=${s.toISOString()}&enddt=${e.toISOString()}`+
+    `&location=${encodeURIComponent(ev.location||'')}&body=${encodeURIComponent(ev.notes||'')}`;
+  window.open(url,'_blank');
+}
+
+// ── Month view ────────────────────────────────────────────────────────
+function calShowMonthModal() {
+  CAL_currentMonthYear = new Date(); // always open to current month
+  calRenderMonth(CAL_currentMonthYear.getFullYear(), CAL_currentMonthYear.getMonth());
+  const m=document.getElementById('cal-month-modal'); if(m) m.style.display='flex';
+  document.addEventListener('keydown', calMonthKey);
+}
+function calCloseMonthModal() {
+  const m=document.getElementById('cal-month-modal'); if(m) m.style.display='none';
+  document.removeEventListener('keydown', calMonthKey);
+}
+function calMonthKey(e) { if(e.key==='Escape') calCloseMonthModal(); }
+document.addEventListener('DOMContentLoaded',()=>{
+  const mm=document.getElementById('cal-month-modal');
+  if(mm) mm.addEventListener('click',e=>{ if(e.target===mm) calCloseMonthModal(); });
+});
+function calRenderMonth(year, month) {
+  const MNAMES=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const titleEl=document.getElementById('cal-month-title');
+  if(titleEl) titleEl.textContent=MNAMES[month]+' '+year;
+  const start=new Date(year,month,1), end=new Date(year,month+1,0); end.setHours(23,59,59,999);
+  let expanded=[];
+  for(const ev of CAL_events) expanded.push(...(ev.recurrence?calExpandRecurring(ev,start,end):[ev]));
+  // Bug 10 fix: expand multi-day all-day events onto each covered day in this month
+  const extraMonth = [];
+  for(const ev of expanded) {
+    if(!ev.allDay || !ev.endDate) continue;
+    const evStart = new Date(ev.datetime.slice(0,10)+'T00:00:00');
+    const evEnd   = new Date(ev.endDate+'T00:00:00');
+    let d = new Date(evStart); d.setDate(d.getDate()+1);
+    while(d <= evEnd) {
+      if(d >= start && d <= end) {
+        const iso = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+        extraMonth.push({...ev, datetime: iso+'T00:00:00', id: ev.id+'_span_'+iso});
+      }
+      d.setDate(d.getDate()+1);
+    }
+  }
+  expanded.push(...extraMonth);
+  const byDate=new Map();
+  for(const ev of expanded) {
+    const k=new Date(ev.datetime).toISOString().slice(0,10);
+    if(!byDate.has(k)) byDate.set(k,[]);
+    byDate.get(k).push(ev);
+  }
+  const firstDay=new Date(year,month,1).getDay();
+  const daysInMonth=new Date(year,month+1,0).getDate();
+  const grid=document.getElementById('cal-month-grid'); if(!grid) return;
+  const DNAMES=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  // Day name headers
+  let html = DNAMES.map(d=>`<div class="cal-month-day-hd">${d.slice(0,3)}</div>`).join('');
+  let dayN=1;
+  for(let i=0; i<6; i++) {
+    for(let j=0; j<7; j++) {
+      if((i===0&&j<firstDay) || dayN>daysInMonth) {
+        html+=`<div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;min-height:90px;opacity:.3"></div>`;
+        if(!(i===0&&j<firstDay)) dayN++;
+        continue;
+      }
+      const date=new Date(year,month,dayN);
+      const k=date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0')+'-'+String(date.getDate()).padStart(2,'0');
+      const evs=byDate.get(k)||[];
+      const isToday=date.toDateString()===new Date().toDateString();
+      const allDayEvs = evs.filter(e=>e.allDay);
+      const timedEvs  = evs.filter(e=>!e.allDay);
+      const shownEvs  = [...allDayEvs, ...timedEvs];
+      const shown = shownEvs.slice(0,3);
+      const more  = shownEvs.length - shown.length;
+      // Bug 5 fix: "+n more" opens day timeline for that date
+      html+=`<div class="cal-month-cell${isToday?' cal-mc-today':''}" onclick="calJumpToDay('${k}')">
+        <div class="cal-mc-num">${dayN}</div>
+        ${shown.map(e=>{
+          const isAD = e.allDay;
+          const timeStr = isAD ? '' : calFmtTime(e.datetime)+' ';
+          return `<div class="cal-mc-ev${isAD?' cal-mc-allday':''}" title="${esc(e.title)}">${timeStr}${esc(e.title)}</div>`;
+        }).join('')}
+        ${more>0 ? `<div class="cal-mc-more" onclick="event.stopPropagation();calCloseMonthModal();calOpenDayTimeline('${k}')">＋${more} more</div>` : ''}
+      </div>`;
+      dayN++;
+    }
+    if(dayN>daysInMonth) break;
+  }
+  grid.innerHTML = html;
+}
+function calJumpToDay(dateStr) {
+  const date=new Date(dateStr+'T00:00:00');
+  date.setHours(0,0,0,0);
+  CAL_weekStart=date; // show clicked date as first day of the 7-day grid
+  calRenderDayGrid(); calUpdateRange(); calCloseMonthModal();
+}
+
+// ── Wiring: attach all button handlers after DOM ready ────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  // ── Collapse / expand ─────────────────────────────────────────────
+  const calBodyEl   = document.getElementById('cal-body');
+  const calColBtn   = document.getElementById('cal-collapse-btn');
+  const calNavCtrl  = document.getElementById('cal-nav-controls');
+  let _calCollapsed = false; // Always start expanded — user can collapse manually each session
+  // (do not read from localStorage so a stale collapse state never hides the grid)
+  function calApplyCollapse(animate) {
+    if(_calCollapsed) {
+      if(calBodyEl)  calBodyEl.style.display  = 'none';
+      if(calNavCtrl) calNavCtrl.style.opacity  = '.4';
+      if(calColBtn)  calColBtn.textContent      = '▶';
+      if(calColBtn)  calColBtn.title             = 'Expand calendar';
+    } else {
+      if(calBodyEl)  calBodyEl.style.display  = 'block';
+      if(calNavCtrl) calNavCtrl.style.opacity  = '1';
+      if(calColBtn)  calColBtn.textContent      = '▼';
+      if(calColBtn)  calColBtn.title             = 'Collapse calendar';
+      calRenderDayGrid(); calUpdateRange();
+    }
+    // Don't persist collapse state — always fresh-open expanded
+  }
+  if(calColBtn) {
+    calColBtn.onclick = () => {
+      _calCollapsed = !_calCollapsed;
+      calApplyCollapse(true);
+    };
+  }
+  calApplyCollapse(false);  // apply saved state on load
+
+  // nav buttons
+  const bind = (id,fn) => { const el=document.getElementById(id); if(el) el.onclick=fn; };
+  bind('cal-prev-week',  ()=>calShiftWeek(-7));
+  bind('cal-next-week',  ()=>calShiftWeek(7));
+  bind('cal-today-btn',  ()=>{ CAL_weekStart=(() => { const d=new Date(); d.setHours(0,0,0,0); return d; })(); calRenderDayGrid(); calUpdateRange(); });
+  bind('cal-month-btn',  calShowMonthModal);
+  bind('cal-sync-btn',   calSyncAll);
+  bind('cal-weekview-btn', calOpenWeekTimeline);
+  bind('cal-wtl-prev', ()=>calShiftWeekTl(-1));
+  bind('cal-wtl-next', ()=>calShiftWeekTl(1));
+  // close week timeline on outside click
+  const wtlModal = document.getElementById('cal-week-timeline');
+  if(wtlModal) wtlModal.addEventListener('click', e=>{ if(e.target===wtlModal) calCloseWeekTimeline(); });
+  bind('cal-dayview-btn', ()=>{ const t=new Date(); calOpenDayTimeline(t.toISOString().slice(0,10)); });
+  bind('cal-tl-prev', ()=>calShiftTimelineDay(-1));
+  bind('cal-tl-next', ()=>calShiftTimelineDay(1));
+  // close timeline on outside click
+  const tlModal = document.getElementById('cal-day-timeline');
+  if(tlModal) tlModal.addEventListener('click', e=>{ if(e.target===tlModal) calCloseDayTimeline(); });
+  bind('cal-add-manual-btn', calShowManualForm);  // kept for safety — button removed from HTML
+  // iCal URL panel
+  bind('cal-manage-urls-btn', () => {
+    const p=document.getElementById('cal-url-panel');
+    if(p) p.style.display = p.style.display==='none'?'block':'none';
+  });
+  bind('cal-close-url-panel', ()=>{ const p=document.getElementById('cal-url-panel'); if(p) p.style.display='none'; });
+  bind('cal-add-url-btn', async () => {
+    const inp=document.getElementById('cal-new-url'); if(!inp) return;
+    const url=inp.value.trim(); if(!url){ toast('Enter a URL','err'); return; }
+    if(CAL_icalUrls.includes(url)){ toast('URL already added','inf'); return; }
+    CAL_icalUrls.push(url);
+    await calSaveUrls(); calRenderUrlList(); calSyncAll();
+    inp.value=''; toast('✓ iCal URL added — syncing…','ok');
+  });
+  // Allow Enter key in URL input
+  const urlInp=document.getElementById('cal-new-url');
+  if(urlInp) urlInp.addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('cal-add-url-btn')?.click(); });
+  // Init timezone label to show actual detected timezone (not "Local")
+  calUpdateTzLabel();
+  // Month prev/next
+  bind('cal-prev-month-btn', ()=>{ CAL_currentMonthYear=new Date(CAL_currentMonthYear.getFullYear(),CAL_currentMonthYear.getMonth()-1,1); calRenderMonth(CAL_currentMonthYear.getFullYear(),CAL_currentMonthYear.getMonth()); });
+  bind('cal-next-month-btn', ()=>{ CAL_currentMonthYear=new Date(CAL_currentMonthYear.getFullYear(),CAL_currentMonthYear.getMonth()+1,1); calRenderMonth(CAL_currentMonthYear.getFullYear(),CAL_currentMonthYear.getMonth()); });
+
+  // Initial load
+  calLoadEvents();                         // from localStorage (instant)
+  calLoadEventsFromFolder();               // from folder JSON (async, overwrites if folder connected)
+  calLoadUrls().then(()=>calSyncAll());
+  calUpdateRange();
+  calRenderDayGrid();
+  // Live countdown refresh — every 60 seconds, re-render grid + update open modal
+  setInterval(() => {
+    calRenderDayGrid();
+    // If event modal is open, refresh its countdown too
+    const modal = document.getElementById('cal-event-modal');
+    if (modal && modal.classList.contains('open') && CAL_currentEvent) {
+      const cdEl = document.getElementById('cal-modal-countdown');
+      if (cdEl) {
+        const cd = calCountdown(CAL_currentEvent._occDatetime||CAL_currentEvent.datetime, CAL_currentEvent.duration);
+        cdEl.textContent = cd;
+        cdEl.style.color = cd.startsWith('🔴') ? 'var(--red)' : cd.startsWith('✓') ? 'var(--green)' : 'var(--amber)';
+      }
+    }
+  }, 60000);
+
+  // Auto-sync every hour
+  setInterval(()=>{ if(CAL_icalUrls.length) calSyncAll(); }, 3600000);
+
+  // Daily reset — if the page is left open overnight, anchor the grid back to today at midnight
+  let _calLastDateStr = new Date().toDateString();
+  setInterval(() => {
+    const todayStr = new Date().toDateString();
+    if (todayStr !== _calLastDateStr) {
+      _calLastDateStr = todayStr;
+      CAL_weekStart = (() => { const d = new Date(); d.setHours(0,0,0,0); return d; })();
+      calRenderDayGrid(); calUpdateRange();
+    }
+  }, 60000); // check every minute
+});
+
+// ── Calendar refreshes when the Home tab is shown ────────────────────
+// (handled directly inside show() above — no override needed)
+
+// ══════════════════════════════════════════════════════
+//  CALENDAR — Timezone, location type, Yahoo export
+// ══════════════════════════════════════════════════════
+
+// ── Timezone ──────────────────────────────────────────
+// ── DateTime picker sync helpers ──────────────────────────────────────
+function calSyncDTFromParts() {
+  // No longer used (split inputs removed), kept for safety
+}
+function calSyncDTFromFull(val) {
+  if(!val) return;
+  const hidden = document.getElementById('cal-ev-datetime');
+  if(hidden) hidden.value = val.slice(0,16);
+}
+function calGetDTValue() {
+  // Primary: hidden field (set by display field's oninput)
+  const hidden = document.getElementById('cal-ev-datetime');
+  if(hidden?.value) return hidden.value;
+  // Fallback: read display field directly
+  const disp = document.getElementById('cal-ev-datetime-display');
+  if(disp?.value) return disp.value.slice(0,16);
+  return '';
+}
+
+// ── All-day toggle ────────────────────────────────────────────────────
+function calToggleAllDay() {
+  const isAllDay = document.getElementById('cal-ev-allday')?.checked;
+  const timedRow   = document.getElementById('cal-ev-timed-row');
+  const allDayRows = document.getElementById('cal-ev-allday-rows');
+  const durRow     = document.getElementById('cal-ev-duration-row');
+  if(isAllDay) {
+    if(timedRow)   timedRow.style.display   = 'none';
+    if(allDayRows) allDayRows.style.display = 'block';
+    if(durRow)     durRow.style.display     = 'none';
+    // Pre-fill start/end with today
+    const today = new Date();
+    const pad = n => String(n).padStart(2,'0');
+    const todayStr = today.getFullYear()+'-'+pad(today.getMonth()+1)+'-'+pad(today.getDate());
+    const startEl = document.getElementById('cal-ev-allday-start');
+    const endEl   = document.getElementById('cal-ev-allday-end');
+    if(startEl && !startEl.value) startEl.value = todayStr;
+    if(endEl   && !endEl.value)   endEl.value   = todayStr;
+  } else {
+    if(timedRow)   timedRow.style.display   = '';
+    if(allDayRows) allDayRows.style.display = 'none';
+    if(durRow)     durRow.style.display     = '';
+  }
+}
+
+let CAL_timezone = localStorage.getItem('cal_timezone') || Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+function calUpdateTzLabel() {
+  const el = document.getElementById('cal-tz-label');
+  if(el) el.textContent = CAL_timezone.replace('_',' ');
+  const note = document.getElementById('cal-form-tz-note');
+  if(note) note.textContent = '('+CAL_timezone+')';
+}
+
+function calShowTzPicker() {
+  // Build a grouped list of common IANA timezones
+  const COMMON_TZ = [
+    '── Americas ──',
+    'America/New_York','America/Chicago','America/Denver','America/Los_Angeles',
+    'America/Sao_Paulo','America/Toronto','America/Vancouver','America/Mexico_City',
+    '── Europe ──',
+    'Europe/London','Europe/Paris','Europe/Berlin','Europe/Rome','Europe/Madrid',
+    'Europe/Amsterdam','Europe/Stockholm','Europe/Warsaw','Europe/Moscow',
+    '── Asia / Pacific ──',
+    'Asia/Kolkata','Asia/Dhaka','Asia/Karachi','Asia/Dubai','Asia/Singapore',
+    'Asia/Shanghai','Asia/Tokyo','Asia/Seoul','Asia/Taipei','Asia/Kathmandu',
+    'Australia/Sydney','Pacific/Auckland',
+    '── Africa ──',
+    'Africa/Cairo','Africa/Johannesburg','Africa/Lagos','Africa/Nairobi',
+    '── UTC ──',
+    'UTC'
+  ];
+
+  // Remove old picker if present
+  document.getElementById('cal-tz-picker-overlay')?.remove();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'cal-tz-picker-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:1200;background:rgba(2,5,15,.85);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center';
+  overlay.innerHTML = `
+    <div style="background:var(--panel);border:1px solid var(--border2);border-top:2px solid var(--glow);padding:1.25rem;width:min(420px,94vw);max-height:80vh;border-radius:0 0 6px 6px;box-shadow:0 24px 60px rgba(0,0,0,.8);display:flex;flex-direction:column;gap:.75rem">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-family:var(--head);font-size:1rem;font-weight:700;color:#fff">🌐 Select Timezone</span>
+        <button class="btn-close-detail" onclick="document.getElementById('cal-tz-picker-overlay').remove()">✕</button>
+      </div>
+      <div style="font-family:var(--mono);font-size:.62rem;color:var(--text3)">Current: <strong style="color:var(--glow)">${CAL_timezone}</strong></div>
+      <input id="cal-tz-search" placeholder="Search timezone…" style="background:var(--surface);border:1px solid var(--border2);color:var(--text);font-family:var(--mono);font-size:.7rem;padding:.4rem .7rem;border-radius:3px;outline:none;width:100%" oninput="calTzFilter(this.value)">
+      <div id="cal-tz-list" style="overflow-y:auto;flex:1;max-height:50vh;display:flex;flex-direction:column;gap:2px"></div>
+    </div>`;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', e => { if(e.target===overlay) overlay.remove(); });
+
+  function renderTzList(filter) {
+    const list = document.getElementById('cal-tz-list'); if(!list) return;
+    list.innerHTML = COMMON_TZ.filter(tz =>
+      tz.startsWith('──') || !filter || tz.toLowerCase().includes(filter.toLowerCase())
+    ).map(tz => {
+      if(tz.startsWith('──')) return `<div style="font-family:var(--mono);font-size:.52rem;color:var(--text3);padding:.3rem .5rem;letter-spacing:.1em;opacity:.6">${tz}</div>`;
+      const isCur = tz === CAL_timezone;
+      return `<div onclick="calSetTimezone('${tz}')" style="font-family:var(--mono);font-size:.68rem;color:${isCur?'var(--glow)':'var(--text2)'};background:${isCur?'var(--glow-dim)':'transparent'};padding:.38rem .6rem;border-radius:3px;cursor:pointer;transition:background .1s" onmouseover="this.style.background='var(--panel2)'" onmouseout="this.style.background='${isCur?'var(--glow-dim)':'transparent'}'">
+        ${isCur?'✓ ':''} ${tz.replace('_',' ')}
+      </div>`;
+    }).join('');
+  }
+  window.calTzFilter = renderTzList;
+  renderTzList('');
+  setTimeout(()=>document.getElementById('cal-tz-search')?.focus(), 50);
+}
+
+function calSetTimezone(tz) {
+  CAL_timezone = tz;
+  localStorage.setItem('cal_timezone', tz);
+  calUpdateTzLabel();
+  document.getElementById('cal-tz-picker-overlay')?.remove();
+  toast('✓ Timezone set: '+tz.replace('_',' '),'ok');
+}
+
+// ── Location type toggle ──────────────────────────────
+function calToggleLocType() {
+  const loctype = document.getElementById('cal-ev-loctype')?.value;
+  const inpRow  = document.getElementById('cal-loc-inperson-row');
+  const onlRow  = document.getElementById('cal-loc-online-row');
+  const urlRow  = document.getElementById('cal-loc-url-row');
+  if(loctype === 'online') {
+    if(inpRow) inpRow.style.display = 'none';
+    if(onlRow) onlRow.style.display = '';
+    if(urlRow) urlRow.style.display = '';
+  } else {
+    if(inpRow) inpRow.style.display = '';
+    if(onlRow) onlRow.style.display = 'none';
+    if(urlRow) urlRow.style.display = 'none';
+  }
+}
+
+// ── Updated showManualForm — reset location fields ────
+function calShowManualForm(editEvent) {
+  const f = document.getElementById('cal-manual-form'); if(!f) return;
+  const headerEl = f.querySelector('.cal-form-header-title');
+  if(headerEl) headerEl.textContent = editEvent ? '// EDIT EVENT' : '// ADD EVENT';
+
+  f.classList.add('open');
+  f.dataset.editId = editEvent ? editEvent.id : '';
+
+  // Determine timed vs all-day
+  const isAllDay = editEvent ? (editEvent.allDay || false) : false;
+  const alldayCb = document.getElementById('cal-ev-allday');
+  if(alldayCb) alldayCb.checked = isAllDay;
+  calToggleAllDay(); // apply UI state
+
+  if(editEvent) {
+    // Populate fields from existing event
+    document.getElementById('cal-ev-title').value = editEvent.title || '';
+    document.getElementById('cal-ev-duration').value = editEvent.duration || 60;
+    document.getElementById('cal-ev-notes').value = editEvent.notes || '';
+    document.getElementById('cal-ev-recurrence').value = editEvent.recurrence?.type || '';
+
+    // Bug 8 fix: pre-fill weekly day checkboxes when editing a weekly recurring event
+    const wdRow = document.getElementById('cal-weekly-days-row');
+    if(editEvent.recurrence?.type === 'WEEKLY') {
+      if(wdRow) wdRow.style.display = 'flex';
+      const recDays = editEvent.recurrence.days || [];
+      document.querySelectorAll('#cal-weekly-days-row input').forEach(cb => {
+        cb.checked = recDays.includes(parseInt(cb.value, 10));
+      });
+    } else {
+      if(wdRow) wdRow.style.display = 'none';
+      document.querySelectorAll('#cal-weekly-days-row input').forEach(cb => cb.checked = false);
+    }
+
+    if(isAllDay) {
+      const startDate = (editEvent.datetime||'').slice(0,10);
+      const endDate   = editEvent.endDate || startDate;
+      const sEl = document.getElementById('cal-ev-allday-start');
+      const eEl = document.getElementById('cal-ev-allday-end');
+      if(sEl) sEl.value = startDate;
+      if(eEl) eEl.value = endDate;
+    } else {
+      const dtVal = (editEvent.datetime||'').slice(0,16);
+      const dispEl = document.getElementById('cal-ev-datetime-display');
+      const hidEl  = document.getElementById('cal-ev-datetime');
+      if(dispEl) dispEl.value = dtVal;
+      if(hidEl)  hidEl.value  = dtVal;
+    }
+
+    // Location
+    const loctype = editEvent.loctype || (editEvent.location?.includes('://') ? 'online' : 'inperson');
+    const loctypeEl = document.getElementById('cal-ev-loctype');
+    if(loctypeEl) loctypeEl.value = loctype;
+    if(loctype === 'online') {
+      const loc = editEvent.location || '';
+      const colonIdx = loc.indexOf(': ');
+      const platform = colonIdx>0 ? loc.slice(0,colonIdx) : '';
+      const url      = colonIdx>0 ? loc.slice(colonIdx+2) : loc;
+      const pEl = document.getElementById('cal-ev-loc-platform');
+      const uEl = document.getElementById('cal-ev-loc-url');
+      if(pEl) pEl.value = platform;
+      if(uEl) uEl.value = url;
+    } else {
+      const locTextEl = document.getElementById('cal-ev-location-text');
+      if(locTextEl) locTextEl.value = editEvent.location || '';
+    }
+    calToggleLocType();
+  } else {
+    // Fresh form defaults
+    const t = new Date(); t.setDate(t.getDate()+1); t.setHours(10,0,0,0);
+    const pad = n => String(n).padStart(2,'0');
+    const dtStr = t.getFullYear()+'-'+pad(t.getMonth()+1)+'-'+pad(t.getDate())+'T10:00';
+    const dispEl = document.getElementById('cal-ev-datetime-display');
+    const hidEl  = document.getElementById('cal-ev-datetime');
+    if(dispEl) dispEl.value = dtStr;
+    if(hidEl)  hidEl.value  = dtStr;
+    document.getElementById('cal-ev-title').value = '';
+    document.getElementById('cal-ev-duration').value = '60';
+    document.getElementById('cal-ev-notes').value = '';
+    document.getElementById('cal-ev-recurrence').value = '';
+    document.querySelectorAll('#cal-weekly-days-row input').forEach(cb=>cb.checked=false);
+    document.getElementById('cal-weekly-days-row').style.display = 'none';
+    const loctype = document.getElementById('cal-ev-loctype');
+    if(loctype) loctype.value = 'inperson';
+    const locText = document.getElementById('cal-ev-location-text');
+    if(locText) locText.value = '';
+    const locUrl = document.getElementById('cal-ev-loc-url');
+    if(locUrl) locUrl.value = '';
+    calToggleLocType();
+  }
+  calUpdateTzLabel();
+  // Update form title and save button text (headerEl already declared above)
+  const saveBtn = document.getElementById('cal-save-manual-btn');
+  if(headerEl) headerEl.textContent = editEvent ? '// EDIT EVENT' : '// ADD EVENT';
+  if(saveBtn)  saveBtn.textContent  = editEvent ? 'Update Event' : 'Save Event';
+  setTimeout(() => {
+    f.scrollIntoView({behavior:'smooth', block:'nearest'});
+    document.getElementById('cal-ev-title')?.focus();
+  }, 150);
+}
+
+function calHideManualForm() {
+  const f = document.getElementById('cal-manual-form'); if(f) f.classList.remove('open');
+}
+
+// ── Updated calSaveManualEvent — handles new location fields ──
+function calSaveManualEvent() {
+  const title = (document.getElementById('cal-ev-title')?.value||'').trim();
+  if(!title) { toast('Event title is required','err'); return; }
+  const notes   = (document.getElementById('cal-ev-notes')?.value||'').trim();
+  const recType = document.getElementById('cal-ev-recurrence')?.value || '';
+  const isAllDay = document.getElementById('cal-ev-allday')?.checked || false;
+
+  // Location
+  const loctype = document.getElementById('cal-ev-loctype')?.value || 'inperson';
+  let location = '';
+  if(loctype === 'online') {
+    const platform = document.getElementById('cal-ev-loc-platform')?.value || '';
+    const url      = (document.getElementById('cal-ev-loc-url')?.value||'').trim();
+    location = platform ? (url ? platform+': '+url : platform) : url;
+  } else {
+    location = (document.getElementById('cal-ev-location-text')?.value||'').trim();
+  }
+
+  let datetime, duration, endDate;
+  if(isAllDay) {
+    const startVal = document.getElementById('cal-ev-allday-start')?.value;
+    const endVal   = document.getElementById('cal-ev-allday-end')?.value;
+    if(!startVal) { toast('Please set a start date','err'); return; }
+    datetime = startVal + 'T00:00';
+    endDate  = endVal || startVal;
+    // Duration = whole days in minutes
+    const dStart = new Date(startVal), dEnd = new Date(endVal||startVal);
+    duration = Math.max(1440, Math.round((dEnd-dStart)/60000) + 1440);
+  } else {
+    datetime = calGetDTValue();
+    if(!datetime) { toast('Please set a date and time','err'); return; }
+    duration = parseInt(document.getElementById('cal-ev-duration')?.value||'60',10) || 60;
+  }
+
+  // Find existing event if editing
+  const form = document.getElementById('cal-manual-form');
+  const editId = form?.dataset.editId || '';
+  const existingIdx = editId ? CAL_events.findIndex(e=>e.id===editId) : -1;
+
+  const ev = {
+    id: existingIdx >= 0 ? editId : 'manual_'+Date.now(),
+    title, datetime, duration, location, notes,
+    source: 'manual', timezone: CAL_timezone, loctype,
+    allDay: isAllDay
+  };
+  if(endDate) ev.endDate = endDate;
+  if(recType) {
+    const rec = {type:recType, interval:1};
+    if(recType==='WEEKLY') {
+      const wdays = [];
+      document.querySelectorAll('#cal-weekly-days-row input:checked').forEach(cb=>wdays.push(parseInt(cb.value,10)));
+      if(wdays.length) rec.days = wdays;
+    }
+    ev.recurrence = rec;
+  }
+
+  if(existingIdx >= 0) {
+    CAL_events[existingIdx] = ev;
+    toast('✓ Event updated','ok');
+  } else {
+    CAL_events.push(ev);
+    toast('✓ Event added','ok');
+  }
+  calSaveEvents();
+  calHideManualForm();
+  if(form) form.dataset.editId = '';
+}
+
+// ── Yahoo Calendar export ─────────────────────────────
+function calAddToYahoo() {
+  if(!CAL_currentEvent) return;
+  const ev = CAL_currentEvent;
+  const s = new Date(ev._occDatetime||ev.datetime);
+  const e = new Date(s.getTime()+(ev.duration||60)*60000);
+  const fmt = d => d.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
+  // Yahoo Calendar direct URL (opens web compose form)
+  const url = 'https://calendar.yahoo.com/?v=60&view=d&type=20'
+    +'&title='+encodeURIComponent(ev.title)
+    +'&st='+fmt(s)
+    +'&et='+fmt(e)
+    +'&desc='+encodeURIComponent(ev.notes||'')
+    +'&in_loc='+encodeURIComponent(ev.location||'');
+  window.open(url,'_blank');
+}
+
+// Final init — run show('home') here so all calendar variables are defined
 show('home');
+
 // Show folder-connect welcome modal on every startup
 if(_fsOK()) {
-    setTimeout(showWelcomeModal, 200); // slight delay so page renders first
+  setTimeout(showWelcomeModal, 200);
 }
 </script>
+
+<!-- ══ CALENDAR WEEK TIMELINE MODAL ══ -->
+<div id="cal-week-timeline">
+  <div class="cal-wtl-box">
+    <div class="cal-wtl-head">
+      <div class="cal-wtl-title" id="cal-wtl-title">Week Schedule</div>
+      <div style="display:flex;gap:.5rem;align-items:center">
+        <button class="cal-btn" id="cal-wtl-prev" style="padding:.28rem .6rem">◀ Prev week</button>
+        <button class="cal-btn" id="cal-wtl-next" style="padding:.28rem .6rem">Next week ▶</button>
+        <span style="font-family:var(--mono);font-size:.58rem;color:var(--text3);padding:0 .3rem">Click column header → Day View</span>
+        <button class="btn-close-detail" onclick="calCloseWeekTimeline()">✕ Close</button>
+      </div>
+    </div>
+    <div class="cal-wtl-scroll">
+      <div id="cal-wtl-body"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CALENDAR DAY TIMELINE MODAL ══ -->
+<div id="cal-day-timeline">
+  <div class="cal-timeline-box">
+    <div class="cal-timeline-head">
+      <div class="cal-timeline-title" id="cal-tl-title">Day Schedule</div>
+      <div style="display:flex;gap:.5rem;align-items:center">
+        <button class="cal-btn" id="cal-tl-prev" style="padding:.28rem .6rem">◀</button>
+        <button class="cal-btn" id="cal-tl-next" style="padding:.28rem .6rem">▶</button>
+        <button class="btn-close-detail" onclick="calCloseDayTimeline()">✕ Close</button>
+      </div>
+    </div>
+    <div class="cal-timeline-body" id="cal-tl-body"></div>
+  </div>
+</div>
+
+<!-- ══ CALENDAR EVENT MODAL ══ -->
+<div id="cal-event-modal">
+  <div class="cal-modal-box">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.3rem">
+      <div class="cal-modal-title" id="cal-modal-title">Event</div>
+      <button class="btn-close-detail" onclick="calCloseModal()">✕ Close</button>
+    </div>
+    <div class="cal-modal-countdown" id="cal-modal-countdown"></div>
+    <div class="cal-modal-row" id="cal-modal-time"></div>
+    <div class="cal-modal-row" id="cal-modal-location"></div>
+    <div class="cal-modal-row" id="cal-modal-notes"></div>
+    <div class="cal-modal-row" id="cal-modal-source" style="opacity:.6"></div>
+    <div class="cal-modal-actions">
+      <button class="cal-btn" onclick="calAddToGoogle()" style="border-color:rgba(51,217,255,.4);color:var(--glow)">↗ Google</button>
+      <button class="cal-btn" onclick="calAddToApple()" style="border-color:rgba(0,255,187,.4);color:var(--green)">⬇ Apple (.ics)</button>
+      <button class="cal-btn" onclick="calAddToOutlook()" style="border-color:rgba(187,153,255,.4);color:var(--purple)">↗ Outlook</button>
+      <button class="cal-btn" onclick="calAddToYahoo()" style="border-color:rgba(255,80,80,.4);color:#ff6060">↗ Yahoo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CALENDAR MONTH MODAL ══ -->
+<div id="cal-month-modal" style="position:fixed;inset:0;z-index:1100;background:rgba(2,5,15,.9);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center">
+  <div style="background:var(--panel);border:1px solid var(--border2);border-top:2px solid var(--glow);padding:1.1rem 1.25rem;width:min(96vw,1600px);height:90vh;max-height:90vh;overflow-y:auto;border-radius:0 0 6px 6px;box-shadow:0 24px 60px rgba(0,0,0,.7);display:flex;flex-direction:column">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.7rem;flex-shrink:0">
+      <div style="display:flex;align-items:center;gap:.6rem">
+        <button class="cal-btn" id="cal-prev-month-btn">◀</button>
+        <span style="font-family:var(--head);font-size:1.1rem;font-weight:700;color:#fff;min-width:180px;text-align:center" id="cal-month-title">Month</span>
+        <button class="cal-btn" id="cal-next-month-btn">▶</button>
+      </div>
+      <button class="btn-close-detail" onclick="calCloseMonthModal()">✕ Close</button>
+    </div>
+    <div id="cal-month-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;font-family:var(--mono);flex:1;overflow-y:auto"></div>
+  </div>
+</div>
+
 </body>
 </html>

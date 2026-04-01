@@ -1,7 +1,7 @@
 // ══════════════════════════════════════════════════════════════
 //  data.js  —  Optional static seed file for Eukosmos
 //
-//  For LOCAL use: you do NOT need this file.
+//  For LOCAL use: you do NOT need this file. This file is randomly generated for the preview purpose. You can delete it.
 //  Your data is saved as data_<section>.json in your folder.
 //
 //  Useful for GitHub Pages deployment or pre-populating on first run.
@@ -31,77 +31,107 @@ window.ASTRO_DATA = {
   // ── LITERATURE PAPERS ──────────────────────────────────────
   papers: [
     {
-      id: "sample-paper-1",
-      date: "2025-01-10",
-      title: "X-ray cavities in the Perseus cluster core",
-      authors: "Smith, J.; Jones, M.; et al.",
-      journal: "ApJ 961, 173",
-      ads: "https://ui.adsabs.harvard.edu/abs/2024ApJ...961..173H/abstract",
-      abstract: "We present deep Chandra observations of the Perseus cluster, revealing new cavities in the X-ray gas. The total mechanical power is estimated at 10^45 erg/s.",
-      summary: "Important paper showing AGN feedback efficiency. They used 1.2 Ms of Chandra data. The cavities have a volume of ~10^68 cm^3. The derived power matches the cooling losses within a factor of 2.",
-      tags: "AGN, X-ray, clusters, feedback",
-      rating: "★★★ Essential",
-      bibtex: "@article{smith2024xray,\n  author = {{Smith, J.} and {Jones, M.}},\n  title = {X-ray cavities in the Perseus cluster core},\n  journal = {ApJ},\n  volume = {961},\n  pages = {173},\n  year = {2024}\n}",
-      pdf: "./pdf/Smith_2024ApJ_961_173H.pdf",
-      source: "ads",
-      arxivId: "2401.12345",
-      read: "done",
-      starred: true
-    },
-    {
-      id: "sample-paper-2",
-      date: "2025-02-20",
-      title: "Galaxy merger rates in IllustrisTNG",
-      authors: "Lee, Y.; Rodriguez, C.; et al.",
-      journal: "MNRAS 528, 1234",
-      ads: "https://ui.adsabs.harvard.edu/abs/2024MNRAS.528.1234L/abstract",
-      abstract: "We quantify galaxy merger rates using the IllustrisTNG simulation at z=0-2. Major mergers peak at z~1.5.",
-      summary: "Good reference for merger rates. They provide fitting functions that we can use for our semi-analytic model.",
-      tags: "simulations, mergers, galaxies",
-      rating: "★★ Very relevant",
-      bibtex: "@article{lee2024galaxy,\n  author = {{Lee, Y.} and {Rodriguez, C.}},\n  title = {Galaxy merger rates in IllustrisTNG},\n  journal = {MNRAS},\n  volume = {528},\n  pages = {1234},\n  year = {2024}\n}",
-      source: "ads",
-      arxivId: "2402.98765",
-      read: "reading"
-    }
+    "id": "mmxyr17i7yy5",
+    "date": "2026-03-19",
+    "title": "A radio bridge connecting the minihalo and phoenix in the Abell 85 cluster",
+    "authors": "Raja, Ramij; Rahaman, Majidul; Datta, Abhirup; Smirnov, Oleg M.",
+    "journal": "Monthly Notices of the Royal Astronomical Society 2023",
+    "status": "published",
+    "ads": "https://www.scixplorer.org/abs/2023MNRAS.526L..70R",
+    "arxiv": "https://arxiv.org/abs/2308.09005",
+    "tags": "",
+    "cite": "",
+    "abstract": "Galaxy clusters are located at the nodes of cosmic filaments and therefore host a lot of hydrodynamical activity. However, cool core clusters are considered to be relatively relaxed systems without much merging activity. The Abell 85 cluster is a unique example where the cluster hosts both a cool core and multiple ongoing merging processes. In this work, we used 700 MHz uGMRT as well as MeerKAT L-band observations, carried out as part of the MeerKAT Galaxy Cluster Legacy Survey (MGCLS), of the Abell 85. We reconfirm the presence of a minihalo in the cluster centre at 700 MHz that was recently discovered in MGCLS. Furthermore, we discovered a radio bridge connecting the central minihalo and the peripheral radio phoenix. The mean surface brightness, size, and flux density of the bridge at 700 MHz are found to be ~0.14 <C2><B5>Jy arcsec<SUP>-2</SUP>, ~220 kpc, and ~4.88 mJy, respectively, with a spectral index of $\\alpha _{700}^{1.28} = -0.92$. Although the origin of the seed relativistic electrons is still unknown, turbulent reacceleration caused by both the spiralling sloshing gas in the intracluster medium and the post-shock turbulence from the outgoing merging shock associated with the phoenix formation may be responsible for the bridge.",
+    "bibtex": "@ARTICLE{2023MNRAS.526L..70R,\n       author = {{Raja}, Ramij and {Rahaman}, Majidul and {Datta}, Abhirup and {Smirnov}, Oleg M.},\n        title = \"{A radio bridge connecting the minihalo and phoenix in the Abell 85 cluster}\",\n      journal = {\\mnras},\n     keywords = {radiation mechanisms: non-thermal, galaxies: clusters: general, galaxies: clusters: individual: Abell 85, galaxies: clusters: intracluster medium, radio continuum: general, Astrophysics - High Energy Astrophysical Phenomena, Astrophysics - Astrophysics of Galaxies},\n         year = 2023,\n        month = nov,\n       volume = {526},\n       number = {1},\n        pages = {L70-L76},\n          doi = {10.1093/mnrasl/slad117},\narchivePrefix = {arXiv},\n       eprint = {2308.09005},\n primaryClass = {astro-ph.HE},\n       adsurl = {https://ui.adsabs.harvard.edu/abs/2023MNRAS.526L..70R},\n      adsnote = {Provided by the SAO/NASA Astrophysics Data System}\n}",
+    "pdf": "./pdf/Raja_2023MNRAS_526L_70R.pdf",
+    "arxivId": "2308.09005",
+    "source": "scix"
+  },
+  {
+    "id": "mmwel9l5pj4p",
+    "date": "2026-03-18",
+    "title": "A radio bridge connecting the minihalo and phoenix in the Abell 85 cluster",
+    "authors": "Raja, Ramij; Rahaman, Majidul; Datta, Abhirup; Smirnov, Oleg M.",
+    "journal": "Monthly Notices of the Royal Astronomical Society 2023",
+    "status": "published",
+    "ads": "https://ui.adsabs.harvard.edu/abs/2023MNRAS.526L..70R",
+    "arxiv": "https://arxiv.org/abs/2308.09005",
+    "tags": "",
+    "cite": "",
+    "abstract": "Galaxy clusters are located at the nodes of cosmic filaments and therefore host a lot of hydrodynamical activity. However, cool core clusters are considered to be relatively relaxed systems without much merging activity. The Abell 85 cluster is a unique example where the cluster hosts both a cool core and multiple ongoing merging processes. In this work, we used 700 MHz uGMRT as well as MeerKAT L-band observations, carried out as part of the MeerKAT Galaxy Cluster Legacy Survey (MGCLS), of the Abell 85. We reconfirm the presence of a minihalo in the cluster centre at 700 MHz that was recently discovered in MGCLS. Furthermore, we discovered a radio bridge connecting the central minihalo and the peripheral radio phoenix. The mean surface brightness, size, and flux density of the bridge at 700 MHz are found to be ~0.14 <C2><B5>Jy arcsec<SUP>-2</SUP>, ~220 kpc, and ~4.88 mJy, respectively, with a spectral index of $\\alpha _{700}^{1.28} = -0.92$. Although the origin of the seed relativistic electrons is still unknown, turbulent reacceleration caused by both the spiralling sloshing gas in the intracluster medium and the post-shock turbulence from the outgoing merging shock associated with the phoenix formation may be responsible for the bridge.",
+    "bibtex": "@ARTICLE{2023MNRAS.526L..70R,\n       author = {{Raja}, Ramij and {Rahaman}, Majidul and {Datta}, Abhirup and {Smirnov}, Oleg M.},\n        title = \"{A radio bridge connecting the minihalo and phoenix in the Abell 85 cluster}\",\n      journal = {\\mnras},\n     keywords = {radiation mechanisms: non-thermal, galaxies: clusters: general, galaxies: clusters: individual: Abell 85, galaxies: clusters: intracluster medium, radio continuum: general, Astrophysics - High Energy Astrophysical Phenomena, Astrophysics - Astrophysics of Galaxies},\n         year = 2023,\n        month = nov,\n       volume = {526},\n       number = {1},\n        pages = {L70-L76},\n          doi = {10.1093/mnrasl/slad117},\narchivePrefix = {arXiv},\n       eprint = {2308.09005},\n primaryClass = {astro-ph.HE},\n       adsurl = {https://ui.adsabs.harvard.edu/abs/2023MNRAS.526L..70R},\n      adsnote = {Provided by the SAO/NASA Astrophysics Data System}\n}",
+    "pdf": "./pdf/Raja_2023MNRAS_526L_70R.pdf",
+    "arxivId": "2308.09005",
+    "source": "ads"
+  },
+  {
+    "id": "mmnobiuk365r",
+    "date": "2026-03-12",
+    "title": "SoUthern Cluster sCale Extended Source Survey (SUCCESS): a GMRT and Meerkat study of nine massive galaxy clusters",
+    "authors": "Kale, R.; Parekh, V.; Rahaman, M.; Joshi, D. C.; Venturi, T.; Kolokythas, K.; Chibueze, J. O.; Sikhosana, S. et al.",
+    "journal": "Monthly Notices of the Royal Astronomical Society 2022",
+    "status": "published",
+    "ads": "https://ui.adsabs.harvard.edu/abs/2022MNRAS.514.5969K",
+    "arxiv": "https://arxiv.org/abs/2206.10895",
+    "tags": "",
+    "cite": "",
+    "abstract": "We aim to carry out a radio study of the SoUthern Cluster sCale Extended Source Survey (SUCCESS) sample consisting of 20 massive (M<SUB>500</SUB> &gt; 5 <C3><97> 10<SUP>14</SUP> M<SUB><E2><8<8A><99></SUB>), nearby (redshift &lt;0.3) and southern (-50<C2><B0> &lt; <CE><B4> &lt; -30<C2><B0>) galaxy clusters detected by the Planck satellite and the South Pole Telescope. Here, we report targeted GMRT observations (325/610 MHz) for a subsample of nine clusters. We also use the first data release of MeerKAT Galaxy Cluster Legacy Survey (1283 MHz) for five of these nine clusters. The properties of the mini-halo in RXC J0528.9-3927, a candidate mini-halo in A3322, the radio halo and candidate double relics in A3399, and the radio halo in RXC J0232.2-4420 are presented. We also report a detection of candidate radio relics at distances 1 and 1.9 Mpc from the centre of RXC J0232.2-4420. The southeast relic of A3399 is consistent with the radio power-mass scaling relation for radio relics, while the candidate relics around RXC J0232.2-4420 are outliers. This indicates an origin of the candidate relics near RXC J0232.2-4420 to be independent of this cluster and a cluster merger-shock origin for the relic in A3399. In this subsample of clusters, 1/9 hosts a radio halo and double relics, 1/9 hosts a radio halo and 2/9 host mini-haloes. The dynamical states based on X-ray morphology show that A3399 is a disturbed cluster; however, the radio halo cluster RXC J0232.2-4420 is relaxed, and the mini-halo clusters have intermediate morphologies, adding to the cases of the less commonly found associations.",
+    "bibtex": "@ARTICLE{2022MNRAS.514.5969K,\n       author = {{Kale}, R. and {Parekh}, V. and {Rahaman}, M. and {Joshi}, D.~C. and {Venturi}, T. and {Kolokythas}, K. and {Chibueze}, J.~O. and {Sikhosana}, S. and {Pillay}, D. and {Knowles}, K.},\n        title = \"{SoUthern Cluster sCale Extended Source Survey (SUCCESS): a GMRT and Meerkat study of nine massive galaxy clusters}\",\n      journal = {\\mnras},\n     keywords = {acceleration of particles, radiation mechanisms: non-thermal, galaxies:clusters:individual: A3322, A3396, A3343, A3399, A3937, RXC J0232.2-4420, RXC J0528.9-3927, RXC J1358.9-4750, PSZ1 G313.85 + 19.21, galaxies: clusters: intracluster medium, radio continuum: galaxies, X-rays: galaxies: clusters, Astrophysics - Cosmology and Nongalactic Astrophysics, Astrophysics - Astrophysics of Galaxies},\n         year = 2022,\n        month = aug,\n       volume = {514},\n       number = {4},\n        pages = {5969-5986},\n          doi = {10.1093/mnras/stac1649},\narchivePrefix = {arXiv},\n       eprint = {2206.10895},\n primaryClass = {astro-ph.CO},\n       adsurl = {https://ui.adsabs.harvard.edu/abs/2022MNRAS.514.5969K},\n      adsnote = {Provided by the SAO/NASA Astrophysics Data System}\n}",
+    "pdf": ""
+  }
   ],
 
   // ── MY PAPERS ──────────────────────────────────────────────
   mypapers: [
     {
-      id: "sample-mypaper-1",
-      date: "2024-11-05",
-      title: "The nature of X-ray cavities in galaxy clusters",
-      authors: "Rahaman, M.; Smith, J.; Jones, M.",
-      journal: "ApJ 975, 15",
-      status: "published",
-      ads: "https://ui.adsabs.harvard.edu/abs/2024ApJ...975...15R/abstract",
-      arxiv: "https://arxiv.org/abs/2408.12345",
-      tags: "AGN, X-ray, clusters",
-      cite: 8,
-      abstract: "We present a systematic study of X-ray cavities in a sample of 40 cool-core clusters. We find a correlation between cavity power and radio luminosity.",
-      bibtex: "@article{rahaman2024nature,\n  author = {{Rahaman, M.} and {Smith, J.} and {Jones, M.}},\n  title = {The nature of X-ray cavities in galaxy clusters},\n  journal = {ApJ},\n  volume = {975},\n  pages = {15},\n  year = {2024}\n}",
-      pdf: "./pdf/Rahaman_2024ApJ_975_15R.pdf",
-      source: "ads",
-      arxivId: "2408.12345"
-    },
-    {
-      id: "sample-mypaper-2",
-      date: "2025-02-01",
-      title: "Deep learning for AGN detection in radio surveys",
-      authors: "Rahaman, M.; Lee, Y.; Zhang, W.",
-      journal: "MNRAS in press",
-      status: "submitted",
-      ads: "https://ui.adsabs.harvard.edu/abs/2025arXiv2501.01234R/abstract",
-      arxiv: "https://arxiv.org/abs/2501.01234",
-      tags: "ML, AGN, radio",
-      cite: 0,
-      abstract: "We train a convolutional neural network to identify AGN in LoTSS images. The model achieves 96% accuracy.",
-      bibtex: "",
-      pdf: "",
-      source: "arxiv",
-      arxivId: "2501.01234"
-    }
+    "id": "mmxyr17i7yy5",
+    "date": "2026-03-19",
+    "title": "A radio bridge connecting the minihalo and phoenix in the Abell 85 cluster",
+    "authors": "Raja, Ramij; Rahaman, Majidul; Datta, Abhirup; Smirnov, Oleg M.",
+    "journal": "Monthly Notices of the Royal Astronomical Society 2023",
+    "status": "published",
+    "ads": "https://www.scixplorer.org/abs/2023MNRAS.526L..70R",
+    "arxiv": "https://arxiv.org/abs/2308.09005",
+    "tags": "",
+    "cite": "",
+    "abstract": "Galaxy clusters are located at the nodes of cosmic filaments and therefore host a lot of hydrodynamical activity. However, cool core clusters are considered to be relatively relaxed systems without much merging activity. The Abell 85 cluster is a unique example where the cluster hosts both a cool core and multiple ongoing merging processes. In this work, we used 700 MHz uGMRT as well as MeerKAT L-band observations, carried out as part of the MeerKAT Galaxy Cluster Legacy Survey (MGCLS), of the Abell 85. We reconfirm the presence of a minihalo in the cluster centre at 700 MHz that was recently discovered in MGCLS. Furthermore, we discovered a radio bridge connecting the central minihalo and the peripheral radio phoenix. The mean surface brightness, size, and flux density of the bridge at 700 MHz are found to be ~0.14 <C2><B5>Jy arcsec<SUP>-2</SUP>, ~220 kpc, and ~4.88 mJy, respectively, with a spectral index of $\\alpha _{700}^{1.28} = -0.92$. Although the origin of the seed relativistic electrons is still unknown, turbulent reacceleration caused by both the spiralling sloshing gas in the intracluster medium and the post-shock turbulence from the outgoing merging shock associated with the phoenix formation may be responsible for the bridge.",
+    "bibtex": "@ARTICLE{2023MNRAS.526L..70R,\n       author = {{Raja}, Ramij and {Rahaman}, Majidul and {Datta}, Abhirup and {Smirnov}, Oleg M.},\n        title = \"{A radio bridge connecting the minihalo and phoenix in the Abell 85 cluster}\",\n      journal = {\\mnras},\n     keywords = {radiation mechanisms: non-thermal, galaxies: clusters: general, galaxies: clusters: individual: Abell 85, galaxies: clusters: intracluster medium, radio continuum: general, Astrophysics - High Energy Astrophysical Phenomena, Astrophysics - Astrophysics of Galaxies},\n         year = 2023,\n        month = nov,\n       volume = {526},\n       number = {1},\n        pages = {L70-L76},\n          doi = {10.1093/mnrasl/slad117},\narchivePrefix = {arXiv},\n       eprint = {2308.09005},\n primaryClass = {astro-ph.HE},\n       adsurl = {https://ui.adsabs.harvard.edu/abs/2023MNRAS.526L..70R},\n      adsnote = {Provided by the SAO/NASA Astrophysics Data System}\n}",
+    "pdf": "./pdf/Raja_2023MNRAS_526L_70R.pdf",
+    "arxivId": "2308.09005",
+    "source": "scix"
+  },
+  {
+    "id": "mmwel9l5pj4p",
+    "date": "2026-03-18",
+    "title": "A radio bridge connecting the minihalo and phoenix in the Abell 85 cluster",
+    "authors": "Raja, Ramij; Rahaman, Majidul; Datta, Abhirup; Smirnov, Oleg M.",
+    "journal": "Monthly Notices of the Royal Astronomical Society 2023",
+    "status": "published",
+    "ads": "https://ui.adsabs.harvard.edu/abs/2023MNRAS.526L..70R",
+    "arxiv": "https://arxiv.org/abs/2308.09005",
+    "tags": "",
+    "cite": "",
+    "abstract": "Galaxy clusters are located at the nodes of cosmic filaments and therefore host a lot of hydrodynamical activity. However, cool core clusters are considered to be relatively relaxed systems without much merging activity. The Abell 85 cluster is a unique example where the cluster hosts both a cool core and multiple ongoing merging processes. In this work, we used 700 MHz uGMRT as well as MeerKAT L-band observations, carried out as part of the MeerKAT Galaxy Cluster Legacy Survey (MGCLS), of the Abell 85. We reconfirm the presence of a minihalo in the cluster centre at 700 MHz that was recently discovered in MGCLS. Furthermore, we discovered a radio bridge connecting the central minihalo and the peripheral radio phoenix. The mean surface brightness, size, and flux density of the bridge at 700 MHz are found to be ~0.14 <C2><B5>Jy arcsec<SUP>-2</SUP>, ~220 kpc, and ~4.88 mJy, respectively, with a spectral index of $\\alpha _{700}^{1.28} = -0.92$. Although the origin of the seed relativistic electrons is still unknown, turbulent reacceleration caused by both the spiralling sloshing gas in the intracluster medium and the post-shock turbulence from the outgoing merging shock associated with the phoenix formation may be responsible for the bridge.",
+    "bibtex": "@ARTICLE{2023MNRAS.526L..70R,\n       author = {{Raja}, Ramij and {Rahaman}, Majidul and {Datta}, Abhirup and {Smirnov}, Oleg M.},\n        title = \"{A radio bridge connecting the minihalo and phoenix in the Abell 85 cluster}\",\n      journal = {\\mnras},\n     keywords = {radiation mechanisms: non-thermal, galaxies: clusters: general, galaxies: clusters: individual: Abell 85, galaxies: clusters: intracluster medium, radio continuum: general, Astrophysics - High Energy Astrophysical Phenomena, Astrophysics - Astrophysics of Galaxies},\n         year = 2023,\n        month = nov,\n       volume = {526},\n       number = {1},\n        pages = {L70-L76},\n          doi = {10.1093/mnrasl/slad117},\narchivePrefix = {arXiv},\n       eprint = {2308.09005},\n primaryClass = {astro-ph.HE},\n       adsurl = {https://ui.adsabs.harvard.edu/abs/2023MNRAS.526L..70R},\n      adsnote = {Provided by the SAO/NASA Astrophysics Data System}\n}",
+    "pdf": "./pdf/Raja_2023MNRAS_526L_70R.pdf",
+    "arxivId": "2308.09005",
+    "source": "ads"
+  },
+  {
+    "id": "mmnobiuk365r",
+    "date": "2026-03-12",
+    "title": "SoUthern Cluster sCale Extended Source Survey (SUCCESS): a GMRT and Meerkat study of nine massive galaxy clusters",
+    "authors": "Kale, R.; Parekh, V.; Rahaman, M.; Joshi, D. C.; Venturi, T.; Kolokythas, K.; Chibueze, J. O.; Sikhosana, S. et al.",
+    "journal": "Monthly Notices of the Royal Astronomical Society 2022",
+    "status": "published",
+    "ads": "https://ui.adsabs.harvard.edu/abs/2022MNRAS.514.5969K",
+    "arxiv": "https://arxiv.org/abs/2206.10895",
+    "tags": "",
+    "cite": "",
+    "abstract": "We aim to carry out a radio study of the SoUthern Cluster sCale Extended Source Survey (SUCCESS) sample consisting of 20 massive (M<SUB>500</SUB> &gt; 5 <C3><97> 10<SUP>14</SUP> M<SUB><E2><8<8A><99></SUB>), nearby (redshift &lt;0.3) and southern (-50<C2><B0> &lt; <CE><B4> &lt; -30<C2><B0>) galaxy clusters detected by the Planck satellite and the South Pole Telescope. Here, we report targeted GMRT observations (325/610 MHz) for a subsample of nine clusters. We also use the first data release of MeerKAT Galaxy Cluster Legacy Survey (1283 MHz) for five of these nine clusters. The properties of the mini-halo in RXC J0528.9-3927, a candidate mini-halo in A3322, the radio halo and candidate double relics in A3399, and the radio halo in RXC J0232.2-4420 are presented. We also report a detection of candidate radio relics at distances 1 and 1.9 Mpc from the centre of RXC J0232.2-4420. The southeast relic of A3399 is consistent with the radio power-mass scaling relation for radio relics, while the candidate relics around RXC J0232.2-4420 are outliers. This indicates an origin of the candidate relics near RXC J0232.2-4420 to be independent of this cluster and a cluster merger-shock origin for the relic in A3399. In this subsample of clusters, 1/9 hosts a radio halo and double relics, 1/9 hosts a radio halo and 2/9 host mini-haloes. The dynamical states based on X-ray morphology show that A3399 is a disturbed cluster; however, the radio halo cluster RXC J0232.2-4420 is relaxed, and the mini-halo clusters have intermediate morphologies, adding to the cases of the less commonly found associations.",
+    "bibtex": "@ARTICLE{2022MNRAS.514.5969K,\n       author = {{Kale}, R. and {Parekh}, V. and {Rahaman}, M. and {Joshi}, D.~C. and {Venturi}, T. and {Kolokythas}, K. and {Chibueze}, J.~O. and {Sikhosana}, S. and {Pillay}, D. and {Knowles}, K.},\n        title = \"{SoUthern Cluster sCale Extended Source Survey (SUCCESS): a GMRT and Meerkat study of nine massive galaxy clusters}\",\n      journal = {\\mnras},\n     keywords = {acceleration of particles, radiation mechanisms: non-thermal, galaxies:clusters:individual: A3322, A3396, A3343, A3399, A3937, RXC J0232.2-4420, RXC J0528.9-3927, RXC J1358.9-4750, PSZ1 G313.85 + 19.21, galaxies: clusters: intracluster medium, radio continuum: galaxies, X-rays: galaxies: clusters, Astrophysics - Cosmology and Nongalactic Astrophysics, Astrophysics - Astrophysics of Galaxies},\n         year = 2022,\n        month = aug,\n       volume = {514},\n       number = {4},\n        pages = {5969-5986},\n          doi = {10.1093/mnras/stac1649},\narchivePrefix = {arXiv},\n       eprint = {2206.10895},\n primaryClass = {astro-ph.CO},\n       adsurl = {https://ui.adsabs.harvard.edu/abs/2022MNRAS.514.5969K},\n      adsnote = {Provided by the SAO/NASA Astrophysics Data System}\n}",
+    "pdf": ""
+  }
   ],
 
   // ── USEFUL LINKS ──────────────────────────────────────────
