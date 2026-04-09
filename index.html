@@ -378,6 +378,23 @@ nav a.active .nav-count{background:var(--glow-dim);color:var(--glow)}
 .bibtex-toggle{font-size:.6rem;color:var(--text3);transition:transform .2s}
 .bibtex-toggle.open{transform:rotate(90deg)}
 .bibtex-body{background:var(--bg2);border-top:1px solid var(--border);padding:.72rem 1rem .6rem;display:none}
+/* BibTeX import radio label hover */
+#bib-opt-ads-label:hover,
+#bib-opt-insp-label:hover,
+#bib-opt-none-label:hover {
+  background: var(--panel2);
+  border-color: var(--border2);
+}
+/* BIBTEX source badge — matches existing PREPRINT badge style */
+.bib-source-badge {
+  font-family: var(--mono);
+  font-size: .58rem;
+  color: var(--amber);
+  border: 1px solid rgba(255,192,85,.35);
+  padding: .1rem .38rem;
+  border-radius: 2px;
+  letter-spacing: .05em;
+}
 .bibtex-pre{font-family:var(--mono);font-size:.73rem;color:#7fffbb;white-space:pre;overflow-x:auto;line-height:1.6;margin-bottom:.6rem}
 /* ── Idea stage badge ── */
 .idea-stage{display:inline-block;font-family:var(--mono);font-size:.58rem;padding:.12rem .45rem;border-radius:2px;border:1px solid;margin-top:.3rem;cursor:pointer;transition:all .15s}
@@ -734,7 +751,8 @@ body.compact .abstract-block,body.compact .bibtex-block{margin-top:.3rem}
 .cal-day-name{letter-spacing:.12em;text-transform:uppercase;color:var(--text3);font-size:.62rem}
 .cal-day-num{font-size:1.15rem;font-weight:700;color:var(--text);line-height:1.1}
 .cal-day-month{font-size:.58rem;color:var(--text3)}
-.cal-day-events{padding:.45rem .5rem;display:flex;flex-direction:column;gap:.4rem}
+.cal-day-allday{padding:.4rem .5rem .2rem;display:flex;flex-direction:column;gap:.3rem;flex-shrink:0}
+.cal-day-timed{padding:.25rem .5rem .45rem;display:flex;flex-direction:column;gap:.4rem;max-height:340px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
 /* ── Event cards — bigger, more readable ── */
 .cal-event{background:var(--surface);border-left:3px solid var(--glow2);border-radius:0 3px 3px 0;padding:.42rem .6rem;cursor:pointer;transition:background .12s}
 .cal-event:hover{background:var(--panel2)}
@@ -833,9 +851,12 @@ body.compact .abstract-block,body.compact .bibtex-block{margin-top:.3rem}
 .cal-wtl-addslot{font-family:var(--mono);font-size:.55rem;color:var(--glow);opacity:0;cursor:pointer;padding:.15rem .25rem;transition:all .12s;white-space:nowrap;overflow:hidden;border-radius:2px;display:block;width:100%}
 .cal-wtl-slot:hover .cal-wtl-addslot{opacity:.7;background:var(--glow-dim)}
 /* ── All-day event banner ── */
-.cal-allday-banner{background:var(--amber-d);border:1px solid rgba(255,192,85,.3);border-left:3px solid var(--amber);border-radius:0 3px 3px 0;padding:.2rem .45rem;margin-bottom:.28rem;cursor:pointer;transition:background .12s;font-family:var(--head);font-size:.78rem;font-weight:600;color:var(--amber);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.cal-allday-banner{background:var(--amber-d);border:1px solid rgba(255,192,85,.3);border-left:3px solid var(--amber);border-radius:0 3px 3px 0;padding:.2rem .45rem;margin-bottom:.28rem;cursor:pointer;transition:background .12s;font-family:var(--head);font-size:.78rem;font-weight:600;color:var(--amber);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;min-width:0}
 .cal-allday-banner:hover{background:rgba(255,192,85,.22)}
 .cal-allday-banner.cal-ev-manual{border-left-color:var(--green);background:var(--green-d);color:var(--green)}
+.cal-allday-banner.cal-ev-deadline-todo{border-left-color:var(--amber);background:var(--amber-d);color:var(--amber)}
+.cal-allday-banner.cal-ev-deadline-job{border-left-color:var(--purple);background:var(--purple-d);color:var(--purple)}
+.cal-allday-banner.cal-ev-deadline-proposal{border-left-color:var(--gold);background:var(--gold-d);color:var(--gold)}
 /* ── Month view cells ── */
 .cal-month-cell{background:var(--panel);border:1px solid var(--border);border-radius:4px;min-height:90px;padding:.4rem .45rem;cursor:pointer;transition:background .12s;overflow:hidden;display:flex;flex-direction:column}
 .cal-month-cell:hover{background:var(--panel2);border-color:var(--border2)}
@@ -959,12 +980,58 @@ body.light .cal-month-cell.cal-mc-today{background:rgba(21,88,192,.07);border-co
 /* KaTeX display math centering */
 .katex-display{text-align:center;margin:.75rem 0;overflow-x:auto}
 /* Rich text toolbar */
+
+/* ── Markdown split/preview mode ── */
+.md-mode-bar{display:flex;gap:.2rem;padding:.25rem .4rem;background:var(--surface);border:1px solid var(--border2);border-bottom:none;flex-wrap:wrap;align-items:center}
+.md-mode-btn{background:none;border:1px solid transparent;color:var(--text3);font-family:var(--mono);font-size:.58rem;padding:.15rem .45rem;cursor:pointer;border-radius:2px;transition:all .12s}
+.md-mode-btn:hover{background:var(--panel2);color:var(--text)}
+.md-mode-btn.active{background:var(--glow-dim);border-color:var(--glow2);color:var(--glow)}
+.md-split-wrap{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border2);border-top:none;min-height:200px}
+.md-split-wrap .md-textarea,.md-preview-pane{font-family:var(--body);font-size:1rem;line-height:1.8;padding:.7rem .9rem;box-sizing:border-box}
+.md-split-wrap .md-textarea{border:none;border-right:1px solid var(--border2);border-radius:0;resize:none;background:var(--surface);color:var(--text);overflow-y:auto}
+.md-preview-pane{background:var(--bg2);overflow-y:auto;min-height:200px;color:var(--text2)}
+.md-preview-only{display:block;background:var(--surface);border:1px solid var(--border2);border-top:none;padding:.7rem .9rem;min-height:120px;font-family:var(--body);font-size:1rem;line-height:1.8;color:var(--text2)}
+
+/* ── LaTeX palette ── */
+.md-editor-wrap{display:flex;flex-direction:column}
+.md-tb-wrap{position:relative}
+.md-lat-panel{display:none;background:var(--panel);border:1px solid var(--border2);border-top:none;padding:.5rem .6rem;z-index:10}
+.md-lat-panel.open{display:flex;flex-direction:column;gap:.35rem}
+.md-lat-tabs{display:flex;gap:.2rem;margin-bottom:.35rem;flex-wrap:wrap}
+.md-lat-tab{background:none;border:1px solid var(--border2);color:var(--text3);font-family:var(--mono);font-size:.56rem;padding:.15rem .45rem;cursor:pointer;border-radius:2px;transition:all .12s}
+.md-lat-tab:hover,.md-lat-tab.active{background:var(--purple-d);border-color:rgba(187,153,255,.4);color:var(--purple)}
+.md-lat-grid{display:flex;flex-wrap:wrap;gap:.2rem}
+.md-lat-btn{background:var(--surface);border:1px solid var(--border2);color:var(--text2);font-family:var(--mono);font-size:.65rem;padding:.22rem .5rem;cursor:pointer;border-radius:2px;transition:all .12s;white-space:nowrap}
+.md-lat-btn:hover{background:var(--purple-d);border-color:rgba(187,153,255,.4);color:var(--purple)}
+
+/* ── Backlinks ── */
+.md-backlink-ac{position:absolute;top:100%;left:0;z-index:402;background:var(--panel);border:1px solid var(--border2);border-top:none;width:320px;max-height:200px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.md-backlink-ac .ac-item{padding:.3rem .6rem;font-family:var(--mono);font-size:.68rem;cursor:pointer;color:var(--text2)}
+.md-backlink-ac .ac-item:hover{background:var(--panel2);color:var(--glow)}
+.md-bl-link{color:var(--glow);text-decoration:underline;cursor:pointer;font-weight:600}
+.md-bl-link:hover{color:var(--glow2)}
+.detail-backlinks{margin-top:1rem;padding-top:.75rem;border-top:1px solid var(--border)}
+.detail-backlink-item{display:inline-flex;align-items:center;gap:.35rem;background:var(--glow-dim);border:1px solid rgba(51,217,255,.2);border-radius:3px;padding:.2rem .55rem;margin:.2rem .2rem 0 0;font-family:var(--mono);font-size:.65rem;color:var(--glow);cursor:pointer;transition:all .12s}
+.detail-backlink-item:hover{background:var(--glow-mid);border-color:var(--glow2)}
+
+/* ── Print / PDF export button ── */
+.btn-print-note{display:inline-flex;align-items:center;gap:.35rem;background:none;border:1px solid var(--border2);color:var(--text3);font-family:var(--mono);font-size:.6rem;padding:.25rem .6rem;cursor:pointer;border-radius:2px;transition:all .15s}
+.btn-print-note:hover{border-color:var(--amber);color:var(--amber)}
+
 .md-toolbar{display:flex;gap:.25rem;padding:.3rem .4rem;background:var(--surface);border:1px solid var(--border2);border-bottom:none;border-radius:2px 2px 0 0;flex-wrap:wrap}
 .md-tb-btn{background:none;border:1px solid transparent;color:var(--text3);font-family:var(--mono);font-size:.62rem;padding:.18rem .42rem;cursor:pointer;border-radius:2px;transition:all .12s;line-height:1.4}
 .md-tb-btn:hover{background:var(--panel2);border-color:var(--border2);color:var(--text)}
 .md-tb-btn.active{background:var(--glow-dim);border-color:var(--glow2);color:var(--glow)}
 .md-tb-sep{width:1px;background:var(--border2);margin:0 .15rem;align-self:stretch}
 .md-textarea{border-top-left-radius:0!important;border-top-right-radius:0!important}
+
+/* ── Papers list view ── */
+.papers-list-item{display:flex;align-items:baseline;justify-content:space-between;gap:.5rem;padding:.38rem .5rem;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:.72rem;color:var(--text2);cursor:pointer;transition:background .1s}
+.papers-list-item:hover{background:var(--panel)}
+.papers-list-text{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.papers-list-link{color:var(--glow);text-decoration:none}
+.papers-list-link:hover{text-decoration:underline}
+.papers-list-actions{display:flex;gap:.15rem;flex-shrink:0;align-items:center}
 .detail-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)}
 
 /* ════════════════════════════════════════════
@@ -1031,7 +1098,8 @@ textarea#p-title, textarea#mp-title,
 #toast.inf{background:var(--glow-dim);border:1px solid var(--glow);color:var(--glow)}
 
 /* ── AUTOCOMPLETE ── */
-.ac-wrap{position:relative}
+.ac-wrap{position:relative;width:100%}
+.ac-wrap input{width:100%;box-sizing:border-box}
 .ac-list{position:absolute;top:100%;left:0;right:0;background:var(--panel2);border:1px solid var(--glow2);border-top:none;z-index:500;max-height:170px;overflow-y:auto;border-radius:0 0 3px 3px}
 .ac-item{padding:.38rem .72rem;font-family:var(--mono);font-size:.73rem;color:var(--text2);cursor:pointer;transition:background .1s}
 .ac-item:hover,.ac-item.sel{background:var(--glow-mid);color:var(--glow)}
@@ -1278,8 +1346,10 @@ textarea#p-title, textarea#mp-title,
   <div class="sec-head">
     <div class="sec-title"><span class="sec-num">02 //</span><h1>Literature Papers</h1></div>
     <div class="sec-actions">
+      <button class="btn-export" onclick="bibImportOpen()" title="Import papers from a .bib file">↑ BibTeX</button>
       <button class="btn-export" onclick="openImport('papers')">↑ Import</button>
       <button class="btn-export" onclick="exportSection('papers')">↓ Export</button>
+      <button class="btn-export" id="toggle-papers-view" onclick="togglePapersView()" title="Switch between card and list view">☰ List View</button>
       <button class="btn-add" onclick="tf('form-papers')">＋ Add Paper</button>
     </div>
   </div>
@@ -1330,6 +1400,65 @@ textarea#p-title, textarea#mp-title,
       <button class="btn-primary" onclick="addEntry('papers')">Save Paper</button>
       <button class="btn-cancel" onclick="tf('form-papers')">Cancel</button>
     </div>
+  </div>
+  <div id="bib-progress-banner" style="display:none;
+    background:var(--surface);border:1px solid var(--border2);
+    border-left:3px solid var(--amber);border-radius:0 3px 3px 0;
+    padding:.75rem 1rem;margin-bottom:.85rem">
+
+    <!-- Running state -->
+    <div id="bib-progress-running">
+      <div style="display:flex;justify-content:space-between;
+          align-items:center;margin-bottom:.4rem">
+        <span style="font-family:var(--mono);font-size:.68rem;
+            color:var(--amber);font-weight:600"
+          id="bib-progress-label">
+          Fetching abstracts… 0 / 0</span>
+        <div style="display:flex;gap:.4rem">
+          <button class="cal-btn"
+            style="font-size:.58rem;border-color:
+              rgba(255,192,85,.3);color:var(--amber)"
+            id="bib-pause-btn"
+            onclick="bibQueueTogglePause()">⏸ Pause</button>
+          <button class="cal-btn"
+            style="font-size:.58rem;border-color:
+              rgba(255,85,119,.3);color:var(--red)"
+            onclick="bibQueueCancel()">✕ Cancel</button>
+        </div>
+      </div>
+      <!-- Progress bar track -->
+      <div style="background:var(--border2);border-radius:4px;
+          height:6px;overflow:hidden">
+        <div id="bib-progress-bar"
+          style="background:var(--amber);height:100%;
+            width:0%;transition:width .4s ease;
+            border-radius:4px"></div>
+      </div>
+      <div style="font-family:var(--mono);font-size:.58rem;
+          color:var(--text3);margin-top:.3rem"
+        id="bib-progress-current">
+        Starting…</div>
+    </div>
+
+    <!-- Completion state (hidden while running) -->
+    <div id="bib-progress-done" style="display:none">
+      <div style="display:flex;justify-content:space-between;
+          align-items:flex-start">
+        <div>
+          <div style="font-family:var(--mono);font-size:.68rem;
+              color:var(--green);font-weight:600;
+              margin-bottom:.4rem"
+            id="bib-done-summary">✓ Sync complete</div>
+          <div id="bib-failed-list"
+            style="font-family:var(--mono);font-size:.62rem;
+              color:var(--text2);line-height:2"></div>
+        </div>
+        <button class="btn-close-detail"
+          style="flex-shrink:0;margin-left:1rem"
+          onclick="bibDismissBanner()">✕ Dismiss</button>
+      </div>
+    </div>
+
   </div>
   <div class="search-row"><input id="q-papers" placeholder="// search by title, author, tag..." oninput="renderPapers()"></div>
   <div id="list-papers"></div>
@@ -1511,7 +1640,17 @@ textarea#p-title, textarea#mp-title,
       <div class="f-row"><label>Status</label>
         <select id="t-status"><option value="todo">To Do</option><option value="in-progress">In Progress</option><option value="done">Done</option></select>
       </div>
-      <div class="f-row"><label>Due Date</label><input id="t-due" type="date"></div>
+      <div class="f-row full" style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;margin-top:.1rem">
+        <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.72rem;text-transform:none;font-weight:600;color:var(--text2)">
+          <input type="checkbox" id="t-multiday" onchange="calToggleTodoMultiDay()" style="width:14px;height:14px;accent-color:var(--amber)">
+          Multi-day event (conference, trip, school…)
+        </label>
+      </div>
+      <div class="f-row" id="t-startdate-row" style="display:none">
+        <label>Start Date</label>
+        <input id="t-startdate" type="date">
+      </div>
+      <div class="f-row"><label id="t-due-label">Due Date</label><input id="t-due" type="date"></div>
       <div class="f-row full"><label>Notes</label><textarea id="t-notes" placeholder="Details, subtasks, links..."></textarea></div>
       <div class="f-row full">
         <label>Links (optional)</label>
@@ -2158,7 +2297,7 @@ function mdPlain(text) {
 
 // ── mdDetailHTML — wrap mdRender output for detail panel ──
 function mdDetailHTML(text) {
-  return `<div class="md-body">${mdRender(text)}</div>`;
+  return `<div class="md-body">${mdRender(mdBacklinkRender(text))}</div>`;
 }
 
 // ── renderAbstractLatex — apply KaTeX to plain-text abstract containers ──
@@ -2257,6 +2396,42 @@ function buildToolbar(tbId, taId) {
   const tb=document.getElementById(tbId);
   if(!tb||tb.dataset.built) return;
   tb.dataset.built='1';
+
+  // ── Outer editor wrap: flex column, holds toolbar-sub-wrap + textarea/split ─
+  const wrap = document.createElement('div');
+  wrap.className = 'md-editor-wrap';
+  wrap.id = 'md-wrap-'+taId;
+  tb.parentNode.insertBefore(wrap, tb);
+
+  // ── Toolbar sub-wrap: position:relative so lat-panel anchors to it ──────────
+  // This ensures the palette always appears just below the toolbar,
+  // regardless of how tall the split/preview content below it is.
+  const tbWrap = document.createElement('div');
+  tbWrap.className = 'md-tb-wrap';
+  tbWrap.id = 'md-tbwrap-'+taId;
+  wrap.appendChild(tbWrap);
+
+  // ── Mode bar (Edit / Split / Preview) ──────────────────────────────
+  const modeBar = document.createElement('div');
+  modeBar.className = 'md-mode-bar';
+  ['✎ Edit','⧉ Split','👁 Preview'].forEach((label, idx) => {
+    const mb = document.createElement('button');
+    mb.type='button'; mb.className='md-mode-btn'+(idx===0?' active':'');
+    mb.textContent=label; mb.title=['Edit raw markdown','Side-by-side edit + preview','Preview only'][idx];
+    mb.dataset.mode=['edit','split','preview'][idx];
+    mb.onclick=()=>mdSetMode(taId, mb.dataset.mode, modeBar);
+    modeBar.appendChild(mb);
+  });
+  const sp=document.createElement('span');sp.style.flex='1';modeBar.appendChild(sp);
+  const omBtn=document.createElement('button');
+  omBtn.type='button';omBtn.className='md-tb-btn';omBtn.textContent='Ω Symbols';
+  omBtn.title='LaTeX symbol & equation palette';omBtn.style.color='var(--purple)';
+  omBtn.onclick=()=>mdToggleLatexPalette(taId);
+  modeBar.appendChild(omBtn);
+  tbWrap.appendChild(modeBar);
+
+  // ── Standard toolbar inside tb-wrap ──────────────────────────────────
+  tbWrap.appendChild(tb);
   MD_BTNS.forEach(b=>{
     if(b.sep){const d=document.createElement('div');d.className='md-tb-sep';tb.appendChild(d);return;}
     const btn=document.createElement('button');
@@ -2264,11 +2439,33 @@ function buildToolbar(tbId, taId) {
     btn.onclick=()=>mdAct(taId,b);
     tb.appendChild(btn);
   });
+
+  // ── LaTeX palette: absolute inside tb-wrap, so top:100% = just below toolbar ─
+  const latPanel = document.createElement('div');
+  latPanel.className='md-lat-panel'; latPanel.id='lat-panel-'+taId;
+  latPanel.innerHTML = _buildLatexPaletteHTML(taId);
+  tbWrap.appendChild(latPanel);
+
+  // ── Backlink AC: absolute inside tb-wrap ─────────────────────────────
+  const blAc = document.createElement('div');
+  blAc.className='md-backlink-ac'; blAc.id='bl-ac-'+taId; blAc.style.display='none';
+  tbWrap.appendChild(blAc);
+
+  // ── Move textarea into outer wrap (below tb-wrap) ────────────────────
+  const ta = document.getElementById(taId);
+  if(ta) {
+    wrap.appendChild(ta);
+    ta.addEventListener('input', ()=>mdBacklinkCheck(ta));
+    ta.addEventListener('keydown', e=>mdBacklinkKey(e, taId));
+  }
 }
 
 function mdAct(taId, b) {
   if(b.act==='img'){mdPickImg(taId);return;}
-  const ta=document.getElementById(taId);
+  // In split mode the original textarea is hidden; target the visible clone instead
+  const splitClone = document.getElementById(taId+'-split');
+  const inSplit = splitClone && splitClone.offsetParent !== null;
+  const ta = inSplit ? splitClone : document.getElementById(taId);
   if(!ta) return;
   const st=ta.selectionStart, en=ta.selectionEnd, sel=ta.value.slice(st,en)||b.s||'';
   let ins='';
@@ -2279,6 +2476,12 @@ function mdAct(taId, b) {
   ta.setRangeText(ins,st,en,'end');
   ta.focus();
   if(b.w&&!ta.value.slice(st,en)){const m=st+b.w[0].length;ta.setSelectionRange(m,m+(b.s||'').length);}
+  // Sync original textarea and refresh preview when in split mode
+  if(inSplit) {
+    const orig = document.getElementById(taId);
+    if(orig) orig.value = ta.value;
+    _mdSyncPreview(ta.value, 'md-prev-'+taId);
+  }
 }
 
 function mdPickImg(taId) {
@@ -2309,6 +2512,15 @@ function _mdInsImg(taId, file) {
   };
   reader.readAsDataURL(file);
 }
+
+// Auto-resize md-textareas as user types
+document.addEventListener('input', e => {
+  if(e.target.classList.contains('md-textarea')) {
+    const ta = e.target;
+    ta.style.height = 'auto';
+    ta.style.height = ta.scrollHeight + 'px';
+  }
+});
 
 // Clipboard paste handler
 document.addEventListener('paste',e=>{
@@ -2366,6 +2578,268 @@ fetch('./lib/katex.min.js', {method:'HEAD'}).then(r => {
     loadKaTeX(); // pre-load silently so first equation is instant
   }
 }).catch(()=>{});
+
+
+// ══════════════════════════════════════════════════════════════════════
+//  MARKDOWN ENHANCEMENTS — Split Preview, LaTeX Palette, Backlinks, Print
+// ══════════════════════════════════════════════════════════════════════
+
+// ── Split / Preview mode ──────────────────────────────────────────────
+let _mdPreviewTimers = {};
+function mdSetMode(taId, mode, modeBar) {
+  const ta = document.getElementById(taId); if(!ta) return;
+  modeBar.querySelectorAll('.md-mode-btn').forEach(b=>b.classList.toggle('active', b.dataset.mode===mode));
+  const wrap = document.getElementById('md-wrap-'+taId) || ta.parentElement;
+  const latPanel = document.getElementById('lat-panel-'+taId);
+
+  // Remove any existing split/preview structure from outer wrap
+  wrap.querySelectorAll('.md-split-wrap,.md-preview-only').forEach(el=>el.remove());
+  ta.style.display='';
+
+  if(mode==='split') {
+    ta.style.display='none';
+    const splitWrap = document.createElement('div'); splitWrap.className='md-split-wrap';
+    // Clone textarea with matching styles for visual consistency
+    const taClone = ta.cloneNode(true);
+    taClone.style.display=''; taClone.style.height=''; taClone.id=taId+'-split';
+    taClone.removeAttribute('data-md'); // prevent double-init
+    const prev = document.createElement('div'); prev.className='md-preview-pane'; prev.id='md-prev-'+taId;
+    taClone.addEventListener('input', () => {
+      ta.value = taClone.value;
+      // Auto-resize clone
+      taClone.style.height='auto'; taClone.style.height=taClone.scrollHeight+'px';
+      prev.style.minHeight = taClone.style.height;
+      _mdSyncPreview(taClone.value, 'md-prev-'+taId);
+    });
+    // Scroll sync: editing pane scrolls → preview follows proportionally
+    taClone.addEventListener('scroll', () => {
+      const pct = taClone.scrollTop / (taClone.scrollHeight - taClone.clientHeight || 1);
+      prev.scrollTop = pct * (prev.scrollHeight - prev.clientHeight);
+    });
+    splitWrap.appendChild(taClone); splitWrap.appendChild(prev);
+    wrap.appendChild(splitWrap);
+    _mdSyncPreview(ta.value, 'md-prev-'+taId);
+    // Match initial heights
+    setTimeout(()=>{
+      taClone.style.height='auto'; taClone.style.height=Math.max(180, taClone.scrollHeight)+'px';
+      prev.style.minHeight = taClone.style.height;
+    }, 30);
+  } else if(mode==='preview') {
+    ta.style.display='none';
+    const prev = document.createElement('div'); prev.className='md-preview-only'; prev.id='md-prev-'+taId;
+    wrap.appendChild(prev);
+    _mdSyncPreview(ta.value, null, prev);
+  }
+  // Close palette when switching modes
+  if(latPanel) latPanel.classList.remove('open');
+}
+function _mdSyncPreview(raw, prevId, prevEl) {
+  const el = prevEl || document.getElementById(prevId); if(!el) return;
+  const rendered = mdRender(mdBacklinkRender(raw));
+  el.innerHTML = '<div class="md-body">'+rendered+'</div>';
+  loadKaTeX(()=>renderKaTeX(el));
+}
+
+// ── LaTeX palette ─────────────────────────────────────────────────────
+const _LAT_TABS = {
+  'Greek': [
+    ['α','\\alpha'],['β','\\beta'],['γ','\\gamma'],['δ','\\delta'],
+    ['ε','\\epsilon'],['ζ','\\zeta'],['η','\\eta'],['θ','\\theta'],
+    ['λ','\\lambda'],['μ','\\mu'],['ν','\\nu'],['ξ','\\xi'],
+    ['π','\\pi'],['ρ','\\rho'],['σ','\\sigma'],['τ','\\tau'],
+    ['φ','\\phi'],['χ','\\chi'],['ψ','\\psi'],['ω','\\omega'],
+    ['Γ','\\Gamma'],['Δ','\\Delta'],['Θ','\\Theta'],['Λ','\\Lambda'],
+    ['Σ','\\Sigma'],['Φ','\\Phi'],['Ψ','\\Psi'],['Ω','\\Omega'],
+  ],
+  'Math': [
+    ['∫','\\int'],['∮','\\oint'],['∑','\\sum'],['∏','\\prod'],
+    ['∂','\\partial'],['∇','\\nabla'],['∞','\\infty'],['±','\\pm'],
+    ['≈','\\approx'],['∝','\\propto'],['≡','\\equiv'],['≤','\\leq'],
+    ['≥','\\geq'],['~','\\sim'],['≃','\\simeq'],['×','\\times'],
+    ['·','\\cdot'],['√','\\sqrt{}'],['→','\\rightarrow'],['⟨','\\langle'],
+    ['⟩','\\rangle'],['…','\\ldots'],['°','\\degree'],['ℏ','\\hbar'],
+  ],
+  'Astro': [
+    ['M☉','M_{\\odot}'],['L☉','L_{\\odot}'],['R☉','R_{\\odot}'],
+    ['pc','\\text{pc}'],['kpc','\\text{kpc}'],['Mpc','\\text{Mpc}'],
+    ['H₀','H_0'],['Ωm','\\Omega_m'],['ΩΛ','\\Omega_{\\Lambda}'],
+    ['σ₈','\\sigma_8'],['Tcmb','T_{\\text{CMB}}'],['z','z_{\\text{spec}}'],
+    ['arcmin','\\text{arcmin}'],['arcsec','\\text{arcsec}'],
+    ['Jy','\\text{Jy}'],['erg/s','\\text{erg s}^{-1}'],
+  ],
+  'Templates': [
+    ['Integral','\\int_{-\\infty}^{\\infty} f(x)\\,dx'],
+    ['Frac','\\frac{a}{b}'],
+    ['Sum','\\sum_{i=0}^{N} x_i'],
+    ['Chi²','\\chi^2 = \\sum_i \\frac{(O_i-E_i)^2}{\\sigma_i^2}'],
+    ['Continuity','\\frac{\\partial \\rho}{\\partial t} + \\nabla\\cdot(\\rho\\mathbf{v})=0'],
+    ['Gauss','\\exp\\!\\left(-\\frac{(x-\\mu)^2}{2\\sigma^2}\\right)'],
+    ['Power law','F \\propto \\nu^{-\\alpha}'],
+    ['Planck','B_\\nu(T) = \\frac{2h\\nu^3}{c^2}\\frac{1}{e^{h\\nu/kT}-1}'],
+  ]
+};
+function _latEnc(code) {
+  // Double backslashes for safe embedding in HTML onclick attribute string literal
+  return code.replace(/\\/g, '\\\\');
+}
+function _buildLatexPaletteHTML(taId) {
+  const tabs = Object.keys(_LAT_TABS);
+  let html = '<div class="md-lat-tabs">';
+  tabs.forEach((t,i) => {
+    html += `<button type="button" class="md-lat-tab${i===0?' active':''}" onclick="mdLatTab(this,'lat-grid-${taId}')" data-tab="${t}">${t}</button>`;
+  });
+  html += '</div><div class="md-lat-grid" id="lat-grid-'+taId+'">';
+  _LAT_TABS[tabs[0]].forEach(([label, code]) => {
+    html += '<button type="button" class="md-lat-btn" title="'+code+'" onclick="mdLatInsert(\'' + taId + '\',\'' + _latEnc(code) + '\')">'+label+'<\/button>';
+  });
+  html += '</div>';
+  return html;
+}
+function mdLatTab(btn, gridId) {
+  const panel = btn.closest('.md-lat-panel');
+  panel.querySelectorAll('.md-lat-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const tab = btn.dataset.tab;
+  const taId = gridId.replace('lat-grid-','');
+  const grid = document.getElementById(gridId); if(!grid) return;
+  grid.innerHTML = (_LAT_TABS[tab]||[]).map(([label, code]) =>
+    '<button type="button" class="md-lat-btn" title="'+code+'" onclick="mdLatInsert(\'' + taId + '\',\'' + _latEnc(code) + '\')">'+label+'<\/button>'
+  ).join('');
+}
+function mdLatInsert(taId, code) {
+  const splitClone = document.getElementById(taId+'-split');
+  const inSplit = splitClone && splitClone.offsetParent !== null;
+  const ta = inSplit ? splitClone : (document.getElementById(taId) || splitClone);
+  if(!ta) return;
+  const isDisplay = code.includes('\\') && code.length > 8;
+  const wrap = isDisplay ? ['$$\n', '\n$$'] : ['$', '$'];
+  const st=ta.selectionStart, en=ta.selectionEnd;
+  ta.setRangeText(wrap[0]+code+wrap[1], st, en, 'end');
+  // sync original textarea and refresh preview
+  const orig = document.getElementById(taId);
+  if(orig && orig !== ta) orig.value = ta.value;
+  if(inSplit) _mdSyncPreview(ta.value, 'md-prev-'+taId);
+  ta.focus();
+}
+function mdToggleLatexPalette(taId) {
+  const panel = document.getElementById('lat-panel-'+taId);
+  if(panel) panel.classList.toggle('open');
+}
+
+// ── Backlinks — [[title]] autocomplete + rendering ────────────────────
+let _blState = {}; // per-textarea state
+function mdBacklinkCheck(ta, overrideId) {
+  // overrideId: use this id to find the backlink-ac (for split mode clones)
+  const acId = overrideId || ta.id;
+  const val = ta.value, pos = ta.selectionStart;
+  const before = val.slice(0, pos);
+  const m = before.match(/\[\[([^\]\n]*)$/);
+  if(!m) { _mdHideBacklinkAc(acId); return; }
+  const query = m[1].toLowerCase();
+  const notes = (DB.notes||[]).filter(n=>n.title&&n.title.toLowerCase().includes(query)).slice(0,8);
+  const ac = document.getElementById('bl-ac-'+acId); if(!ac) return;
+  if(!notes.length) { ac.style.display='none'; return; }
+  ac.innerHTML = notes.map((n,i)=>
+    `<div class="ac-item" data-title="${esc(n.title)}" data-idx="${i}" onmousedown="mdBacklinkPick(event,'${acId}')">${esc(n.title)}</div>`
+  ).join('');
+  ac.style.display='block';
+  _blState[acId] = { query, notes, sel: 0 };
+  ac.querySelectorAll('.ac-item')[0]?.classList.add('active');
+}
+function mdBacklinkKey(e, taId) {
+  const ac = document.getElementById('bl-ac-'+taId); if(!ac||ac.style.display==='none') return;
+  const items = ac.querySelectorAll('.ac-item');
+  const st = _blState[taId]; if(!st) return;
+  if(e.key==='ArrowDown') { e.preventDefault(); st.sel=Math.min(st.sel+1,items.length-1); }
+  else if(e.key==='ArrowUp') { e.preventDefault(); st.sel=Math.max(st.sel-1,0); }
+  else if(e.key==='Enter'||e.key==='Tab') {
+    e.preventDefault();
+    items[st.sel]?.dispatchEvent(new MouseEvent('mousedown'));
+    return;
+  } else if(e.key==='Escape') { _mdHideBacklinkAc(taId); return; }
+  items.forEach((it,i)=>it.classList.toggle('active',i===st.sel));
+}
+function mdBacklinkPick(e, taId) {
+  e.preventDefault();
+  const title = e.currentTarget.dataset.title;
+  const ta = document.getElementById(taId); if(!ta) return;
+  const val=ta.value, pos=ta.selectionStart, before=val.slice(0,pos);
+  const m=before.match(/(\[\[[^\]\n]*)$/);
+  if(!m) return;
+  const replaceStart = pos - m[1].length;
+  ta.setRangeText('[['+title+']]', replaceStart, pos, 'end');
+  _mdHideBacklinkAc(taId);
+  ta.focus();
+  // Sync split pane
+  const splitTa = document.getElementById(taId+'-split');
+  if(splitTa) { splitTa.value=ta.value; _mdSyncPreview(ta.value,'md-prev-'+taId); }
+}
+function _mdHideBacklinkAc(id) {
+  const ac=document.getElementById('bl-ac-'+id); if(ac) ac.style.display='none';
+  delete _blState[id];
+}
+// Render [[title]] tokens as clickable links in detail panel
+function mdBacklinkRender(raw) {
+  if(!raw) return raw;
+  return raw.replace(/\[\[([^\]]+)\]\]/g, (_, title) => {
+    const note = (DB.notes||[]).find(n=>n.title===title);
+    if(note) return `<span class="md-bl-link" onclick="openDetail('notes','${note.id}')" title="Open: ${title}">${title}</span>`;
+    return `<span style="color:var(--text3);text-decoration:line-through" title="Note not found: ${title}">${title}</span>`;
+  });
+}
+// Scan all notes for backlinks pointing TO a given note id — returns list of referencing notes
+function mdGetBacklinks(noteId) {
+  const target = (DB.notes||[]).find(n=>n.id===noteId); if(!target) return [];
+  const pattern = '[['+target.title+']]';
+  return (DB.notes||[]).filter(n=>n.id!==noteId && (n.body||'').includes(pattern));
+}
+
+// ── Print to PDF ──────────────────────────────────────────────────────
+function mdPrintNote(section, id) {
+  const entry = (DB[section]||[]).find(e=>e.id===id); if(!entry) return;
+  const title = entry.title||entry.name||'Note';
+  const body  = entry.body||entry.summary||entry.notes||entry.abstract||'';
+  const date  = entry.date||'';
+  const tags  = entry.tags||'';
+  // Render markdown to HTML (same pipeline as detail panel)
+  const renderedBody = mdRender(mdBacklinkRender(body));
+  // Get KaTeX CSS URL
+  const katexCss = document.querySelector('link[href*="katex"]')?.href || 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css';
+  const katexJs  = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js';
+  const _ph = [
+    '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">',
+    '<title>'+esc(title)+'<\/title>',
+    '<link rel="stylesheet" href="'+katexCss+'">',
+    '<style>body{font-family:Georgia,serif;font-size:12pt;line-height:1.8;color:#111;max-width:800px;margin:2cm auto;padding:0 1cm}',
+    'h1{font-size:17pt;font-weight:bold;border-bottom:2pt solid #333;padding-bottom:.4em;margin-bottom:.3em}',
+    'h2{font-size:14pt}h3{font-size:12pt}',
+    '.meta{font-size:9pt;color:#666;font-family:monospace;margin-bottom:1.5em}',
+    '.tag{background:#eee;border-radius:3px;padding:.1em .4em;margin-right:.3em;font-size:9pt}',
+    'pre{background:#f5f5f5;border-left:3pt solid #aaa;padding:.6em 1em;overflow-x:auto;font-size:9pt}',
+    'code{font-family:monospace;background:#f0f0f0;padding:.1em .3em;border-radius:2px;font-size:9pt}',
+    'blockquote{border-left:3pt solid #ccc;margin:0;padding:.2em 1em;color:#555}',
+    '.katex-display{text-align:center;margin:.75em 0}hr{border:none;border-top:1pt solid #ddd;margin:1.5em 0}',
+    '@media print{body{margin:1cm auto}pre{white-space:pre-wrap}}<\/style><\/head><body>',
+    '<h1>'+esc(title)+'<\/h1>',
+    '<div class="meta">',
+    (date ? '\uD83D\uDCC5 '+date+'&nbsp;&nbsp;' : ''),
+    (tags ? tags.split(',').map(function(t){return '<span class="tag">'+esc(t.trim())+'<\/span>';}).join('') : ''),
+    '<\/div>',
+    '<div id="content">'+renderedBody+'<\/div>',
+    '<scr'+'ipt src="'+katexJs+'"><\/scr'+'ipt>',
+    '<scr'+'ipt>',
+    'window.addEventListener("load",function(){',
+    'document.querySelectorAll(".md-math-inline").forEach(function(el){try{el.innerHTML=katex.renderToString(el.dataset.math||"",{throwOnError:false});}catch(e){}});',
+    'document.querySelectorAll(".md-math-display").forEach(function(el){try{el.innerHTML=katex.renderToString(el.dataset.math||"",{throwOnError:false,displayMode:true});}catch(e){}});',
+    'setTimeout(function(){window.print();},600);',
+    '});',
+    '<\/scr'+'ipt>',
+    '<\/body><\/html>'
+  ].join('');
+  const w = window.open('','_blank');
+  w.document.write(_ph);
+  w.document.close();
+}
 
 // Init toolbars on any visible data-md textareas
 function initMdTextareas() {
@@ -2713,17 +3187,51 @@ function exportMasterBibtex(){
   const all=[...(DB.papers||[]).map(p=>({...p,_s:'Lit.Papers'})),...(DB.mypapers||[]).map(p=>({...p,_s:'MyPapers'}))];
   const withB=all.filter(p=>p.bibtex&&p.bibtex.trim().startsWith('@'));
   const noB  =all.filter(p=>!p.bibtex||!p.bibtex.trim().startsWith('@'));
-  if(!withB.length){toast('No BibTeX found — run Auto-fill on your papers first','err');return;}
+  if(!withB.length&&!noB.length){toast('No papers found','err');return;}
   let bib='% ═══════════════════════════════════════════\n% master_library.bib — Provided by Eukosmos — A Researcher\'s Notebook\n% Date: '+today()+'\n% Entries with BibTeX: '+withB.length+'\n% Entries without BibTeX: '+noB.length+(noB.length?'\n% Missing: '+noB.slice(0,5).map(p=>p.title||'untitled').join('; '):'')
     +'\n% Cite key: FirstAuthor_Year_Bibcode\n% ═══════════════════════════════════════════\n\n';
   bib+='% ── Literature Papers ──────────────────────\n\n';
-  (DB.papers||[]).filter(p=>p.bibtex&&p.bibtex.trim().startsWith('@')).forEach(p=>{bib+=_rewriteKey(p)+'\n\n';});
+  (DB.papers||[]).forEach(p=>{
+    if(p.bibtex&&p.bibtex.trim().startsWith('@')){
+      bib+=_rewriteKey(p)+'\n\n';
+    } else {
+      const key = p.ads
+        ? (p.ads.split('/abs/')[1] || 'unknown')
+        : (p.arxivId || p.id);
+      const lines = ['@article{' + key + ','];
+      if(p.title)   lines.push('  title   = {' + p.title + '},');
+      if(p.authors) lines.push('  author  = {' + p.authors + '},');
+      if(p.journal) lines.push('  journal = {' + p.journal + '},');
+      if(p.ads)     lines.push('  adsurl  = {' + p.ads + '},');
+      if(p.arxivId) lines.push('  eprint  = {' + p.arxivId + '},');
+      if(p.doi)     lines.push('  doi     = {' + p.doi + '},');
+      lines.push('}');
+      bib+=lines.join('\n')+'\n\n';
+    }
+  });
   bib+='% ── My Papers ──────────────────────────────\n\n';
-  (DB.mypapers||[]).filter(p=>p.bibtex&&p.bibtex.trim().startsWith('@')).forEach(p=>{bib+=_rewriteKey(p)+'\n\n';});
+  (DB.mypapers||[]).forEach(p=>{
+    if(p.bibtex&&p.bibtex.trim().startsWith('@')){
+      bib+=_rewriteKey(p)+'\n\n';
+    } else {
+      const key = p.ads
+        ? (p.ads.split('/abs/')[1] || 'unknown')
+        : (p.arxivId || p.id);
+      const lines = ['@article{' + key + ','];
+      if(p.title)   lines.push('  title   = {' + p.title + '},');
+      if(p.authors) lines.push('  author  = {' + p.authors + '},');
+      if(p.journal) lines.push('  journal = {' + p.journal + '},');
+      if(p.ads)     lines.push('  adsurl  = {' + p.ads + '},');
+      if(p.arxivId) lines.push('  eprint  = {' + p.arxivId + '},');
+      if(p.doi)     lines.push('  doi     = {' + p.doi + '},');
+      lines.push('}');
+      bib+=lines.join('\n')+'\n\n';
+    }
+  });
   const blob=new Blob([bib],{type:'text/plain'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='master_library.bib';a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href),3000);
-  toast('✓ master_library.bib downloaded ('+withB.length+' entries)','ok');
+  toast('✓ master_library.bib downloaded ('+(withB.length+noB.length)+' entries)','ok');
 }
 function _rewriteKey(p){
   // If this paper was fetched from or synced to InspireHEP, use the InspireHEP texkey
@@ -3431,6 +3939,12 @@ document.addEventListener('DOMContentLoaded',()=>{
 document.addEventListener('keydown',e=>{
   if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();gsOpen();}
   if(e.key==='/'&&document.activeElement===document.body){e.preventDefault();gsOpen();}
+  if(e.key==='Escape'){bibImportClose();}
+});
+
+document.addEventListener('DOMContentLoaded',()=>{
+  const bibModal=document.getElementById('bib-import-modal');
+  if(bibModal){bibModal.addEventListener('click',e=>{if(e.target===bibModal)bibImportClose();});}
 });
 
 // ════════════════════════════════════════════════
@@ -4255,7 +4769,13 @@ function buildDetailHTML(section, e) {
   if(e.priority && section==='todos') {
     html += `<span class="status st-${e.status||'todo'}" style="margin-right:.5rem">${e.status||'todo'}</span>`;
     html += `<span class="tag tag-${e.priority==='high'?'red':e.priority==='medium'?'amber':'cyan'}">${e.priority}</span>`;
-    if(e.due) html += `<span style="font-family:var(--mono);font-size:.63rem;color:var(--text3);margin-left:.75rem">due ${e.due}</span>`;
+    if(e.multiDay && e.startDate && e.due) {
+      const _ds = new Date(e.startDate+'T00:00:00'), _de = new Date(e.due+'T00:00:00');
+      const _fmt = d => d.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});
+      html += `<span style="font-family:var(--mono);font-size:.63rem;color:var(--amber);margin-left:.75rem">📌 ${_fmt(_ds)} → ${_fmt(_de)}</span>`;
+    } else if(e.due) {
+      html += `<span style="font-family:var(--mono);font-size:.63rem;color:var(--text3);margin-left:.75rem">due ${e.due}</span>`;
+    }
     html += '<br><br>';
   }
 
@@ -4324,6 +4844,18 @@ function buildDetailHTML(section, e) {
     if(e.cat)  { html += `<div style="font-family:var(--mono);font-size:.72rem;color:var(--text3);margin-top:.6rem">Category: ${esc(e.cat)}</div>`; }
   }
 
+  // Backlinks — notes that reference this entry with [[title]]
+  if(section==='notes') {
+    const _bls = mdGetBacklinks(e.id);
+    if(_bls.length) {
+      html += `<div class="detail-backlinks"><div class="detail-section-header" style="margin-top:0">🔗 Referenced by (${_bls.length})</div>`;
+      _bls.forEach(n => {
+        html += `<span class="detail-backlink-item" onclick="openDetail('notes','${esc(n.id)}')" title="${esc(n.title)}">↩ ${esc(n.title)}</span>`;
+      });
+      html += '</div>';
+    }
+  }
+
   // Extra links/pdfs for notes, todos, ideas
   if(section==='notes' || section==='todos' || section==='ideas') {
     if(e.links && e.links.length) {
@@ -4338,6 +4870,11 @@ function buildDetailHTML(section, e) {
         if(p.path) html += `<button class="pdf-link" onclick="event.stopPropagation();openPDF('${esc(p.path)}')">📄 ${esc(p.label||p.path)}</button> `;
       });
     }
+  }
+
+  // Print / export button for notes, ideas
+  if(section==='notes'||section==='ideas') {
+    html += `<button class="btn-print-note" onclick="mdPrintNote('${section}','${e.id}')" title="Print or Save as PDF">🖨 Print / PDF</button>`;
   }
 
   // Links area
@@ -4401,20 +4938,32 @@ function buildDetailHTML(section, e) {
 
   // Show preprint banner when:
   //   - source is explicitly 'arxiv' (set by auto-fill), OR
+  //   - source is 'bibtex' (imported from .bib — may be missing abstract), OR
   //   - ads URL is an arxiv.org link (old entries before source tracking)
-  // In both cases we can attempt a SciX/ADS sync.
-  const _isPreprint = e.source==='arxiv' || (!e.source && e.ads && e.ads.includes('arxiv.org'));
+  const _isPreprint = e.source==='arxiv' || e.source==='bibtex' || (!e.source && e.ads && e.ads.includes('arxiv.org'));
   const _pArxivId   = e.arxivId || (e.ads&&e.ads.includes('arxiv.org/abs/')?e.ads.split('/abs/')[1]?.split('/')[0]?.split('?')[0]:'');
-  if(_isPreprint && _pArxivId){
-    const _btnStyle='background:none;border:1px solid var(--amber);color:var(--amber);font-family:var(--mono);font-size:.6rem;padding:.22rem .65rem;cursor:pointer;border-radius:2px;margin:.2rem .25rem 0 0;transition:all .15s;white-space:nowrap';
+  if(_isPreprint && (_pArxivId || e.source==='bibtex')){
+    const _bannerLabel = e.source==='bibtex'
+      ? '📄 BibTeX import — abstract not yet fetched.'
+      : '📄 arXiv preprint — not yet synced to a literature database.';
+    const _btnStyle    ='background:none;border:1px solid var(--amber);color:var(--amber);font-family:var(--mono);font-size:.6rem;padding:.22rem .65rem;cursor:pointer;border-radius:2px;margin:.2rem .25rem 0 0;transition:all .15s;white-space:nowrap';
     const _btnStyleScix='background:none;border:1px solid var(--glow);color:var(--glow);font-family:var(--mono);font-size:.6rem;padding:.22rem .65rem;cursor:pointer;border-radius:2px;margin:.2rem .25rem 0 0;transition:all .15s;white-space:nowrap';
-    const _btnStyleIns='background:none;border:1px solid var(--purple);color:var(--purple);font-family:var(--mono);font-size:.6rem;padding:.22rem .65rem;cursor:pointer;border-radius:2px;margin:.2rem .25rem 0 0;transition:all .15s;white-space:nowrap';
+    const _btnStyleIns ='background:none;border:1px solid var(--purple);color:var(--purple);font-family:var(--mono);font-size:.6rem;padding:.22rem .65rem;cursor:pointer;border-radius:2px;margin:.2rem .25rem 0 0;transition:all .15s;white-space:nowrap';
+    // bibtex papers use syncBibTeXPaper (handles bibcode/DOI fallback)
+    // arxiv papers keep the original syncToPaper / syncToInspireHEP
+    const _adsBtn  = e.source==='bibtex'
+      ? `<button onclick="syncBibTeXPaper('${section}','${e.id}','ads')"  style="${_btnStyle}">🔄 Sync to [ADS]</button>`
+      : `<button onclick="syncToPaper('${section}','${e.id}','${_pArxivId}','ads')"  style="${_btnStyle}">🔄 Sync to [ADS]</button>`;
+    const _scixBtn = e.source==='bibtex'
+      ? `<button onclick="syncBibTeXPaper('${section}','${e.id}','scix')" style="${_btnStyleScix}">🔄 Sync to [SciX]</button>`
+      : `<button onclick="syncToPaper('${section}','${e.id}','${_pArxivId}','scix')" style="${_btnStyleScix}">🔄 Sync to [SciX]</button>`;
+    const _insBtn  = e.source==='bibtex'
+      ? `<button onclick="syncBibTeXPaper('${section}','${e.id}','inspirehep')" style="${_btnStyleIns}">🔄 Sync to [InspireHEP]</button>`
+      : `<button onclick="syncToInspireHEP('${section}','${e.id}','${_pArxivId}')"   style="${_btnStyleIns}">🔄 Sync to [InspireHEP]</button>`;
     html+=`<div style="margin-top:1rem;padding:.75rem 1rem;background:var(--amber-d);border:1px solid rgba(255,192,85,.35);border-radius:3px;font-family:var(--mono);font-size:.65rem;color:var(--amber)">
-      📄 arXiv preprint — not yet synced to a literature database.
+      ${_bannerLabel}
       <div style="display:flex;flex-wrap:wrap;gap:.1rem;margin-top:.5rem">
-        <button onclick="syncToPaper('${section}','${e.id}','${_pArxivId}','ads')"  style="${_btnStyle}">🔄 Sync to [ADS]</button>
-        <button onclick="syncToPaper('${section}','${e.id}','${_pArxivId}','scix')" style="${_btnStyleScix}">🔄 Sync to [SciX]</button>
-        <button onclick="syncToInspireHEP('${section}','${e.id}','${_pArxivId}')"   style="${_btnStyleIns}">🔄 Sync to [InspireHEP]</button>
+        ${_adsBtn}${_scixBtn}${_insBtn}
       </div>
       <div style="color:var(--text3);margin-top:.4rem;font-size:.58rem;line-height:1.6">ADS/SciX require your API token · InspireHEP is open access · syncing updates metadata and BibTeX</div>
     </div>`;
@@ -4710,9 +5259,18 @@ function addEntry(k) {
     cl(['sn-title','sn-lang','sn-desc','sn-code','sn-tags']);
   } else if(k==='todos') {
     if(!g('t-title')) return toast('Task title required','err');
-    entry={...entry,title:g('t-title'),priority:document.getElementById('t-priority').value,status:document.getElementById('t-status').value,due:g('t-due'),notes:g('t-notes'),
+    const _isMulti = document.getElementById('t-multiday')?.checked || false;
+    const _startDate = _isMulti ? (g('t-startdate')||'') : '';
+    entry={...entry, title:g('t-title'), priority:document.getElementById('t-priority').value,
+           status:document.getElementById('t-status').value, due:g('t-due'), notes:g('t-notes'),
+           multiDay: _isMulti || undefined, startDate: _startDate || undefined,
            links:_readMultiRows('t-links-wrap','link'), pdfs:_readMultiRows('t-pdfs-wrap','pdf')};
-    cl(['t-title','t-due','t-notes']);
+    // clean up undefined fields
+    if(!entry.multiDay) { delete entry.multiDay; delete entry.startDate; }
+    cl(['t-title','t-due','t-notes','t-startdate']);
+    const _mdCb = document.getElementById('t-multiday'); if(_mdCb) _mdCb.checked = false;
+    const _sdRow = document.getElementById('t-startdate-row'); if(_sdRow) _sdRow.style.display='none';
+    const _dueLbl = document.getElementById('t-due-label'); if(_dueLbl) _dueLbl.textContent='Due Date';
     document.getElementById('t-links-wrap').innerHTML='';
     document.getElementById('t-pdfs-wrap').innerHTML='';
   } else if(k==='collaborators') {
@@ -4854,15 +5412,89 @@ function cycleReadStatus(id) {
   p.read=READ_NEXT[p.read||'unread']||'unread';
   save('papers');renderPapers();
 }
+// ── Papers view toggle — persisted in localStorage ────────────────────
+let papersView = localStorage.getItem('papers_view') || 'card';
+
+function togglePapersView() {
+  papersView = papersView === 'card' ? 'list' : 'card';
+  localStorage.setItem('papers_view', papersView);
+  const btn = document.getElementById('toggle-papers-view');
+  if(btn) btn.textContent = papersView === 'card' ? '☰ List View' : '▦ Card View';
+  renderPapers();
+}
+
+// Helper: extract first-author citation key from authors string
+function _papFirstAuthor(authors) {
+  if(!authors) return 'Anonymous';
+  // Split on ; or , then take first segment, get last word (last name)
+  const first = authors.split(/[;,]/)[0].trim();
+  const parts = first.trim().split(/\s+/);
+  // Remove trailing punctuation
+  let last = parts[parts.length - 1].replace(/[.,;:]+$/, '');
+  return last || 'Anonymous';
+}
+
+// Helper: extract 4-digit year from journal field, fall back to date
+function _papYear(p) {
+  // 1. journal field (e.g. 'ApJ 2024')
+  const m = (p.journal||'').match(/(19|20)\d{2}/);
+  if(m) return m[0];
+  // 2. BibTeX: year = {2024} or year = 2024
+  const mb = (p.bibtex||'').match(/year\s*=\s*\{?(19|20)\d{2}\}?/i);
+  if(mb) { const my = mb[0].match(/(19|20)\d{2}/); if(my) return my[0]; }
+  // 3. ADS URL bibcode first 4 chars after /abs/ are the year
+  const adsM = (p.ads||'').match(/\/abs\/(19|20)\d{2}/);
+  if(adsM) return adsM[0].slice(-4);
+  // 4. date field last resort
+  const m2 = (p.date||'').match(/(19|20)\d{2}/);
+  if(m2) return m2[0];
+  return '';
+}
+
 function renderPapers() {
   const q=sq('q-papers');
   const el=document.getElementById('list-papers'); cnt('papers');
+
+  // Keep toggle button label in sync (in case renderPapers called externally)
+  const toggleBtn = document.getElementById('toggle-papers-view');
+  if(toggleBtn) toggleBtn.textContent = papersView === 'card' ? '☰ List View' : '▦ Card View';
+
   let items=DB.papers.filter(p=>{
     if(!q) return true;
     const blob=[p.title,p.authors,p.tags,p.abstract,p.summary,p.bibtex,p.journal,p.notes].filter(Boolean).join(' ').toLowerCase();
     return blob.includes(q);
   });
   if(!items.length){el.innerHTML=empty('no papers found');return;}
+
+  // ── LIST VIEW ────────────────────────────────────────────────────────
+  if(papersView === 'list') {
+    el.innerHTML = items.map(p => {
+      const firstAuth = _papFirstAuthor(p.authors);
+      const isMulti   = (p.authors||'').split(/[;,]/).filter(s=>s.trim()).length > 1;
+      const authLabel = isMulti ? firstAuth + ' et al.' : firstAuth;
+      const year      = _papYear(p);
+      const yearStr   = year ? ' (' + year + ')' : '';
+      // Best URL: ADS preferred, then arxiv
+      const url = (p.ads && p.source !== 'inspirehep') ? p.ads
+                : (p.arxiv || (p.arxivId ? 'https://arxiv.org/abs/'+p.arxivId : ''));
+      const titleHtml = url
+        ? `<a class="papers-list-link" href="${esc(url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">"${esc(p.title)}"</a>`
+        : `"${esc(p.title)}"`;
+      const actions = `<div class="papers-list-actions" onclick="event.stopPropagation()">
+        <button class="star-btn ${p.starred?'starred':''}" onclick="toggleStar('${p.id}')" title="${p.starred?'Unstar':'Star'}" style="font-size:.7rem;padding:.1rem .2rem">★</button>
+        <button class="btn-edit" onclick="editEntry('papers','${p.id}')">✎</button>
+        <button class="btn-dupe" onclick="dupeEntry('papers','${p.id}')">⎘</button>
+        <button class="btn-del"  onclick="del('papers','${p.id}')">✕</button>
+      </div>`;
+      return `<div class="papers-list-item" onclick="openDetail('papers','${p.id}')">
+        <span class="papers-list-text">${esc(authLabel)}${esc(yearStr)} on ${titleHtml}${p.source==='bibtex'?`<span class="bib-source-badge" style="font-size:.55rem;margin-left:.3rem">BIBTEX</span>`:''}</span>
+        ${actions}
+      </div>`;
+    }).join('');
+    return;
+  }
+
+  // ── CARD VIEW (original) ─────────────────────────────────────────────
   el.innerHTML=items.map(p=>{
     const _arxivLnk  = p.arxivId ? 'https://arxiv.org/abs/'+p.arxivId
                       : (p.arxiv && p.arxiv.includes('arxiv.org') ? p.arxiv
@@ -4882,7 +5514,9 @@ function renderPapers() {
         ${p.source==='arxiv'&&p.ads?`<a class="card-link" href="${esc(p.ads)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--amber)">↗ arXiv</a>`:''}
         ${_arxivLnk&&p.source!=='arxiv'?`<a class="card-link" href="${esc(_arxivLnk)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--amber);opacity:.8">↗ arXiv</a>`:''}
         ${_inspLnk?`<a class="card-link" href="${esc(_inspLnk)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--purple);border-color:rgba(187,153,255,.4)">↗ InspireHEP</a>`:''}
-        ${p.source==='arxiv'?`<span style="font-family:var(--mono);font-size:.58rem;color:var(--amber);border:1px solid rgba(255,192,85,.35);padding:.1rem .38rem;border-radius:2px">PREPRINT</span>`:''}
+        ${p.source==='arxiv'?`<span class="bib-source-badge">PREPRINT</span>`:''}
+        ${p.source==='bibtex'?`<span class="bib-source-badge" style="color:var(--amber)">BIBTEX</span>`:''}
+        ${p.source==='bibtex'?`<button onclick="event.stopPropagation();bibManualSync('${p.id}',this)" class="card-link" style="cursor:pointer">⚡ Fetch abstract</button>`:''}
         ${p.pdf?`<button class="pdf-link" onclick="event.stopPropagation();openPDF('${esc(p.pdf)}')" style="cursor:pointer">📄 PDF</button>`:''}
       </div>
       ${p.abstract?`<div class="abstract-block" onclick="event.stopPropagation()">
@@ -5023,7 +5657,21 @@ function renderTodos() {
         <div class="card-title" style="${t.status==='done'?'text-decoration:line-through;opacity:.5':''}">${esc(t.title)}</div>
         <div class="card-meta">${[t.priority?t.priority+' priority':'',t.date].filter(Boolean).join(' · ')}</div>
       </div>${cardActions('todos',t.id)}</div>
-      ${(()=>{if(!t.due)return '';const d=new Date(t.due);d.setHours(0,0,0,0);const now=new Date();now.setHours(0,0,0,0);const diff=Math.round((d-now)/864e5);const label=diff<0?'⚠ '+Math.abs(diff)+'d overdue':diff===0?'⏰ Due TODAY':diff===1?'⏰ Due tomorrow':'📅 Due in '+diff+'d';const col=diff<0?'var(--red)':diff<=3?'var(--amber)':'var(--text3)';return '<span style="font-family:var(--mono);font-size:.62rem;color:'+col+';margin-top:.25rem;display:inline-block">'+label+'</span>';})()}
+      ${(()=>{
+        if(t.multiDay && t.startDate && t.due) {
+          const ds = new Date(t.startDate+'T00:00:00'), de = new Date(t.due+'T00:00:00');
+          const now = new Date(); now.setHours(0,0,0,0);
+          const diff = Math.round((de-now)/864e5);
+          const label = diff<0?'⚠ ended '+Math.abs(diff)+'d ago':diff===0?'⏰ Ends TODAY':'📌 '+ds.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' → '+de.toLocaleDateString(undefined,{month:'short',day:'numeric'});
+          const col = diff<0?'var(--red)':diff<=3?'var(--amber)':'var(--glow)';
+          return '<span style="font-family:var(--mono);font-size:.62rem;color:'+col+';margin-top:.25rem;display:inline-block">'+label+'</span>';
+        }
+        if(!t.due)return '';
+        const d=new Date(t.due+'T00:00:00');const now=new Date();now.setHours(0,0,0,0);const diff=Math.round((d-now)/864e5);
+        const label=diff<0?'⚠ '+Math.abs(diff)+'d overdue':diff===0?'⏰ Due TODAY':diff===1?'⏰ Due tomorrow':'📅 Due in '+diff+'d';
+        const col=diff<0?'var(--red)':diff<=3?'var(--amber)':'var(--text3)';
+        return '<span style="font-family:var(--mono);font-size:.62rem;color:'+col+';margin-top:.25rem;display:inline-block">'+label+'</span>';
+      })()}
       ${t.notes?`<div class="card-body card-body-clamp">${esc(t.notes).replace(/\n/g,'<br>')}</div>`:''}
       <span class="status ${TODO_ST[t.status]||''}" style="cursor:pointer;margin-top:.35rem" onclick="event.stopPropagation();cycleTodoStatus('${t.id}')" title="Click to advance status">${t.status}</span>
       <div class="card-extra" style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.5rem">
@@ -5142,7 +5790,7 @@ function editEntry(section,id) {
     const pfx   = isLit ? 'ef-p' : 'ef-mp';
     const ratingOpts = ['','★ Interesting','★★ Very relevant','★★★ Essential'];
     const readOpts   = ['unread','reading','done'];
-    const srcOpts    = ['ads','scix','arxiv','inspirehep'];
+    const srcOpts    = ['ads','scix','arxiv','inspirehep','bibtex'];
     const statusOpts = isLit ? [] : ['published','submitted','in-prep'];
     let html='<div class="form-grid">'
       // Title — full-width textarea
@@ -5198,6 +5846,92 @@ function editEntry(section,id) {
       +'<div style="font-family:var(--mono);font-size:.6rem;color:var(--text3);margin-top:.5rem">Created: '+entry.date+'</div>';
     document.getElementById('edit-fields').innerHTML=html;
     document.getElementById('edit-modal').classList.add('open'); return;
+  }
+
+  // ── Notes — rich editor ──────────────────────────────────────────────
+  if(section==='notes') {
+    const meta='<div style="font-family:var(--mono);font-size:.6rem;color:var(--text3);margin-top:.5rem">Created: '+entry.date+'</div>';
+    let html='<div class="form-grid">'
+      +'<div class="f-row full"><label>Title</label><input id="ef-title" value="'+esc(entry.title||'')+'"></div>'
+      +'<div class="f-row"><label>Tags</label><input id="ef-tags" value="'+esc(entry.tags||'')+'"></div>'
+      +'<div class="f-row"><label>Related ADS / URL</label><input id="ef-link" value="'+esc(entry.link||'')+'"></div>'
+      +'<div class="f-row full"><label>Note</label><div id="tb-ef-body" class="md-toolbar"></div><textarea id="ef-body" class="md-textarea" data-md="1" style="min-height:140px">'+esc(entry.body||'')+'</textarea></div>'
+      +'<div class="f-row full"><label>Links (optional)</label><div id="ef-links-wrap"></div>'
+      +'<button class=\"btn-row-add\" onclick=\"addMultiRow(\'ef-links-wrap\',\'link\')\">&#65291; Add Link</button></div>'
+      +'<div class="f-row full"><label>PDFs / Files (optional)</label><div id="ef-pdfs-wrap"></div>'
+      +'<button class=\"btn-row-add\" onclick=\"addMultiRow(\'ef-pdfs-wrap\',\'pdf\')\">&#65291; Add PDF</button></div>'
+      +'</div>'+meta;
+    document.getElementById('edit-fields').innerHTML=html;
+    (entry.links||[]).forEach(function(l){addMultiRow('ef-links-wrap','link');var r=document.querySelector('#ef-links-wrap .multi-row:last-child').querySelectorAll('input');r[0].value=l.label||'';r[1].value=l.url||'';});
+    (entry.pdfs||[]).forEach(function(p){addMultiRow('ef-pdfs-wrap','pdf');var r=document.querySelector('#ef-pdfs-wrap .multi-row:last-child').querySelectorAll('input');r[0].value=p.label||'';r[1].value=p.path||'';});
+    document.getElementById('edit-modal').classList.add('open');
+    setTimeout(initMdTextareas, 50); return;
+  }
+
+  // ── Todos — rich editor with multiDay support ─────────────────────────────
+  if(section==='todos') {
+    const prioOpts=['high','medium','low'];
+    const statOpts=[['todo','To Do'],['in-progress','In Progress'],['done','Done']];
+    const isMulti=!!entry.multiDay;
+    const meta='<div style="font-family:var(--mono);font-size:.6rem;color:var(--text3);margin-top:.5rem">Created: '+entry.date+'</div>';
+    let html='<div class="form-grid">'
+      +'<div class="f-row full"><label>Task</label><input id="ef-title" value="'+esc(entry.title||'')+'"></div>'
+      +'<div class="f-row"><label>Priority</label><select id="ef-priority">'
+      +prioOpts.map(function(o){return '<option value="'+o+'"'+(entry.priority===o?' selected':'')+'>'+o.charAt(0).toUpperCase()+o.slice(1)+'</option>';}).join('')
+      +'</select></div>'
+      +'<div class="f-row"><label>Status</label><select id="ef-status">'
+      +statOpts.map(function(p){return '<option value="'+p[0]+'"'+(entry.status===p[0]?' selected':'')+'>'+p[1]+'</option>';}).join('')
+      +'</select></div>'
+      +'<div class="f-row full" style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">'
+      +'<label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.72rem;text-transform:none;font-weight:600;color:var(--text2)">'
+      +'<input type="checkbox" id="ef-multiday" onchange="calToggleTodoMultiDayEdit()" style="width:14px;height:14px;accent-color:var(--amber)"'+(isMulti?' checked':'')+'>'
+      +'Multi-day event (conference, trip, school…)</label></div>'
+      +'<div class="f-row" id="ef-startdate-row" style="'+(isMulti?'':'display:none')+'">'
+      +'<label>Start Date</label><input id="ef-startdate" type="date" value="'+esc(entry.startDate||'')+'"></div>'
+      +'<div class="f-row"><label id="ef-due-label">'+(isMulti?'End Date':'Due Date')+'</label>'
+      +'<input id="ef-due" type="date" value="'+esc(entry.due||'')+'"></div>'
+      +'<div class="f-row full"><label>Notes</label><div id="tb-ef-notes" class="md-toolbar"></div><textarea id="ef-notes" class="md-textarea" data-md="1" style="min-height:80px">'+esc(entry.notes||'')+'</textarea></div>'
+      +'<div class="f-row full"><label>Links (optional)</label><div id="ef-links-wrap"></div>'
+      +'<button class=\"btn-row-add\" onclick=\"addMultiRow(\'ef-links-wrap\',\'link\')\">&#65291; Add Link</button></div>'
+      +'<div class="f-row full"><label>PDFs / Files (optional)</label><div id="ef-pdfs-wrap"></div>'
+      +'<button class=\"btn-row-add\" onclick=\"addMultiRow(\'ef-pdfs-wrap\',\'pdf\')\">&#65291; Add PDF</button></div>'
+      +'</div>'+meta;
+    document.getElementById('edit-fields').innerHTML=html;
+    (entry.links||[]).forEach(function(l){addMultiRow('ef-links-wrap','link');var r=document.querySelector('#ef-links-wrap .multi-row:last-child').querySelectorAll('input');r[0].value=l.label||'';r[1].value=l.url||'';});
+    (entry.pdfs||[]).forEach(function(p){addMultiRow('ef-pdfs-wrap','pdf');var r=document.querySelector('#ef-pdfs-wrap .multi-row:last-child').querySelectorAll('input');r[0].value=p.label||'';r[1].value=p.path||'';});
+    document.getElementById('edit-modal').classList.add('open');
+    setTimeout(initMdTextareas, 50); return;
+  }
+
+  // ── Ideas — rich editor ───────────────────────────────────────────────────
+  if(section==='ideas') {
+    const feasOpts=['','🟢 High — ready to pursue','🟡 Medium — needs more work','🔴 Low — long-term / speculative'];
+    const stageOpts=[['backlog','💭 Backlog'],['active','🚀 Active'],['parked','⏸ Parked'],['done','✅ Completed']];
+    const meta='<div style="font-family:var(--mono);font-size:.6rem;color:var(--text3);margin-top:.5rem">Created: '+entry.date+'</div>';
+    let html='<div class="form-grid">'
+      +'<div class="f-row"><label>Date</label><input id="ef-date" type="date" value="'+esc(entry.date||'')+'"></div>'
+      +'<div class="f-row"><label>Idea Title</label><input id="ef-title" value="'+esc(entry.title||'')+'"></div>'
+      +'<div class="f-row full"><label>Hypothesis</label><div id="tb-ef-hypothesis" class="md-toolbar"></div><textarea id="ef-hypothesis" class="md-textarea" data-md="1" style="min-height:90px">'+esc(entry.hypothesis||'')+'</textarea></div>'
+      +'<div class="f-row full"><label>Related Papers</label><input id="ef-papers" value="'+esc(entry.papers||'')+'"></div>'
+      +'<div class="f-row"><label>Feasibility</label><select id="ef-feasibility">'
+      +feasOpts.map(function(o){return '<option value="'+esc(o)+'"'+(entry.feasibility===o?' selected':'')+'>'+esc(o||'— Unrated —')+'</option>';}).join('')
+      +'</select></div>'
+      +'<div class="f-row"><label>Stage</label><select id="ef-stage">'
+      +stageOpts.map(function(p){return '<option value="'+p[0]+'"'+(entry.stage===p[0]?' selected':'')+'>'+p[1]+'</option>';}).join('')
+      +'</select></div>'
+      +'<div class="f-row"><label>Tags</label><input id="ef-tags" value="'+esc(entry.tags||'')+'"></div>'
+      +'<div class="f-row"><label>Related Ref</label><input id="ef-ref" value="'+esc(entry.ref||'')+'"></div>'
+      +'<div class="f-row full"><label>Notes</label><textarea id="ef-notes" style="min-height:80px">'+esc(entry.notes||'')+'</textarea></div>'
+      +'<div class="f-row full"><label>Links (optional)</label><div id="ef-links-wrap"></div>'
+      +'<button class=\"btn-row-add\" onclick=\"addMultiRow(\'ef-links-wrap\',\'link\')\">&#65291; Add Link</button></div>'
+      +'<div class="f-row full"><label>PDFs / Files (optional)</label><div id="ef-pdfs-wrap"></div>'
+      +'<button class=\"btn-row-add\" onclick=\"addMultiRow(\'ef-pdfs-wrap\',\'pdf\')\">&#65291; Add PDF</button></div>'
+      +'</div>'+meta;
+    document.getElementById('edit-fields').innerHTML=html;
+    (entry.links||[]).forEach(function(l){addMultiRow('ef-links-wrap','link');var r=document.querySelector('#ef-links-wrap .multi-row:last-child').querySelectorAll('input');r[0].value=l.label||'';r[1].value=l.url||'';});
+    (entry.pdfs||[]).forEach(function(p){addMultiRow('ef-pdfs-wrap','pdf');var r=document.querySelector('#ef-pdfs-wrap .multi-row:last-child').querySelectorAll('input');r[0].value=p.label||'';r[1].value=p.path||'';});
+    document.getElementById('edit-modal').classList.add('open');
+    setTimeout(initMdTextareas, 50); return;
   }
 
   // Default generic editor
@@ -5310,6 +6044,10 @@ function saveEdit() {
     entry.notes    =(document.getElementById('ef-notes')?.value||'').trim();
     entry.links    =_readMultiRows('ef-links-wrap','link');
     entry.pdfs     =_readMultiRows('ef-pdfs-wrap','pdf');
+    const _efMulti = document.getElementById('ef-multiday')?.checked || false;
+    const _efStart = (document.getElementById('ef-startdate')?.value||'').trim();
+    if(_efMulti && _efStart) { entry.multiDay=true; entry.startDate=_efStart; }
+    else { delete entry.multiDay; delete entry.startDate; }
     save(_editSection); closeEdit(); render(_editSection);
     if(currentDetailId===_editId) openDetail(_editSection,_editId);
     toast('Entry updated','ok'); return;
@@ -6394,6 +7132,11 @@ function calGroupByDay(startDate) {
     }
   }
   expanded.push(...extraDays);
+
+  // Feature 3: inject deadline events from todos, jobs, proposals
+  const deadlines = calGetDeadlineEvents();
+  expanded.push(...deadlines);
+
   const days = [];
   for(let i=0;i<7;i++) {
     const date = new Date(startDate); date.setDate(startDate.getDate()+i);
@@ -6404,6 +7147,50 @@ function calGroupByDay(startDate) {
     days.push({date, events:dayEvs});
   }
   return days;
+}
+
+// ── Synthesize all-day deadline events from todos, jobs, proposals ────
+// Returns read-only synthetic event objects — nothing is written to CAL_events
+function calGetDeadlineEvents() {
+  const evs = [];
+  const pad = n => String(n).padStart(2,'0');
+  const mkEv = (id, title, dateStr, source, sec, sid, notes) => {
+    if(!dateStr || typeof dateStr !== 'string') return;
+    const _d = dateStr.trim();
+    // Must be YYYY-MM-DD — skip empty strings, 'true', random values
+    if(_d.length !== 10 || _d[4] !== '-' || _d[7] !== '-') return;
+    if(isNaN(new Date(_d+'T00:00:00').getTime())) return;
+    evs.push({ id, title, datetime:_d+'T00:00:00', duration:1440, allDay:true,
+               source, _deadlineSection:sec, _deadlineId:sid, notes:notes||'' });
+  };
+
+  // ── Todos (single-date or multi-day) ──
+  (DB.todos||[]).filter(t => t.status!=='done').forEach(t => {
+    if(t.multiDay && t.startDate && t.due) {
+      // Span the full range start→end inclusive; last day gets ⏰ to mark deadline
+      const start = new Date(t.startDate+'T00:00:00');
+      const end   = new Date(t.due+'T00:00:00');
+      let cur = new Date(start);
+      while(cur <= end) {
+        const iso   = cur.getFullYear()+'-'+pad(cur.getMonth()+1)+'-'+pad(cur.getDate());
+        const emoji = cur.toDateString()===end.toDateString() ? '📌⏰' : '📌';
+        mkEv('deadline_todos_'+t.id+'_'+iso, emoji+' '+t.title, iso, 'deadline-todos', 'todos', t.id, t.notes);
+        cur.setDate(cur.getDate()+1);
+      }
+    } else if(t.due) {
+      mkEv('deadline_todos_'+t.id, '⏰ '+t.title, t.due, 'deadline-todos', 'todos', t.id, t.notes);
+    }
+  });
+
+  // ── Jobs ──
+  (DB.jobs||[]).filter(j => j.deadline && j.status!=='Rejected' && j.status!=='Withdrawn')
+    .forEach(j => mkEv('deadline_jobs_'+j.id, '💼 '+j.title, j.deadline, 'deadline-jobs', 'jobs', j.id, j.notes));
+
+  // ── Proposals ──
+  (DB.proposals||[]).filter(p => p.deadline && p.status!=='Submitted' && p.status!=='Rejected')
+    .forEach(p => mkEv('deadline_proposals_'+p.id, '📋 '+p.title, p.deadline, 'deadline-proposals', 'proposals', p.id, p.notes));
+
+  return evs;
 }
 
 // ── Render 7-day grid ────────────────────────────────────────────────
@@ -6426,12 +7213,19 @@ function calRenderDayGrid() {
         <span class="cal-day-month">${MONTHS[day.date.getMonth()]}</span>
         ${day.events.length ? `<span style="font-family:var(--mono);font-size:.5rem;color:var(--glow);opacity:.7">${day.events.length} event${day.events.length>1?'s':''}</span>` : ''}
       </div>
-      <div class="cal-day-events">
+      <div class="cal-day-allday">
         ${allDayEvs.map(ev => {
-          const cls = ev.source==='manual'?'cal-ev-manual':'';
+          const src = ev.source||'';
+          const cls = src==='manual'?'cal-ev-manual'
+                    : src==='deadline-todos'?'cal-ev-deadline-todo'
+                    : src==='deadline-jobs'?'cal-ev-deadline-job'
+                    : src==='deadline-proposals'?'cal-ev-deadline-proposal'
+                    : '';
           const baseId = ev.id.split('_20')[0];
-          return `<div class="cal-allday-banner ${cls}" onclick="calShowEventModal('${esc(ev.id)}','${esc(baseId)}')" title="${esc(ev.title)}">🗓 ${esc(ev.title)}</div>`;
+          return `<div class="cal-allday-banner ${cls}" onclick="calShowEventModal('${esc(ev.id)}','${esc(baseId)}')" title="${esc(ev.title)}">${esc(ev.title)}</div>`;
         }).join('')}
+      </div>
+      <div class="cal-day-timed">
         ${timedEvs.length ? timedEvs.map(ev => {
           const cls = ev.source==='manual'?'cal-ev-manual':ev.source==='ical'?'cal-ev-ical':'';
           const baseId = ev.id.split('_20')[0];
@@ -6515,6 +7309,9 @@ function calGetDayEvents(date) {
       expanded.push({...ev, datetime: iso+'T00:00:00', id: ev.id+'_span_'+iso});
     }
   }
+  // Inject deadline events
+  expanded.push(...calGetDeadlineEvents());
+
   return expanded.filter(ev => {
     const evd = new Date(ev.datetime); evd.setHours(0,0,0,0);
     return evd.toDateString() === date.toDateString();
@@ -6568,11 +7365,30 @@ function calRenderDayTimeline() {
     const isFree    = !slot.starts.length && !slot.conts.length;
     const addDT     = date.getFullYear()+'-'+addPad(date.getMonth()+1)+'-'+addPad(date.getDate())
                     +'T'+addPad(h)+':'+addPad(half*30);
+
+    // ── Current-time indicator: inject red line at exact minute position ──
+    const isToday = date.toDateString() === new Date().toDateString();
+    let nowLineHtml = '';
+    if(isToday) {
+      const now = new Date();
+      const nowSlot = now.getHours()*2 + (now.getMinutes() >= 30 ? 1 : 0);
+      if(nowSlot === s) {
+        // % position within the 30-min slot (0–100)
+        const pct = ((now.getMinutes() % 30) / 30 * 100).toFixed(1);
+        nowLineHtml = `<div id="cal-now-line" style="position:relative;height:0;margin:0 -0.5rem">
+          <div style="position:absolute;top:0;left:0;right:0;height:2px;background:var(--red);box-shadow:0 0 6px var(--red);margin-top:${pct}%">
+            <div style="position:absolute;left:0;top:-4px;width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 6px var(--red)"></div>
+          </div>
+        </div>`;
+      }
+    }
+
     html += `<div class="cal-tl-slot${isHour?' cal-tl-hour':''}">
       <div class="cal-tl-time">${timeLabel}</div>
       <div class="cal-tl-bar">
+        ${nowLineHtml}
         ${slot.starts.map(ev => {
-          const cls = ev.source==='manual'?'cal-ev-manual':ev.source==='ical'?'cal-ev-ical':'';
+          const cls = ev.source==='manual'?'cal-ev-manual':ev.source==='ical'?'cal-ev-ical':ev.source==='deadline-todo'?'cal-ev-deadline-todo':ev.source==='deadline-job'?'cal-ev-deadline-job':ev.source==='deadline-proposal'?'cal-ev-deadline-proposal':'';
           const baseId = ev.id.split('_20')[0];
           const durTxt = (ev.duration||60)+'min';
           return `<div class="cal-tl-event ${cls}" onclick="calShowEventModal('${esc(ev.id)}','${esc(baseId)}');calCloseDayTimeline()">
@@ -6589,6 +7405,25 @@ function calRenderDayTimeline() {
     </div>`;
   }
   body.innerHTML = html;
+
+  // Auto-scroll: bring current time into view (for today), or first event (for other days)
+  const isToday2 = date.toDateString() === new Date().toDateString();
+  if(isToday2) {
+    const nowLine = body.querySelector('#cal-now-line');
+    if(nowLine) {
+      const container = body.closest('.cal-timeline-body') || body.parentElement;
+      setTimeout(() => {
+        const lineTop = nowLine.getBoundingClientRect().top;
+        const ctTop   = container.getBoundingClientRect().top;
+        container.scrollTop += (lineTop - ctTop) - (container.clientHeight * 0.35);
+      }, 50);
+    }
+  } else {
+    const firstEvent = body.querySelector('.cal-tl-event');
+    if(firstEvent) {
+      setTimeout(() => firstEvent.scrollIntoView({block:'center', behavior:'smooth'}), 50);
+    }
+  }
 }
 
 function calPrefillManualForm(datetimeLocal, closeDay, closeWeek) {
@@ -6751,6 +7586,25 @@ function calRenderWeekTimeline() {
 
 // ── Event modal ───────────────────────────────────────────────────────
 function calShowEventModal(occId, baseId) {
+  // ── Deadline events: redirect to the source entry's detail card ──
+  // These are synthetic read-only events — no modal needed, just navigate to the real entry
+  const _dlPrefix = ['deadline_todos_','deadline_jobs_','deadline_proposals_'];
+  const _matchedPrefix = _dlPrefix.find(p => occId.startsWith(p));
+  if(_matchedPrefix) {
+    const _section = _matchedPrefix === 'deadline_todos_' ? 'todos'
+                   : _matchedPrefix === 'deadline_jobs_'  ? 'jobs' : 'proposals';
+    // Extract the entry id: everything after the prefix, up to the next underscore+date
+    const _afterPrefix = occId.slice(_matchedPrefix.length);
+    // The entry id is everything before _span_ or _2026- (date suffix)
+    const _entryId = _afterPrefix.replace(/_span_\d{4}-\d{2}-\d{2}$/, '').replace(/_\d{4}-\d{2}-\d{2}$/, '');
+    // Close any open modals/timelines, navigate to section and open detail
+    calCloseDayTimeline();
+    calCloseWeekTimeline();
+    show(_section);
+    setTimeout(() => openDetail(_section, _entryId), 200);
+    return;
+  }
+
   // Find the base event (not occurrence) for editing/deleting
   const base = CAL_events.find(e => e.id === baseId) || CAL_events.find(e => e.id === occId);
   // For display, reconstruct datetime from occurrence id if needed
@@ -7175,7 +8029,24 @@ function calSetTimezone(tz) {
   toast('✓ Timezone set: '+tz.replace('_',' '),'ok');
 }
 
-// ── Location type toggle ──────────────────────────────
+// ── Multi-day todo toggle ─────────────────────────────
+function calToggleTodoMultiDay() {
+  const isMulti = document.getElementById('t-multiday')?.checked;
+  const row = document.getElementById('t-startdate-row');
+  if(row) row.style.display = isMulti ? '' : 'none';
+  const lbl = document.getElementById('t-due-label');
+  if(lbl) lbl.textContent = isMulti ? 'End Date' : 'Due Date';
+}
+// Same toggle for the edit modal (uses ef- prefix ids)
+function calToggleTodoMultiDayEdit() {
+  const isMulti = document.getElementById('ef-multiday')?.checked;
+  const row = document.getElementById('ef-startdate-row');
+  if(row) row.style.display = isMulti ? '' : 'none';
+  const lbl = document.getElementById('ef-due-label');
+  if(lbl) lbl.textContent = isMulti ? 'End Date' : 'Due Date';
+}
+
+
 function calToggleLocType() {
   const loctype = document.getElementById('cal-ev-loctype')?.value;
   const inpRow  = document.getElementById('cal-loc-inperson-row');
@@ -7461,6 +8332,730 @@ if(_fsOK()) {
     <div id="cal-month-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;font-family:var(--mono);flex:1;overflow-y:auto"></div>
   </div>
 </div>
+
+<!-- ── BibTeX Import Modal ── -->
+<div id="bib-import-modal"
+  style="position:fixed;inset:0;z-index:1200;
+    background:rgba(2,5,15,.92);backdrop-filter:blur(8px);
+    display:none;align-items:center;justify-content:center">
+  <div style="background:var(--panel);border:1px solid var(--border2);
+      border-top:2px solid var(--amber);padding:1.5rem;
+      width:min(560px,96vw);max-height:90vh;overflow-y:auto;
+      border-radius:0 0 6px 6px;
+      box-shadow:0 24px 60px rgba(0,0,0,.8)">
+
+    <!-- Header -->
+    <div style="display:flex;justify-content:space-between;
+        align-items:center;margin-bottom:1.1rem">
+      <div style="font-family:var(--head);font-size:1rem;
+          font-weight:700;color:var(--amber);letter-spacing:.1em">
+        ↑ IMPORT FROM BIBTEX</div>
+      <button class="btn-close-detail"
+        onclick="bibImportClose()">✕ Close</button>
+    </div>
+
+    <!-- File picker -->
+    <div style="margin-bottom:1rem">
+      <label style="font-family:var(--mono);font-size:.62rem;
+          color:var(--text3);letter-spacing:.1em;
+          text-transform:uppercase;display:block;
+          margin-bottom:.4rem">Select .bib file</label>
+      <input type="file" id="bib-file-input" accept=".bib,.txt"
+        onchange="bibFileSelected(this)"
+        style="font-family:var(--mono);font-size:.68rem;
+          color:var(--text2);background:var(--surface);
+          border:1px solid var(--border2);border-radius:2px;
+          padding:.4rem .6rem;width:100%;cursor:pointer">
+    </div>
+
+    <!-- Parse summary (hidden until file selected) -->
+    <div id="bib-parse-summary" style="display:none;
+        background:var(--surface);border:1px solid var(--border2);
+        border-radius:3px;padding:.75rem .9rem;
+        margin-bottom:1rem;font-family:var(--mono);
+        font-size:.68rem;color:var(--text2);line-height:1.8">
+    </div>
+
+    <!-- Fetch options (hidden until file selected) -->
+    <div id="bib-fetch-options" style="display:none;
+        margin-bottom:1.1rem">
+      <div style="font-family:var(--mono);font-size:.62rem;
+          color:var(--text3);letter-spacing:.1em;
+          text-transform:uppercase;margin-bottom:.6rem">
+        Abstract fetch options</div>
+
+      <!-- Option 1: ADS/SciX -->
+      <label style="display:flex;align-items:flex-start;
+          gap:.6rem;padding:.5rem .6rem;border-radius:3px;
+          cursor:pointer;margin-bottom:.3rem;
+          border:1px solid var(--border);transition:all .12s"
+        id="bib-opt-ads-label">
+        <input type="radio" name="bib-fetch-source"
+          value="ads" id="bib-opt-ads"
+          onchange="bibOptionChanged()"
+          style="margin-top:.15rem;accent-color:var(--glow)">
+        <div>
+          <div style="font-family:var(--mono);font-size:.68rem;
+              color:var(--text);font-weight:600">
+            Fetch from ADS / SciX</div>
+          <div style="font-family:var(--mono);font-size:.58rem;
+              color:var(--text3);margin-top:.15rem">
+            Requires ADS API token · Best for astronomy journals
+            · Fetches abstract, full metadata, BibTeX</div>
+        </div>
+      </label>
+
+      <!-- Option 2: InspireHEP -->
+      <label style="display:flex;align-items:flex-start;
+          gap:.6rem;padding:.5rem .6rem;border-radius:3px;
+          cursor:pointer;margin-bottom:.3rem;
+          border:1px solid var(--border);transition:all .12s"
+        id="bib-opt-insp-label">
+        <input type="radio" name="bib-fetch-source"
+          value="inspirehep" id="bib-opt-insp"
+          onchange="bibOptionChanged()"
+          style="margin-top:.15rem;accent-color:var(--glow)">
+        <div>
+          <div style="font-family:var(--mono);font-size:.68rem;
+              color:var(--text);font-weight:600">
+            Fetch from InspireHEP</div>
+          <div style="font-family:var(--mono);font-size:.58rem;
+              color:var(--text3);margin-top:.15rem">
+            Free · No token needed · Best for HEP / theory papers
+            · Fetches abstract, full metadata, BibTeX</div>
+        </div>
+      </label>
+
+      <!-- Option 3: Metadata only -->
+      <label style="display:flex;align-items:flex-start;
+          gap:.6rem;padding:.5rem .6rem;border-radius:3px;
+          cursor:pointer;margin-bottom:.3rem;
+          border:1px solid var(--border);transition:all .12s"
+        id="bib-opt-none-label">
+        <input type="radio" name="bib-fetch-source"
+          value="none" id="bib-opt-none"
+          onchange="bibOptionChanged()" checked
+          style="margin-top:.15rem;accent-color:var(--glow)">
+        <div>
+          <div style="font-family:var(--mono);font-size:.68rem;
+              color:var(--text);font-weight:600">
+            Import metadata only</div>
+          <div style="font-family:var(--mono);font-size:.58rem;
+              color:var(--text3);margin-top:.15rem">
+            No abstract fetch · Papers marked as source: bibtex
+            · You can sync individually later using the ⚡ button
+          </div>
+        </div>
+      </label>
+
+      <!-- Rate limit notice (shown for ads/inspirehep options) -->
+      <div id="bib-rate-notice"
+        style="display:none;margin-top:.6rem;
+          background:var(--amber-d);border:1px solid
+          rgba(255,192,85,.3);border-radius:3px;
+          padding:.5rem .7rem;font-family:var(--mono);
+          font-size:.62rem;color:var(--amber);line-height:1.7">
+        ℹ Due to API rate limits, abstracts are fetched
+        1 paper every 10 seconds to avoid being blocked.<br>
+        <span id="bib-time-estimate"></span><br>
+        You can continue using the notebook while this runs.
+      </div>
+    </div>
+
+    <!-- Duplicate warning (shown if duplicates found) -->
+    <div id="bib-dupe-warning" style="display:none;
+        background:var(--red-d);border:1px solid
+        rgba(255,85,119,.3);border-radius:3px;
+        padding:.5rem .7rem;margin-bottom:.9rem;
+        font-family:var(--mono);font-size:.62rem;
+        color:var(--red);line-height:1.7"></div>
+
+    <!-- Action buttons -->
+    <div style="display:flex;gap:.5rem;
+        justify-content:flex-end;margin-top:.5rem">
+      <button class="btn-cancel"
+        onclick="bibImportClose()">Cancel</button>
+      <button class="btn-primary" id="bib-import-btn"
+        onclick="bibImportConfirm()"
+        style="display:none">
+        Import →</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+//  BIBTEX IMPORT — parser, modal, background fetch queue
+// ══════════════════════════════════════════════════════════════
+
+// ── CHANGE 5: Pure-JS BibTeX parser ──────────────────────────
+
+function bibParse(text) {
+  const entries = [];
+  const entryRe = /@(\w+)\s*\{\s*([^,]+),/g;
+  let m;
+  while((m = entryRe.exec(text)) !== null) {
+    const type = m[1].toLowerCase();
+    const key  = m[2].trim();
+    if(type === 'string' || type === 'preamble' || type === 'comment') continue;
+    let depth = 1, start = entryRe.lastIndex, i = start;
+    while(i < text.length && depth > 0) {
+      if(text[i] === '{') depth++;
+      else if(text[i] === '}') depth--;
+      i++;
+    }
+    const body = text.slice(start, i - 1);
+    const fields = { _type: type, _key: key };
+    const fieldRe = /(\w+)\s*=\s*(?:\{((?:[^{}]|\{[^{}]*\})*)\}|"([^"]*)"|(\d+))/g;
+    let fm;
+    while((fm = fieldRe.exec(body)) !== null) {
+      const fname = fm[1].toLowerCase();
+      const fval  = (fm[2] !== undefined ? fm[2]
+                  : fm[3] !== undefined ? fm[3]
+                  : fm[4] || '').trim();
+      fields[fname] = fval
+        .replace(/\{\{([^}]*)\}\}/g, '$1')
+        .replace(/\{([^}]*)\}/g, '$1')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+    entries.push(fields);
+  }
+  return entries;
+}
+
+function bibEntryToPaper(entry) {
+  function normalizeAuthors(raw) {
+    if(!raw) return '';
+    return raw.split(/\s+and\s+/i).map(a => {
+      a = a.trim();
+      if(a.includes(',')) {
+        const parts = a.split(',');
+        return (parts[1]||'').trim() + ' ' + (parts[0]||'').trim();
+      }
+      return a;
+    }).join('; ');
+  }
+  const year = entry.year || (entry._key.match(/^(\d{4})/) || [])[1] || '';
+  const journalRaw = entry.journal || entry.booktitle || '';
+  const journalStr = [journalRaw, year].filter(Boolean).join(' ');
+  let arxivId = '', arxivUrl = '';
+  if(entry.eprint && (!entry.archiveprefix || entry.archiveprefix.toLowerCase() === 'arxiv')) {
+    arxivId = entry.eprint.trim();
+    arxivUrl = 'https://arxiv.org/abs/' + arxivId;
+  }
+  let adsUrl = entry.adsurl || entry.url || '';
+  if(!adsUrl && /^\d{4}[A-Z]/.test(entry._key)) {
+    adsUrl = 'https://ui.adsabs.harvard.edu/abs/' + encodeURIComponent(entry._key);
+  }
+  const doi = entry.doi || '';
+  const isInspireKey = /^\w+:\d{4}\w+$/.test(entry._key);
+  let inspireKey = isInspireKey ? entry._key : '';
+  let inspireUrl = inspireKey
+    ? 'https://inspirehep.net/literature?sort=mostrecent&size=25&page=1&q=texkey%3A' + inspireKey
+    : '';
+  const cleanBib = _bibReconstruct(entry);
+  return {
+    id:         uid(),
+    date:       today(),
+    title:      entry.title || '',
+    authors:    normalizeAuthors(entry.author || ''),
+    journal:    journalStr,
+    abstract:   entry.abstract || '',
+    summary:    '',
+    tags:       '',
+    rating:     '',
+    bibtex:     cleanBib,
+    ads:        adsUrl,
+    arxiv:      arxivUrl,
+    arxivId:    arxivId,
+    doi:        doi,
+    source:     'bibtex',
+    inspire:    inspireUrl,
+    inspireKey: inspireKey,
+    inspireUrl: inspireUrl,
+    notes:      ''
+  };
+}
+
+function _bibReconstruct(entry) {
+  const skip = ['_type','_key'];
+  const type = entry._type || 'article';
+  const key  = entry._key  || 'unknown';
+  let lines  = ['@' + type + '{' + key + ','];
+  const fieldOrder = ['author','title','journal','booktitle',
+    'year','volume','number','pages','doi','eprint',
+    'archiveprefix','primaryclass','url','adsurl','adsnote',
+    'abstract','note'];
+  const done = new Set();
+  fieldOrder.forEach(f => {
+    if(entry[f] && !skip.includes(f)) {
+      lines.push('  ' + f + ' = {' + entry[f] + '},');
+      done.add(f);
+    }
+  });
+  Object.keys(entry).forEach(f => {
+    if(!done.has(f) && !skip.includes(f) && entry[f]) {
+      lines.push('  ' + f + ' = {' + entry[f] + '},');
+    }
+  });
+  lines.push('}');
+  return lines.join('\n');
+}
+
+// ── CHANGE 6: Import modal functions ─────────────────────────
+
+let _bibParsed   = [];
+let _bibDupes    = [];
+let _bibFetchSrc = 'none';
+
+function bibImportOpen() {
+  _bibParsed   = [];
+  _bibDupes    = [];
+  _bibFetchSrc = 'none';
+  document.getElementById('bib-file-input').value = '';
+  document.getElementById('bib-parse-summary').style.display  = 'none';
+  document.getElementById('bib-fetch-options').style.display  = 'none';
+  document.getElementById('bib-dupe-warning').style.display   = 'none';
+  document.getElementById('bib-import-btn').style.display     = 'none';
+  document.getElementById('bib-rate-notice').style.display    = 'none';
+  document.getElementById('bib-opt-none').checked             = true;
+  const modal = document.getElementById('bib-import-modal');
+  if(modal) modal.style.display = 'flex';
+}
+
+function bibImportClose() {
+  const modal = document.getElementById('bib-import-modal');
+  if(modal) modal.style.display = 'none';
+}
+
+function bibFileSelected(input) {
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => { _bibProcessFile(ev.target.result); };
+  reader.readAsText(file);
+}
+
+function _bibProcessFile(text) {
+  const rawEntries = bibParse(text);
+  if(!rawEntries.length) { toast('No BibTeX entries found in this file','err'); return; }
+  const allPapers = rawEntries.map(bibEntryToPaper).filter(p => p.title || p.authors);
+  _bibParsed = [];
+  _bibDupes  = [];
+  allPapers.forEach(p => {
+    const isDupe = DB.papers.some(existing =>
+      (p.arxivId && existing.arxivId === p.arxivId) ||
+      (p.ads && existing.ads === p.ads) ||
+      (p.title && existing.title &&
+       p.title.toLowerCase().trim() === existing.title.toLowerCase().trim())
+    );
+    if(isDupe) _bibDupes.push(p);
+    else _bibParsed.push(p);
+  });
+  const summaryEl = document.getElementById('bib-parse-summary');
+  summaryEl.style.display = 'block';
+  summaryEl.innerHTML =
+    '<strong style="color:var(--text)">' + rawEntries.length + '</strong> entries found in file<br>' +
+    '<strong style="color:var(--green)">' + _bibParsed.length + '</strong> new papers to import<br>' +
+    (_bibDupes.length
+      ? '<strong style="color:var(--amber)">' + _bibDupes.length + '</strong> already exist — will be skipped<br>'
+      : '') +
+    '<strong style="color:var(--glow)">' + _bibParsed.filter(p=>p.arxivId).length + '</strong> have arXiv IDs<br>' +
+    '<strong style="color:var(--glow)">' + _bibParsed.filter(p=>p.ads).length + '</strong> have ADS bibcodes';
+  const dupeEl = document.getElementById('bib-dupe-warning');
+  if(_bibDupes.length) {
+    dupeEl.style.display = 'block';
+    dupeEl.textContent = '⚠ ' + _bibDupes.length + ' paper' + (_bibDupes.length>1?'s':'') +
+      ' already exist in your library and will be skipped.';
+  } else {
+    dupeEl.style.display = 'none';
+  }
+  if(_bibParsed.length) {
+    document.getElementById('bib-fetch-options').style.display = 'block';
+    document.getElementById('bib-import-btn').style.display    = '';
+    bibOptionChanged();
+  }
+}
+
+function bibOptionChanged() {
+  const sel = document.querySelector('input[name="bib-fetch-source"]:checked');
+  _bibFetchSrc = sel ? sel.value : 'none';
+  const notice   = document.getElementById('bib-rate-notice');
+  const estimate = document.getElementById('bib-time-estimate');
+  if(_bibFetchSrc === 'none') {
+    notice.style.display = 'none';
+  } else {
+    notice.style.display = 'block';
+    const secs = _bibParsed.length * 10;
+    const mins = Math.ceil(secs / 60);
+    estimate.textContent = _bibParsed.length + ' papers will take approximately ' +
+      (mins < 2 ? 'about 1 minute' : 'about ' + mins + ' minutes') + '.';
+  }
+  ['ads','insp','none'].forEach(id => {
+    const lbl = document.getElementById('bib-opt-'+id+'-label');
+    if(lbl) lbl.style.borderColor =
+      ((_bibFetchSrc==='ads'&&id==='ads') ||
+       (_bibFetchSrc==='inspirehep'&&id==='insp') ||
+       (_bibFetchSrc==='none'&&id==='none'))
+      ? 'var(--glow)' : 'var(--border)';
+  });
+}
+
+async function bibImportConfirm() {
+  if(!_bibParsed.length) { toast('No new papers to import','inf'); return; }
+  _bibParsed.forEach(p => DB.papers.unshift(p));
+  save('papers');
+  renderPapers();
+  cnt('papers');
+  toast('✓ Imported ' + _bibParsed.length + ' papers','ok');
+  bibImportClose();
+  if(_bibFetchSrc !== 'none') {
+    bibQueueStart([..._bibParsed], _bibFetchSrc);
+  }
+}
+
+// ── CHANGE 7: Background fetch queue ─────────────────────────
+
+let _bibQueue        = [];
+let _bibQueueTotal   = 0;
+let _bibQueueDone    = 0;
+let _bibQueueFailed  = [];
+let _bibQueuePaused  = false;
+let _bibQueueTimer   = null;
+let _bibQueueSrc     = 'ads';
+let _bibQueueRunning = false;
+
+function bibQueueStart(papers, source) {
+  _bibQueue        = papers.map(p => p.id);
+  _bibQueueTotal   = papers.length;
+  _bibQueueDone    = 0;
+  _bibQueueFailed  = [];
+  _bibQueuePaused  = false;
+  _bibQueueSrc     = source;
+  _bibQueueRunning = true;
+  const banner  = document.getElementById('bib-progress-banner');
+  const running = document.getElementById('bib-progress-running');
+  const done    = document.getElementById('bib-progress-done');
+  if(banner)  banner.style.display  = 'block';
+  if(running) running.style.display = 'block';
+  if(done)    done.style.display    = 'none';
+  _bibUpdateProgress();
+  document.getElementById('list-papers')?.scrollIntoView({behavior:'smooth',block:'start'});
+  bibQueueStep();
+}
+
+async function bibQueueStep() {
+  if(!_bibQueueRunning) return;
+  if(_bibQueuePaused)   return;
+  if(!_bibQueue.length) { _bibQueueComplete(); return; }
+  const paperId = _bibQueue.shift();
+  const paper   = DB.papers.find(p => p.id === paperId);
+  if(!paper) {
+    _bibQueueDone++;
+    _bibUpdateProgress();
+    _bibQueueTimer = setTimeout(bibQueueStep, 10000);
+    return;
+  }
+  const curEl = document.getElementById('bib-progress-current');
+  if(curEl) curEl.textContent = 'Fetching: ' +
+    (paper.authors ? paper.authors.split(/[;,]/)[0].trim() + ' et al.' : paper.title.slice(0,40));
+  try {
+    const _qSrc = _bibQueueSrc === 'ads' ? 'ads' : 'inspirehep';
+    await syncBibTeXPaper('papers', paper.id, _qSrc);
+  } catch(e) {
+    _bibQueueFailed.push({ title: paper.title, id: paper.id, reason: e.message || 'Unknown error' });
+  }
+  _bibQueueDone++;
+  _bibUpdateProgress();
+  save('papers');
+  renderPapers();
+  if(_bibQueue.length) {
+    _bibQueueTimer = setTimeout(bibQueueStep, 10000);
+  } else {
+    _bibQueueComplete();
+  }
+}
+
+function _bibUpdateProgress() {
+  const pct    = _bibQueueTotal > 0 ? Math.round(_bibQueueDone / _bibQueueTotal * 100) : 0;
+  const labelEl = document.getElementById('bib-progress-label');
+  const barEl   = document.getElementById('bib-progress-bar');
+  if(labelEl) labelEl.textContent = 'Fetching abstracts… ' + _bibQueueDone + ' / ' + _bibQueueTotal + ' (' + pct + '%)';
+  if(barEl)   barEl.style.width   = pct + '%';
+}
+
+function _bibQueueComplete() {
+  _bibQueueRunning = false;
+  const running = document.getElementById('bib-progress-running');
+  const done    = document.getElementById('bib-progress-done');
+  if(running) running.style.display = 'none';
+  if(done)    done.style.display    = 'block';
+  const total   = _bibQueueTotal;
+  const failed  = _bibQueueFailed.length;
+  const success = total - failed;
+  const summaryEl = document.getElementById('bib-done-summary');
+  if(summaryEl) summaryEl.innerHTML =
+    '✓ Abstract sync complete — ' + total + ' paper' + (total!==1?'s':'') + ' processed<br>' +
+    '<span style="color:var(--green)">' + success + ' successful</span>' +
+    (failed ? ' &nbsp;|&nbsp; <span style="color:var(--red)">' + failed + ' failed</span>' : '');
+  const failedEl = document.getElementById('bib-failed-list');
+  if(failedEl && failed) {
+    failedEl.innerHTML =
+      '<div style="color:var(--text3);margin-bottom:.3rem">Failed papers (source kept as bibtex — use ⚡ button to retry individually):</div>' +
+      _bibQueueFailed.map(f =>
+        '<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem">' +
+        '<span style="color:var(--red)">✗</span>' +
+        '<span style="color:var(--text2)">' + esc(f.title.slice(0,50)) + (f.title.length>50?'…':'') + '</span>' +
+        '<span style="color:var(--text3);font-size:.58rem">— ' + esc(f.reason) + '</span>' +
+        '</div>'
+      ).join('');
+  } else if(failedEl) {
+    failedEl.innerHTML = '';
+  }
+}
+
+function bibQueueTogglePause() {
+  _bibQueuePaused = !_bibQueuePaused;
+  const btn = document.getElementById('bib-pause-btn');
+  if(_bibQueuePaused) {
+    if(_bibQueueTimer) clearTimeout(_bibQueueTimer);
+    if(btn) btn.textContent = '▶ Resume';
+  } else {
+    if(btn) btn.textContent = '⏸ Pause';
+    bibQueueStep();
+  }
+}
+
+function bibQueueCancel() {
+  _bibQueueRunning = false;
+  _bibQueuePaused  = false;
+  if(_bibQueueTimer) clearTimeout(_bibQueueTimer);
+  _bibQueue = [];
+  _bibQueueComplete();
+}
+
+function bibDismissBanner() {
+  const banner = document.getElementById('bib-progress-banner');
+  if(banner) banner.style.display = 'none';
+}
+
+// ── syncBibTeXPaper — fetch abstract/metadata for bibtex-sourced papers ──
+// Handles arxivId, ADS bibcode (from adsurl), DOI, and InspireHEP key fallbacks.
+// Called from: detail view sync banner, card ⚡ popover, background queue.
+// Does NOT touch syncToPaper() or syncToInspireHEP() — those are arxiv-only.
+async function syncBibTeXPaper(section, id, target) {
+  const entry = (DB[section]||[]).find(e => e.id === id);
+  if(!entry) return;
+
+  // Pick best identifier — priority: arxivId → ADS bibcode → DOI → inspireKey
+  const _arxivId    = entry.arxivId || '';
+  const _adsBC      = (!_arxivId && entry.ads && entry.ads.includes('/abs/'))
+    ? decodeURIComponent(entry.ads.split('/abs/')[1].split('/')[0].split('?')[0])
+    : '';
+  const _doi        = entry.doi || '';
+  const _inspireKey = entry.inspireKey || '';
+
+  // Build ADS query string based on best available identifier
+  let _adsQuery = '', _adsLabel = '';
+  if(_arxivId)    { _adsQuery = 'arxiv:'   + _arxivId; _adsLabel = 'arXiv:' + _arxivId; }
+  else if(_adsBC) { _adsQuery = 'bibcode:' + _adsBC;   _adsLabel = 'bibcode:' + _adsBC; }
+  else if(_doi)   { _adsQuery = 'doi:'     + _doi;     _adsLabel = 'DOI:' + _doi; }
+
+  // ── ADS / SciX path ──────────────────────────────────────────────────
+  if(target === 'ads' || target === 'scix') {
+    const token = getADSToken();
+    if(!token) { toast('Enter your ADS API token in Lit. Papers first.','err'); return; }
+    if(!_adsQuery) { toast('No identifier found for ADS lookup (no arXiv ID, bibcode, or DOI).','err'); return; }
+
+    const _wantScix = (target === 'scix');
+    const svcLabel  = _wantScix ? 'SciX' : 'ADS';
+    toast('Checking ' + svcLabel + ' for ' + _adsLabel + '…', 'inf');
+
+    const localProxy = location.protocol !== 'file:'
+      ? location.origin + (_wantScix ? '/api/scix' : '/api/ads')
+      : null;
+    const directApi  = _wantScix
+      ? 'https://api.scixplorer.org/v1'
+      : 'https://api.adsabs.harvard.edu/v1';
+    const APIS = [localProxy, directApi].filter(Boolean);
+
+    for(const base of APIS) {
+      try {
+        const params = new URLSearchParams({
+          q:    _adsQuery,
+          fl:   'title,author,pub,year,abstract,identifier,bibcode',
+          rows: '1'
+        });
+        const res = await fetch(base + '/search/query?' + params.toString(), {
+          headers: {'Authorization': 'Bearer ' + token},
+          signal: AbortSignal.timeout(12000)
+        });
+        if(res.status === 401) { toast('ADS token invalid — check your token in Lit. Papers settings.','err'); return; }
+        if(!res.ok) continue;
+        const data = await res.json();
+        const docs = data.response && data.response.docs;
+        if(!docs || !docs.length) { toast('Not found in ' + svcLabel + ' — try InspireHEP instead.','inf'); return; }
+
+        const doc     = docs[0];
+        const bc      = doc.bibcode || _adsBC || '';
+        const title   = (doc.title && doc.title[0]) || '';
+        const authors = doc.author ? doc.author.slice(0,8).join('; ') + (doc.author.length>8?' et al.':'') : '';
+        const journal = [doc.pub, doc.year].filter(Boolean).join(' ');
+        const abstract= doc.abstract || '';
+        const canonUrl= _wantScix
+          ? 'https://www.scixplorer.org/abs/' + encodeURIComponent(bc)
+          : 'https://ui.adsabs.harvard.edu/abs/' + encodeURIComponent(bc);
+
+        // Extract arXiv ID from identifiers list if present
+        let arxivId = entry.arxivId || '';
+        if(!arxivId && doc.identifier) {
+          const ax = doc.identifier.find(x => x.toLowerCase().startsWith('arxiv:'));
+          if(ax) arxivId = ax.replace(/arxiv:/i, '');
+        }
+
+        // Fetch BibTeX for this bibcode
+        let bibtex = entry.bibtex || '';
+        if(bc) {
+          try {
+            const bRes = await fetch(base + '/export/bibtex', {
+              method: 'POST',
+              headers: {'Authorization':'Bearer '+token,'Content-Type':'application/json'},
+              body: JSON.stringify({bibcode:[bc]}),
+              signal: AbortSignal.timeout(8000)
+            });
+            if(bRes.ok) bibtex = ((await bRes.json()).export || '').trim() || bibtex;
+          } catch(_){}
+        }
+
+        // Update entry fields
+        if(title)    entry.title    = title;
+        if(authors)  entry.authors  = authors;
+        if(journal)  entry.journal  = journal;
+        if(abstract) entry.abstract = abstract;
+        entry.ads    = canonUrl;
+        entry.source = _wantScix ? 'scix' : 'ads';
+        if(arxivId)  { entry.arxivId = arxivId; entry.arxiv = 'https://arxiv.org/abs/' + arxivId; }
+        if(bibtex)   entry.bibtex   = bibtex;
+
+        save(section);
+        const _db = document.getElementById('detail-body');
+        if(_db && currentDetailId === id) { _db.innerHTML = buildDetailHTML(section, entry); mdPostRender(_db); }
+        renderPapers();
+        toast('✓ Synced to ' + svcLabel + ' — abstract fetched.', 'ok');
+        return;
+      } catch(err) {
+        if(err.name === 'AbortError') break;
+      }
+    }
+    toast('Not found in ' + svcLabel + ' — check your token or try InspireHEP.', 'inf');
+    return;
+  }
+
+  // ── InspireHEP path ───────────────────────────────────────────────────
+  if(target === 'inspirehep') {
+    // Query priority: arxivId → doi → inspireKey → adsBC (as texkey attempt)
+    let _insQuery = '', _insLabel = '';
+    if(_arxivId)         { _insQuery = 'arxiv%3A'  + encodeURIComponent(_arxivId);    _insLabel = 'arXiv:' + _arxivId; }
+    else if(_doi)        { _insQuery = 'doi%3A'     + encodeURIComponent(_doi);        _insLabel = 'DOI'; }
+    else if(_inspireKey) { _insQuery = 'texkey%3A'  + encodeURIComponent(_inspireKey); _insLabel = 'texkey:' + _inspireKey; }
+    else if(_adsBC)      { _insQuery = 'texkey%3A'  + encodeURIComponent(_adsBC);      _insLabel = 'bibcode:' + _adsBC; }
+
+    if(!_insQuery) { toast('No identifier found for InspireHEP lookup.','err'); return; }
+    toast('Checking InspireHEP for ' + _insLabel + '…', 'inf');
+
+    try {
+      const searchBase = location.protocol !== 'file:'
+        ? location.origin + '/api/inspire'
+        : 'https://inspirehep.net/api/literature';
+      const sRes = await fetch(
+        searchBase + '?sort=mostrecent&size=1&page=1&q=' + _insQuery,
+        {signal: AbortSignal.timeout(15000)}
+      );
+      if(!sRes.ok) throw new Error('InspireHEP search failed: HTTP ' + sRes.status);
+      const sData = await sRes.json();
+      const hits  = sData.hits && sData.hits.hits;
+      if(!hits || !hits.length) { toast('Not found in InspireHEP.','inf'); return; }
+
+      const insId = String(hits[0].id);
+      const d = await fetchInspireHEP(insId);
+
+      if(d.title)      entry.title      = d.title;
+      if(d.authors)    entry.authors    = d.authors;
+      if(d.journal)    entry.journal    = d.journal;
+      if(d.abstract)   entry.abstract   = d.abstract;
+      if(d.bibtex)     entry.bibtex     = d.bibtex;
+      if(d.inspireUrl) entry.inspire    = d.inspireUrl;
+      if(d.inspireId)  entry.inspireId  = d.inspireId;
+      if(d.inspireKey) entry.inspireKey = d.inspireKey;
+      if(d.arxivId)    { entry.arxivId  = d.arxivId; entry.arxiv = 'https://arxiv.org/abs/' + d.arxivId; }
+      entry.source = 'inspirehep';
+
+      save(section);
+      const _db = document.getElementById('detail-body');
+      if(_db && currentDetailId === id) { _db.innerHTML = buildDetailHTML(section, entry); mdPostRender(_db); }
+      renderPapers();
+      toast('✓ Synced to InspireHEP — abstract fetched.', 'ok');
+    } catch(err) {
+      toast('InspireHEP sync failed: ' + err.message, 'err');
+    }
+  }
+}
+
+function bibManualSync(paperId, triggerEl) {
+  const paper = DB.papers.find(p => p.id === paperId);
+  if(!paper) return;
+
+  // Remove any existing popover
+  const existing = document.getElementById('bib-sync-popover');
+  if(existing) existing.remove();
+
+  // Build popover
+  const pop = document.createElement('div');
+  pop.id = 'bib-sync-popover';
+  pop.style.cssText = 'position:fixed;z-index:2000;background:var(--panel);border:1px solid var(--border2);border-top:2px solid var(--amber);border-radius:3px;padding:.5rem .5rem .4rem;box-shadow:0 8px 32px rgba(0,0,0,.7);display:flex;flex-direction:column;gap:.3rem;min-width:160px;font-family:var(--mono);font-size:.63rem';
+
+  const btnBase = 'background:none;border:1px solid;border-radius:2px;padding:.28rem .65rem;cursor:pointer;font-family:var(--mono);font-size:.62rem;text-align:left;width:100%;transition:opacity .12s';
+
+  pop.innerHTML =
+    '<div style="color:var(--text3);font-size:.58rem;margin-bottom:.2rem;padding-left:.1rem">Fetch abstract via:</div>' +
+    '<button id="bib-pop-ads"  style="'+btnBase+';color:var(--amber);border-color:rgba(255,192,85,.5)">⚡ ADS / SciX</button>' +
+    '<button id="bib-pop-insp" style="'+btnBase+';color:var(--purple);border-color:rgba(187,153,255,.5)">⚡ InspireHEP</button>' +
+    '<button id="bib-pop-cancel" style="'+btnBase+';color:var(--text3);border-color:var(--border2)">✕ Cancel</button>';
+
+  document.body.appendChild(pop);
+
+  // Position near the trigger button
+  const rect = triggerEl ? triggerEl.getBoundingClientRect() : {bottom: window.innerHeight/2, left: window.innerWidth/2, width: 0};
+  const popH = 130; // approximate height
+  const top  = (rect.bottom + popH > window.innerHeight) ? rect.top - popH - 4 : rect.bottom + 4;
+  pop.style.top  = top + 'px';
+  pop.style.left = Math.min(rect.left, window.innerWidth - 175) + 'px';
+
+  function dismiss() { pop.remove(); }
+
+  document.getElementById('bib-pop-cancel').onclick = function(e) { e.stopPropagation(); dismiss(); };
+
+  document.getElementById('bib-pop-ads').onclick = function(e) {
+    e.stopPropagation(); dismiss();
+    syncBibTeXPaper('papers', paper.id, 'ads');
+  };
+
+  document.getElementById('bib-pop-insp').onclick = function(e) {
+    e.stopPropagation(); dismiss();
+    syncBibTeXPaper('papers', paper.id, 'inspirehep');
+  };
+
+  // Dismiss on outside click (one-shot)
+  setTimeout(() => {
+    document.addEventListener('click', function _dismiss() {
+      dismiss();
+      document.removeEventListener('click', _dismiss);
+    });
+  }, 0);
+}
+</script>
 
 </body>
 </html>
