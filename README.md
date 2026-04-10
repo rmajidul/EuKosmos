@@ -42,7 +42,7 @@ Click [here](https://rmajidul.github.io/EuKosmos/) for a live preview.
 
 - **Python 3.6+** — pre-installed on macOS and most Linux systems
 - **Google Chrome** — required for local file read/write. Safari and Firefox block the necessary file permissions.
-- **ics** Python package — required for iCalendar (`.ics`) export
+- **iCalendar** Python package — required for iCalendar (`.ics`) export
 
 ---
 
@@ -86,10 +86,10 @@ Your prompt will change to show `(vnotebook)` when the environment is active.
 With the virtual environment active, install the required package:
 
 ```bash
-pip install ics
+pip install icalendar python-dateutil
 ```
 
-The `ics` library enables the Calendar section to export deadlines and events as standard `.ics` files that import directly into Apple Calendar, Google Calendar, Outlook, and any other iCalendar-compatible app.
+The `icalendar` library enables the Calendar section to export deadlines and events as standard `.ics` files that import directly into Apple Calendar, Google Calendar, Outlook, and any other iCalendar-compatible app.
 
 > No other packages are needed. All other functionality runs in the browser.
 
@@ -173,7 +173,7 @@ chmod -R 777 .
 ```bash
 python3 -m venv vnotebook
 source vnotebook/bin/activate
-pip install ics
+pip install icalendar python-dateutil
 ```
 
 **4. Start the server and connect:**
@@ -195,7 +195,7 @@ Open Chrome → `http://localhost:8080` → click **📂 Connect Folder** in the
 ```bash
 cd ~/Dropbox/eukosmos          # adjust path for your service
 chmod -R 777 .
-source vnotebook/bin/activate  # or recreate venv if not synced: python3 -m venv vnotebook && source vnotebook/bin/activate && pip install ics
+source vnotebook/bin/activate  # or recreate venv if not synced: python3 -m venv vnotebook && source vnotebook/bin/activate && pip install icalendar python-dateutil
 python3 serve.py
 ```
 
@@ -203,7 +203,7 @@ python3 serve.py
 
 All your papers, notes, and data load immediately from the synced JSON files.
 
-> **Tip:** Add `vnotebook/` to your sync service's ignore list (`.dropboxignore`, `.gitignore`, etc.) to avoid syncing the virtual environment itself — it's large and machine-specific. Recreate it with `python3 -m venv vnotebook && source vnotebook/bin/activate && pip install ics` on each machine.
+> **Tip:** Add `vnotebook/` to your sync service's ignore list (`.dropboxignore`, `.gitignore`, etc.) to avoid syncing the virtual environment itself — it's large and machine-specific. Recreate it with `python3 -m venv vnotebook && source vnotebook/bin/activate && pip install icalendar python-dateutil` on each machine.
 
 ---
 
@@ -340,7 +340,7 @@ After editing, hard-refresh Chrome: `Cmd+Shift+R` (Mac) or `Ctrl+Shift+R` (Windo
 | Port 8080 already in use | `lsof -ti tcp:8080 \| xargs kill` or run `python3 serve.py 9090` and open `http://localhost:9090` |
 | ADS auto-fill not working | Check your token is entered in the Literature Papers form |
 | BibTeX sync fails with "not found" | The paper may be journal-only (no arXiv ID). Use **Sync to [ADS]** from the detail panel — it will try the ADS bibcode automatically. |
-| Calendar `.ics` export fails | Make sure `ics` is installed: `pip install ics` with your virtual environment active |
+| Calendar `.ics` export fails | Make sure `ics` is installed: `pip install icalendar python-dateutil` with your virtual environment active |
 | Equations not rendering | Needs internet on first run to download KaTeX; works offline after that |
 | `ics` module not found | Activate your virtual environment first: `source vnotebook/bin/activate` |
 | Permission denied errors | Run `chmod -R 777 .` in the eukosmos folder |
